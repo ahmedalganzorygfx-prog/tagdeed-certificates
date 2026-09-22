@@ -642,7 +642,7 @@ if df is not None:
 
                 st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. إظهار زر الطباعة لطباعة الإفادة مقاس 15*20 في صفحة واحدة مدمجة بالكامل
+                # 3. إظهار زر الطباعة لطباعة الإفادة مع التوقيع المتمركز والخط الموحد Cairo
                 if is_available:
                     components.html(
                         f"""
@@ -688,7 +688,7 @@ if df is not None:
                                             padding: 0;
                                             background-color: #fff;
                                             color: #000;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Cairo', sans-serif, Arial;
                                             direction: rtl;
                                             text-align: right;
                                         }}
@@ -716,6 +716,7 @@ if df is not None:
                                             border-radius: 8px;
                                             padding: 10px 14px;
                                             margin-bottom: 8px;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .card-title {{
                                             color: #0d233a;
@@ -725,15 +726,18 @@ if df is not None:
                                             padding-bottom: 4px;
                                             margin-bottom: 8px;
                                             text-align: center;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .card-row {{
                                             font-size: 13px;
                                             font-weight: 600;
                                             margin-bottom: 6px;
                                             color: #111;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .card-row b {{
                                             color: #d32f2f;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .status-green {{
                                             background-color: #f0fdf4;
@@ -745,15 +749,18 @@ if df is not None:
                                             font-size: 12px;
                                             font-weight: bold;
                                             margin-bottom: 8px;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .pulse-text {{
                                             color: #15803d;
                                             font-size: 14px;
                                             font-weight: bold;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .pickup-instructions {{
                                             color: #15803d;
                                             font-size: 11px;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .working-hours-print {{
                                             background-color: #fafafa;
@@ -764,35 +771,40 @@ if df is not None:
                                             border-radius: 6px;
                                             font-size: 11px;
                                             line-height: 1.5;
-                                            margin-bottom: 15px;
+                                            margin-bottom: 12px;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .working-hours-title {{
                                             color: #0d233a;
                                             font-size: 12px;
                                             font-weight: bold;
                                             margin-bottom: 3px;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .highlight {{
                                             color: #d32f2f;
                                             font-weight: bold;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .print-footer-signature {{
                                             display: flex;
-                                            justify-content: flex-start;
+                                            justify-content: center;
                                             align-items: center;
                                             width: 100%;
-                                            padding-right: 10px;
-                                            margin-top: 5px;
+                                            margin-top: 8px;
+                                            text-align: center;
                                         }}
                                         .signature-box {{
-                                            text-align: right;
+                                            text-align: center;
                                             font-size: 13px;
                                             font-weight: bold;
                                             color: #0d233a;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .signature-box b {{
                                             color: #d32f2f;
-                                            font-size: 14px;
+                                            font-size: 15px;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                     </style>
                                 </head>
