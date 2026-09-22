@@ -612,7 +612,7 @@ if df is not None:
 
                 # 2. فحص حالة الشهادة وعرضها
                 status_html = ""
-                is_available = False  # متغير للتحقق مما إذا كانت الشهادة موجودة بالفرع
+                is_available = False
 
                 if status_column and pd.notna(first_row[status_column]):
                     status_val = str(first_row[status_column]).strip()
@@ -624,7 +624,7 @@ if df is not None:
                         </div>
                         """
                     elif "موجودة" in status_val:
-                        is_available = True  # الشهادة موجودة بالفرع
+                        is_available = True
                         status_html = """
                         <div class="status-green" id="print-status-box">
                             <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
@@ -642,7 +642,7 @@ if df is not None:
 
                 st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. إظهار زر الطباعة فقط إذا كانت الشهادة موجودة بالفرع
+                # 3. إظهار زر الطباعة لطباعة الإفادة مع التوقيع والتوسيط
                 if is_available:
                     components.html(
                         f"""
@@ -683,29 +683,37 @@ if df is not None:
                                             size: 15cm 20cm;
                                             margin: 0.5cm;
                                         }}
+                                        html, body {{
+                                            height: 100%;
+                                            margin: 0;
+                                            padding: 0;
+                                        }}
                                         body {{
                                             font-family: 'Cairo', sans-serif;
                                             direction: rtl;
                                             text-align: right;
                                             background-color: #fff;
                                             color: #000;
-                                            margin: 0;
-                                            padding: 15px 10px;
+                                            padding: 10px 15px;
                                             box-sizing: border-box;
                                             display: flex;
                                             flex-direction: column;
                                             justify-content: center;
-                                            min-height: 19cm;
+                                            align-items: center;
+                                        }}
+                                        .container {{
+                                            width: 100%;
+                                            max-width: 14cm;
+                                            margin: 0 auto;
                                         }}
                                         .print-header {{
                                             text-align: center;
-                                            margin-bottom: 25px;
-                                            margin-top: 15px;
+                                            margin-bottom: 20px;
                                         }}
                                         .print-header img {{
-                                            width: 120px;
+                                            width: 130px;
                                             height: auto;
-                                            margin-bottom: 8px;
+                                            margin-bottom: 5px;
                                         }}
                                         .teacher-card {{
                                             border: 2px solid #0d233a;
@@ -760,7 +768,7 @@ if df is not None:
                                             border-radius: 6px;
                                             font-size: 12px;
                                             line-height: 1.6;
-                                            margin-top: 5px;
+                                            margin-bottom: 20px;
                                         }}
                                         .working-hours-title {{
                                             color: #0d233a;
@@ -772,18 +780,44 @@ if df is not None:
                                             color: #d32f2f;
                                             font-weight: bold;
                                         }}
+                                        .print-footer-signature {{
+                                            display: flex;
+                                            justify-content: flex-start;
+                                            align-items: center;
+                                            width: 100%;
+                                            padding-right: 15px;
+                                            margin-top: 10px;
+                                        }}
+                                        .signature-box {{
+                                            text-align: right;
+                                            font-size: 14px;
+                                            font-weight: bold;
+                                            color: #0d233a;
+                                        }}
+                                        .signature-box b {{
+                                            color: #d32f2f;
+                                            font-size: 15px;
+                                        }}
                                     </style>
                                 </head>
                                 <body>
-                                    <div class="print-header">
-                                        <img src="{logo_src}" alt="شعار الأكاديمية">
-                                    </div>
-                                    ${{cardHtml}}
-                                    ${{statusHtml}}
-                                    <div class="working-hours-print">
-                                        <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
-                                        • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
-                                        • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
+                                    <div class="container">
+                                        <div class="print-header">
+                                            <img src="{logo_src}" alt="شعار الأكاديمية">
+                                        </div>
+                                        ${{cardHtml}}
+                                        ${{statusHtml}}
+                                        <div class="working-hours-print">
+                                            <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
+                                            • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
+                                            • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
+                                        </div>
+                                        <div class="print-footer-signature">
+                                            <div class="signature-box">
+                                                مدير الفرع<br>
+                                                <b>أ. أحمد الجنزوري</b>
+                                            </div>
+                                        </div>
                                     </div>
                                     <script>
                                         window.onload = function() {{
