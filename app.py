@@ -165,6 +165,31 @@ st.markdown(
         border-bottom: 1px solid rgba(56, 139, 253, 0.2);
         border-left: 1px solid rgba(56, 139, 253, 0.2);
     }
+    /* تنسيق أزرار الواتساب للتواصل والدعم الفني */
+    .whatsapp-container {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+    .whatsapp-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background-color: #25d366;
+        color: white !important;
+        font-weight: bold;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.2s;
+    }
+    .whatsapp-btn:hover {
+        background-color: #128c7e;
+    }
     /* تنسيق تذييل الصفحة (Footer) */
     .footer {
         margin-top: 40px;
@@ -172,7 +197,7 @@ st.markdown(
         text-align: center;
         border-top: 1px solid #30363d;
         color: #8b949e;
-        font-size: 14px;
+        font-size: 15px;
         direction: rtl;
         line-height: 1.8;
     }
@@ -181,13 +206,13 @@ st.markdown(
         overflow: hidden;
         border: 1px solid #30363d;
         box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-        margin-top: 12px;
+        margin-top: 15px;
         margin-bottom: 20px;
     }
     .map-btn {
         display: inline-block;
-        margin-top: 8px;
-        padding: 8px 16px;
+        margin-top: 10px;
+        padding: 8px 18px;
         background-color: #238636;
         color: white !important;
         font-weight: bold;
@@ -380,13 +405,21 @@ else:
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
     )
 
-# تذييل الصفحة مع الخريطة المثبتة بـ Pin ورابط العرض المباشر في تطبيق جوجل ماب
+# تذييل الصفحة مع أرقام الواتساب والدعم الفني والعنوان التفصيلي
 st.markdown(
     """
     <div class="footer">
-        📍 <b>مقر الفرع:</b> الأكاديمية المهنية للمعلمين - فرع الجيزة (تاج الدول، إمبابة)<br>
+        💬 <b>أرقام الدعم الفني للتواصل عبر واتس آب:</b>
+        <div class="whatsapp-container">
+            <a href="https://wa.me/201069996245" target="_blank" class="whatsapp-btn">🟢 01069996245</a>
+            <a href="https://wa.me/201120807631" target="_blank" class="whatsapp-btn">🟢 01120807631</a>
+            <a href="https://wa.me/201201109892" target="_blank" class="whatsapp-btn">🟢 01201109892</a>
+        </div>
+        <br>
+        📍 <b>عنوان الفرع:</b> الأكاديمية المهنية للمعلمين - فرع الجيزة<br>
+        🏢 ش المحطة - إمبابة (بجوار مدرسة باحثة البادية التجارية بنات)<br>
         <a href="https://maps.app.goo.gl/akdNyovrEbWLJmBu9" target="_blank" class="map-btn">
-            🗺️ فتح الموقع والتوجيه في تطبيق Google Maps
+            🗺️ فتح الموقع والتوجيه المباشر في تطبيق Google Maps
         </a>
         <div class="map-container">
             <iframe 
