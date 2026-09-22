@@ -1,3 +1,4 @@
+import base64
 import os
 import pandas as pd
 import streamlit as st
@@ -31,6 +32,7 @@ st.markdown(
         align-items: center;
         margin-bottom: 20px;
         width: 100%;
+        text-align: center;
     }
     .logo-container img {
         width: 200px;
@@ -242,22 +244,31 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# عرض اللوجو متمركزاً تماماً في منتصف الصفحة
-logo_file_path = "logo.png"
-if not os.path.exists(logo_file_path):
+
+# دالة قراءة الشعار وتحويله إلى Base64 لمنع انكسار الصورة والتأكد من تمركزها
+def get_image_base64(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode()
+            return f"data:image/png;base64,{encoded_string}"
     for file in os.listdir("."):
         if file.lower().startswith("logo") and file.lower().endswith(
             (".png", ".jpg", ".jpeg")
         ):
-            logo_file_path = file
-            break
-    if not os.path.exists(logo_file_path):
-        logo_file_path = "https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+            with open(file, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode()
+                ext = file.split(".")[-1].lower()
+                return f"data:image/{ext};base64,{encoded_string}"
+    return "https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
 
+
+logo_src = get_image_base64("logo.png")
+
+# عرض اللوجو متمركزاً تماماً بدون أخطاء تحميل
 st.markdown(
     f"""
     <div class="logo-container">
-        <img src="{logo_file_path}" alt="Logo">
+        <img src="{logo_src}" alt="Logo">
     </div>
     """,
     unsafe_allow_html=True,
