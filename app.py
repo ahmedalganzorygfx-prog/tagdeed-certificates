@@ -100,10 +100,8 @@ st.markdown(
         text-align: right;
     }
 
-    /* تغيير لون الخط الداخلي لصندوق النجاح الأخضر ليكون أصفر عريض ناصع */
-    [data-testid="stNotificationContentSuccess"] p,
-    [data-testid="stNotificationContentSuccess"] div,
-    [data-testid="stNotificationContentSuccess"] span {
+    /* تغيير لون الكلام فقط داخل صندوق التنبيه الأخضر دون تغيير الخلفية */
+    [data-testid="stAlert"] * {
         color: #ffcc00 !important;
         font-weight: bold !important;
         font-size: 18px !important;
@@ -422,7 +420,7 @@ if df is not None:
                 result = df[df[id_column].str.contains(search_query, na=False)]
 
             if not result.empty:
-                # استخدام st.success الأصلية للإبقاء على الصندوق والأيقونة والخلفية الخضراء
+                # استخدام st.success الأصلية للإبقاء على الصندوق الأخصر والأيقونة
                 st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
 
                 for idx, row in result.iterrows():
