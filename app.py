@@ -486,11 +486,11 @@ st.markdown(
     }
 
     /* ========================================================================= */
-    /* 🖨️ إعدادات الطباعة الصارمة لضبط المحتوى كاملاً في صفحة واحدة بدون زيادات */
+    /* 🖨️ إعدادات الطباعة الصارمة لضغط المحتوى بالكامل في صفحة واحدة بمقاس 15*20 */
     /* ========================================================================= */
     @page {
         size: 15cm 20cm;
-        margin: 0.4cm;
+        margin: 0.2cm;
     }
     @media print {
         body, html, .stApp {
@@ -501,44 +501,53 @@ st.markdown(
             margin: 0 !important;
             padding: 0 !important;
             overflow: hidden !important;
+            page-break-inside: avoid !important;
+            page-break-after: avoid !important;
         }
 
-        /* إخفاء الهيدر الرئيسي وتنبيهات النجاح والأيقونات من المطبوعة تماماً */
+        /* إخفاء الهيدر وأيقونة المصباح ورسائل النجاح والأزرار لتجميع المحتوى في صفحة واحدة */
         .header-box, .logo-container, .custom-footer, .map-container, 
         .whatsapp-container, .stForm, .hand-container, 
         .action-btn-container, iframe, hr, [data-testid="stToast"],
-        [data-testid="stAlert"], [data-testid="stHeader"], [data-testid="stToolbar"] {
+        [data-testid="stAlert"], [data-testid="stHeader"], [data-testid="stToolbar"],
+        .element-container:has(div:contains("💡")) {
             display: none !important;
         }
 
-        /* تنسيق بطاقة المعلم لتكون الواجهة الرئيسية المطبوعة */
+        /* إخفاء نص المساعدة العلوي */
+        div:contains("💡 أدخل الرقم القومي") {
+            display: none !important;
+        }
+
+        /* تنسيق بطاقة بيانات المعلم لتكون مضغوطة وأنيقة */
         .teacher-card {
             background-color: #ffffff !important;
             border: 2px solid #0d233a !important;
             border-radius: 8px !important;
-            padding: 12px 15px !important;
-            margin: 0 0 10px 0 !important;
+            padding: 10px 14px !important;
+            margin: 0 0 6px 0 !important;
             box-shadow: none !important;
             direction: rtl !important;
             text-align: right !important;
             width: 100% !important;
             box-sizing: border-box !important;
+            page-break-inside: avoid !important;
         }
         .card-title {
             color: #0d233a !important;
-            font-size: 16px !important;
+            font-size: 15px !important;
             font-weight: 800 !important;
             border-bottom: 2px solid #d32f2f !important;
-            padding-bottom: 6px !important;
-            margin-bottom: 12px !important;
+            padding-bottom: 4px !important;
+            margin-bottom: 8px !important;
             text-align: center !important;
         }
         .card-row {
             color: #111111 !important;
-            font-size: 14px !important;
+            font-size: 13px !important;
             font-weight: 600 !important;
-            margin-bottom: 8px !important;
-            line-height: 1.5 !important;
+            margin-bottom: 5px !important;
+            line-height: 1.4 !important;
         }
         .card-row b {
             color: #d32f2f !important;
@@ -549,67 +558,72 @@ st.markdown(
         .status-green {
             background-color: #f0fdf4 !important;
             color: #15803d !important;
-            border: 2px solid #15803d !important;
-            padding: 10px !important;
+            border: 1.5px solid #15803d !important;
+            padding: 8px !important;
             border-radius: 6px !important;
             text-align: center !important;
-            font-size: 14px !important;
+            font-size: 13px !important;
             font-weight: bold !important;
-            margin-bottom: 10px !important;
+            margin-bottom: 6px !important;
+            page-break-inside: avoid !important;
         }
         .status-red {
             background-color: #fef2f2 !important;
             color: #b91c1c !important;
-            border: 2px solid #b91c1c !important;
-            padding: 10px !important;
+            border: 1.5px solid #b91c1c !important;
+            padding: 8px !important;
             border-radius: 6px !important;
             text-align: center !important;
-            font-size: 14px !important;
+            font-size: 13px !important;
             font-weight: bold !important;
-            margin-bottom: 10px !important;
+            margin-bottom: 6px !important;
+            page-break-inside: avoid !important;
         }
         .status-blue {
             background-color: #eff6ff !important;
             color: #1d4ed8 !important;
-            border: 2px solid #1d4ed8 !important;
-            padding: 10px !important;
+            border: 1.5px solid #1d4ed8 !important;
+            padding: 8px !important;
             border-radius: 6px !important;
             text-align: center !important;
-            font-size: 14px !important;
+            font-size: 13px !important;
             font-weight: bold !important;
-            margin-bottom: 10px !important;
+            margin-bottom: 6px !important;
+            page-break-inside: avoid !important;
         }
         .pulse-text {
             color: #15803d !important;
-            font-size: 15px !important;
+            font-size: 14px !important;
             font-weight: bold !important;
             animation: none !important;
         }
         .pickup-instructions {
             color: #15803d !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
         }
 
-        /* بطاقة المواعيد الرسمية بأسفل الإفادة المطبوعة */
+        /* بطاقة المواعيد الرسمية ملحقة مباشرة داخل الصفحة الأولى */
         .working-hours-box {
             display: block !important;
             background-color: #fafafa !important;
             border: 1.5px solid #0d233a !important;
-            border-right: 5px solid #d32f2f !important;
+            border-right: 4px solid #d32f2f !important;
             color: #111111 !important;
-            padding: 10px 14px !important;
+            padding: 8px 12px !important;
             border-radius: 6px !important;
-            margin-top: 8px !important;
-            font-size: 12px !important;
-            line-height: 1.6 !important;
+            margin-top: 6px !important;
+            font-size: 11px !important;
+            line-height: 1.5 !important;
             box-shadow: none !important;
             width: 100% !important;
             box-sizing: border-box !important;
+            page-break-inside: avoid !important;
         }
         .working-hours-title {
             color: #0d233a !important;
-            font-size: 13px !important;
+            font-size: 12px !important;
             font-weight: bold !important;
+            margin-bottom: 3px !important;
         }
         .working-hours-highlight {
             color: #d32f2f !important;
