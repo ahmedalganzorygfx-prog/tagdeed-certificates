@@ -79,7 +79,7 @@ ga_script = f"""
 """
 components.html(ga_script, height=0, width=0)
 
-# تطبيق التنسيق عبر CSS
+# تطبيق التنسيق عبر CSS لشاشة العرض
 st.markdown(
     """
     <style>
@@ -175,7 +175,6 @@ st.markdown(
         font-size: 14px;
         margin: 0;
     }
-    /* تنسيق النص الملون والمميز باللون الأحمر بدلاً من الذهبي */
     .highlight-red {
         color: #ff5555 !important;
         font-weight: bold;
@@ -184,7 +183,6 @@ st.markdown(
         color: #ff5555 !important;
         font-weight: bold;
     }
-    /* تنسيق مميز بخط أكبر ولون لافت لتعليمات الاستلام */
     .pickup-instructions {
         font-size: 16px !important;
         color: #ff7777 !important;
@@ -197,7 +195,6 @@ st.markdown(
         text-align: right;
     }
 
-    /* تغيير لون الكلام فقط داخل صندوق التنبيه الأخضر دون تغيير الخلفية */
     [data-testid="stAlert"] * {
         color: #ff5555 !important;
         font-weight: bold !important;
@@ -217,18 +214,17 @@ st.markdown(
         background-color: #30363d;
         border-color: #8b949e;
     }
-    /* جعل تسمية خانة الإدخال باللون الأبيض */
     .stTextInput label {
         color: #ffffff !important;
         font-weight: bold !important;
     }
-    /* تصميم خانة الإدخال لتتناغم مع التصميم الداكن */
     .stTextInput input {
         background-color: #161b22 !important;
         color: white !important;
         border: 1px solid #30363d !important;
         border-radius: 6px !important;
     }
+    
     /* تصميم بطاقة بيانات المعلم الداكنة للشاشة */
     .teacher-card {
         background-color: #161b22;
@@ -310,23 +306,10 @@ st.markdown(
         border-left: 1px solid rgba(56, 139, 253, 0.2);
     }
 
-    /* تأثير الوميض المتوهج مع تغير الألوان والخط العريض */
     @keyframes colorPulseGlow {
-        0% {
-            color: #3fb950;
-            transform: scale(1);
-            text-shadow: 0 0 4px rgba(63, 185, 80, 0.4);
-        }
-        50% {
-            color: #ff7777;
-            transform: scale(1.06);
-            text-shadow: 0 0 12px rgba(255, 119, 119, 0.8);
-        }
-        100% {
-            color: #3fb950;
-            transform: scale(1);
-            text-shadow: 0 0 4px rgba(63, 185, 80, 0.4);
-        }
+        0% { color: #3fb950; transform: scale(1); }
+        50% { color: #ff7777; transform: scale(1.06); }
+        100% { color: #3fb950; transform: scale(1); }
     }
     .pulse-text {
         display: inline-block;
@@ -336,7 +319,6 @@ st.markdown(
         margin-bottom: 5px;
     }
 
-    /* أزرار الإجراءات والمشاركة والطباعة */
     .action-btn-container {
         display: flex;
         justify-content: center;
@@ -358,9 +340,7 @@ st.markdown(
         font-size: 14px;
         transition: background-color 0.2s;
     }
-    .share-whatsapp-btn:hover {
-        background-color: #2ea043;
-    }
+    .share-whatsapp-btn:hover { background-color: #2ea043; }
 
     /* صندوق مواعيد العمل الرسمية */
     .working-hours-box {
@@ -389,7 +369,6 @@ st.markdown(
         font-size: 17px;
     }
 
-    /* تنسيق أزرار الواتساب للتواصل والدعم الفني */
     .whatsapp-container {
         display: flex;
         justify-content: center;
@@ -409,12 +388,7 @@ st.markdown(
         border-radius: 20px;
         text-decoration: none;
         font-size: 14px;
-        transition: background-color 0.2s;
     }
-    .whatsapp-btn:hover {
-        background-color: #128c7e;
-    }
-    /* تصميم تذييل الصفحة الفاخر (Footer) */
     .custom-footer {
         margin-top: 40px;
         padding: 20px;
@@ -426,13 +400,11 @@ st.markdown(
         font-size: 14px;
         direction: rtl;
         line-height: 1.8;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
     .map-container {
         border-radius: 12px;
         overflow: hidden;
         border: 1px solid #30363d;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         margin-top: 15px;
         margin-bottom: 20px;
     }
@@ -445,12 +417,7 @@ st.markdown(
         font-weight: bold;
         border-radius: 6px;
         text-decoration: none;
-        transition: background-color 0.2s;
     }
-    .map-btn:hover {
-        background-color: #2ea043;
-    }
-    /* شارة عداد الزوار */
     .visitor-badge {
         display: inline-block;
         margin-top: 15px;
@@ -462,11 +429,6 @@ st.markdown(
         font-size: 13px;
         font-weight: bold;
     }
-    .visitor-badge span {
-        color: #58a6ff;
-    }
-
-    /* تصميم تبويب توقيع الإدارة والمدير */
     .director-badge {
         display: inline-block;
         margin-top: 12px;
@@ -478,157 +440,6 @@ st.markdown(
         color: #e0e0e0;
         font-size: 14px;
         font-weight: bold;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-    .director-badge b {
-        color: #ff5555;
-        font-size: 15px;
-    }
-
-    /* ========================================================================= */
-    /* 🖨️ إعدادات الطباعة الصارمة لضغط المحتوى بالكامل في صفحة واحدة بمقاس 15*20 */
-    /* ========================================================================= */
-    @page {
-        size: 15cm 20cm;
-        margin: 0.2cm;
-    }
-    @media print {
-        body, html, .stApp {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            width: 100% !important;
-            height: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-            page-break-inside: avoid !important;
-            page-break-after: avoid !important;
-        }
-
-        /* إخفاء الهيدر وأيقونة المصباح ورسائل النجاح والأزرار لتجميع المحتوى في صفحة واحدة */
-        .header-box, .logo-container, .custom-footer, .map-container, 
-        .whatsapp-container, .stForm, .hand-container, 
-        .action-btn-container, iframe, hr, [data-testid="stToast"],
-        [data-testid="stAlert"], [data-testid="stHeader"], [data-testid="stToolbar"],
-        .element-container:has(div:contains("💡")) {
-            display: none !important;
-        }
-
-        /* إخفاء نص المساعدة العلوي */
-        div:contains("💡 أدخل الرقم القومي") {
-            display: none !important;
-        }
-
-        /* تنسيق بطاقة بيانات المعلم لتكون مضغوطة وأنيقة */
-        .teacher-card {
-            background-color: #ffffff !important;
-            border: 2px solid #0d233a !important;
-            border-radius: 8px !important;
-            padding: 10px 14px !important;
-            margin: 0 0 6px 0 !important;
-            box-shadow: none !important;
-            direction: rtl !important;
-            text-align: right !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-            page-break-inside: avoid !important;
-        }
-        .card-title {
-            color: #0d233a !important;
-            font-size: 15px !important;
-            font-weight: 800 !important;
-            border-bottom: 2px solid #d32f2f !important;
-            padding-bottom: 4px !important;
-            margin-bottom: 8px !important;
-            text-align: center !important;
-        }
-        .card-row {
-            color: #111111 !important;
-            font-size: 13px !important;
-            font-weight: 600 !important;
-            margin-bottom: 5px !important;
-            line-height: 1.4 !important;
-        }
-        .card-row b {
-            color: #d32f2f !important;
-            font-weight: 800 !important;
-        }
-
-        /* صناديق الحالات باللون الأحمر والكحلي المحسنة للطباعة */
-        .status-green {
-            background-color: #f0fdf4 !important;
-            color: #15803d !important;
-            border: 1.5px solid #15803d !important;
-            padding: 8px !important;
-            border-radius: 6px !important;
-            text-align: center !important;
-            font-size: 13px !important;
-            font-weight: bold !important;
-            margin-bottom: 6px !important;
-            page-break-inside: avoid !important;
-        }
-        .status-red {
-            background-color: #fef2f2 !important;
-            color: #b91c1c !important;
-            border: 1.5px solid #b91c1c !important;
-            padding: 8px !important;
-            border-radius: 6px !important;
-            text-align: center !important;
-            font-size: 13px !important;
-            font-weight: bold !important;
-            margin-bottom: 6px !important;
-            page-break-inside: avoid !important;
-        }
-        .status-blue {
-            background-color: #eff6ff !important;
-            color: #1d4ed8 !important;
-            border: 1.5px solid #1d4ed8 !important;
-            padding: 8px !important;
-            border-radius: 6px !important;
-            text-align: center !important;
-            font-size: 13px !important;
-            font-weight: bold !important;
-            margin-bottom: 6px !important;
-            page-break-inside: avoid !important;
-        }
-        .pulse-text {
-            color: #15803d !important;
-            font-size: 14px !important;
-            font-weight: bold !important;
-            animation: none !important;
-        }
-        .pickup-instructions {
-            color: #15803d !important;
-            font-size: 11px !important;
-        }
-
-        /* بطاقة المواعيد الرسمية ملحقة مباشرة داخل الصفحة الأولى */
-        .working-hours-box {
-            display: block !important;
-            background-color: #fafafa !important;
-            border: 1.5px solid #0d233a !important;
-            border-right: 4px solid #d32f2f !important;
-            color: #111111 !important;
-            padding: 8px 12px !important;
-            border-radius: 6px !important;
-            margin-top: 6px !important;
-            font-size: 11px !important;
-            line-height: 1.5 !important;
-            box-shadow: none !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-            page-break-inside: avoid !important;
-        }
-        .working-hours-title {
-            color: #0d233a !important;
-            font-size: 12px !important;
-            font-weight: bold !important;
-            margin-bottom: 3px !important;
-        }
-        .working-hours-highlight {
-            color: #d32f2f !important;
-            font-weight: bold !important;
-        }
     }
     </style>
 """,
@@ -786,9 +597,9 @@ if df is not None:
                         serial_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
                         break
 
-                # 1. عرض بطاقة بيانات المعلم مرة واحدة فقط
+                # 1. عرض بطاقة بيانات المعلم
                 card_code = f"""
-                <div class="teacher-card" id="printable-card">
+                <div class="teacher-card" id="print-teacher-card">
                     <div class="card-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة<br><span style="font-size: 14px; font-weight: normal; color: #d32f2f;">إفادة استعلام عن شهادة القيادة والإشراف</span></div>
                     <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
                     <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
@@ -799,49 +610,40 @@ if df is not None:
                 """
                 st.markdown(card_code, unsafe_allow_html=True)
 
-                # 2. عرض صندوق حالة الشهادة مرة واحدة فقط
+                # 2. نص حالة الشهادة ليتم استخراجها في المطبوعة
+                status_html = ""
                 if status_column and pd.notna(first_row[status_column]):
                     status_val = str(first_row[status_column]).strip()
                     if "لم تصل" in status_val:
-                        st.markdown(
-                            """
-                            <div class="status-red">
-                                🔴 لم تصل إلى الفرع حتى الآن<br>
-                                <span style="font-weight: normal; font-size: 13px;">يرجى الاستعلام في وقت لاحق.</span>
-                            </div>
-                            """,
-                            unsafe_allow_html=True,
-                        )
+                        status_html = """
+                        <div class="status-red" id="print-status-box">
+                            🔴 لم تصل إلى الفرع حتى الآن<br>
+                            <span style="font-weight: normal; font-size: 13px;">يرجى الاستعلام في وقت لاحق.</span>
+                        </div>
+                        """
                     elif "موجودة" in status_val:
-                        st.markdown(
-                            """
-                            <div class="status-green">
-                                <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
-                                <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
-                            </div>
-                            """,
-                            unsafe_allow_html=True,
-                        )
+                        status_html = """
+                        <div class="status-green" id="print-status-box">
+                            <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
+                            <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
+                        </div>
+                        """
                     elif "تسليم" in status_val:
-                        st.markdown(
-                            """
-                            <div class="status-blue">
-                                🔵 تم تسليم الشهادة للمعلم
-                            </div>
-                            """,
-                            unsafe_allow_html=True,
-                        )
+                        status_html = """
+                        <div class="status-blue" id="print-status-box">
+                            🔵 تم تسليم الشهادة للمعلم
+                        </div>
+                        """
                     else:
-                        st.markdown(
-                            f'<div class="status-blue">حالة الشهادة: {status_val}</div>',
-                            unsafe_allow_html=True,
-                        )
+                        status_html = f'<div class="status-blue" id="print-status-box">حالة الشهادة: {status_val}</div>'
 
-                # 3. زر الطباعة التفاعلي المضبوط لإطلاق أمر الطباعة للنافذة الرئيسية بالكامل
+                st.markdown(status_html, unsafe_allow_html=True)
+
+                # 3. دالة JavaScript متطورة لفتح نافذة طباعة معزولة 100% بمقاس 15*20 سم صفحة واحدة
                 components.html(
                     """
                     <div style="display: flex; justify-content: center; width: 100%;">
-                        <button onclick="window.parent.print()" style="
+                        <button onclick="printIsolatedCard()" style="
                             background-color: #1f6beb;
                             color: white;
                             font-weight: bold;
@@ -855,6 +657,146 @@ if df is not None:
                             transition: background-color 0.2s;
                         ">🖨️ طباعة إفادة الاستعلام</button>
                     </div>
+
+                    <script>
+                    function printIsolatedCard() {
+                        var cardElem = window.parent.document.getElementById('print-teacher-card');
+                        var statusElem = window.parent.document.getElementById('print-status-box');
+                        
+                        var cardHtml = cardElem ? cardElem.outerHTML : '';
+                        var statusHtml = statusElem ? statusElem.outerHTML : '';
+                        
+                        var printWin = window.open('', '', 'width=650,height=800');
+                        printWin.document.write(`
+                            <!DOCTYPE html>
+                            <html dir="rtl" lang="ar">
+                            <head>
+                                <meta charset="utf-8">
+                                <title>إفادة استعلام - فرع الجيزة</title>
+                                <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+                                <style>
+                                    @page {
+                                        size: 15cm 20cm;
+                                        margin: 0.4cm;
+                                    }
+                                    body {
+                                        font-family: 'Cairo', sans-serif;
+                                        direction: rtl;
+                                        text-align: right;
+                                        background-color: #fff;
+                                        color: #000;
+                                        margin: 0;
+                                        padding: 10px;
+                                        box-sizing: border-box;
+                                    }
+                                    .teacher-card {
+                                        border: 2px solid #0d233a;
+                                        border-radius: 8px;
+                                        padding: 12px 16px;
+                                        margin-bottom: 10px;
+                                    }
+                                    .card-title {
+                                        color: #0d233a;
+                                        font-size: 16px;
+                                        font-weight: 800;
+                                        border-bottom: 2px solid #d32f2f;
+                                        padding-bottom: 6px;
+                                        margin-bottom: 12px;
+                                        text-align: center;
+                                    }
+                                    .card-row {
+                                        font-size: 14px;
+                                        font-weight: 600;
+                                        margin-bottom: 8px;
+                                        color: #111;
+                                    }
+                                    .card-row b {
+                                        color: #d32f2f;
+                                    }
+                                    .status-green {
+                                        background-color: #f0fdf4;
+                                        color: #15803d;
+                                        border: 1.5px solid #15803d;
+                                        padding: 10px;
+                                        border-radius: 6px;
+                                        text-align: center;
+                                        font-size: 13px;
+                                        font-weight: bold;
+                                        margin-bottom: 10px;
+                                    }
+                                    .status-red {
+                                        background-color: #fef2f2;
+                                        color: #b91c1c;
+                                        border: 1.5px solid #b91c1c;
+                                        padding: 10px;
+                                        border-radius: 6px;
+                                        text-align: center;
+                                        font-size: 13px;
+                                        font-weight: bold;
+                                        margin-bottom: 10px;
+                                    }
+                                    .status-blue {
+                                        background-color: #eff6ff;
+                                        color: #1d4ed8;
+                                        border: 1.5px solid #1d4ed8;
+                                        padding: 10px;
+                                        border-radius: 6px;
+                                        text-align: center;
+                                        font-size: 13px;
+                                        font-weight: bold;
+                                        margin-bottom: 10px;
+                                    }
+                                    .pulse-text {
+                                        color: #15803d;
+                                        font-size: 15px;
+                                        font-weight: bold;
+                                    }
+                                    .pickup-instructions {
+                                        color: #15803d;
+                                        font-size: 12px;
+                                    }
+                                    .working-hours-print {
+                                        background-color: #fafafa;
+                                        border: 1.5px solid #0d233a;
+                                        border-right: 5px solid #d32f2f;
+                                        color: #111;
+                                        padding: 10px 14px;
+                                        border-radius: 6px;
+                                        font-size: 12px;
+                                        line-height: 1.6;
+                                    }
+                                    .working-hours-title {
+                                        color: #0d233a;
+                                        font-size: 13px;
+                                        font-weight: bold;
+                                        margin-bottom: 4px;
+                                    }
+                                    .highlight {
+                                        color: #d32f2f;
+                                        font-weight: bold;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                ${cardHtml}
+                                ${statusHtml}
+                                <div class="working-hours-print">
+                                    <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
+                                    • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
+                                    • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
+                                </div>
+                                <script>
+                                    window.onload = function() {
+                                        window.print();
+                                        setTimeout(function() { window.close(); }, 500);
+                                    };
+                                <\/script>
+                            </body>
+                            </html>
+                        `);
+                        printWin.document.close();
+                    }
+                    </script>
                     """,
                     height=60,
                 )
@@ -874,7 +816,7 @@ whatsapp_share_text = "https://wa.me/?text=" + pd.Series([
     "🏛️ بوابة الاستعلام عن شهادات القيادة والإشراف - فرع الجيزة:\nاستعلم عن حالة شهادتك الآن من الرابط التالي:\nhttps://giza-academy.streamlit.app"
 ]).str.replace(" ", "%20").iloc[0]
 
-# صندوق مواعيد العمل الرسمية (يظهر بالشاشة وبأسفل المطبوعة تلقائياً)
+# صندوق مواعيد العمل الرسمية في البوابة
 st.markdown(
     """
     <div class="working-hours-box">
