@@ -65,7 +65,11 @@ st.markdown(
         font-size: 14px;
         margin: 0;
     }
-    /* تنسيق اللون الأصفر للبرامج التدريبية */
+    /* تنسيق النص الملون والمميز داخل العنوان والبرامج */
+    .highlight-yellow {
+        color: #ffcc00 !important;
+        font-weight: bold;
+    }
     .programs-text {
         color: #ffcc00 !important;
         font-weight: bold;
@@ -245,7 +249,7 @@ st.markdown(
 )
 
 
-# دالة قراءة الشعار وتحويله إلى Base64 لمنع انكسار الصورة والتأكد من تمركزها
+# دالة قراءة الشعار وتحويله إلى Base64 لمنع انكسار الصورة
 def get_image_base64(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as image_file:
@@ -264,7 +268,7 @@ def get_image_base64(file_path):
 
 logo_src = get_image_base64("logo.png")
 
-# عرض اللوجو متمركزاً تماماً بدون أخطاء تحميل
+# عرض اللوجو متمركزاً في المنتصف
 st.markdown(
     f"""
     <div class="logo-container">
@@ -274,12 +278,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# صندوق العنوان والبرامج التدريبية
+# صندوق العنوان والموضوع مع تمييز (تجديد - بدل فاقد) باللون الأصفر
 st.markdown(
     """
     <div class="header-box">
         <h2>🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</h2>
-        <h4>الاستعلام عن تجديد شهادة القيادة والإشراف</h4>
+        <h4>الاستعلام عن <span class="highlight-yellow">(تجديد - بدل فاقد)</span> شهادة القيادة والإشراف</h4>
         <p><b>البرامج التدريبية :</b> <span class="programs-text">مدير ووكيل إدارة تعليمية &nbsp;|&nbsp; مدير ووكيل إدارة مدرسية &nbsp;|&nbsp; أساسيات التوجيه الفني</span></p>
     </div>
     """,
