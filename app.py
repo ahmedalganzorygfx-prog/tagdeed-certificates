@@ -233,7 +233,7 @@ st.markdown(
         border: 1px solid #30363d;
         padding: 22px;
         border-radius: 12px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         text-align: right;
         direction: rtl;
@@ -258,7 +258,8 @@ st.markdown(
         padding: 14px;
         border-radius: 8px;
         border-right: 5px solid #f85149;
-        margin-top: 15px;
+        margin-top: 10px;
+        margin-bottom: 15px;
         font-size: 16px;
         font-weight: bold;
         text-align: center;
@@ -273,7 +274,8 @@ st.markdown(
         padding: 16px;
         border-radius: 8px;
         border-right: 5px solid #2ea043;
-        margin-top: 15px;
+        margin-top: 10px;
+        margin-bottom: 15px;
         font-size: 16px;
         font-weight: bold;
         text-align: center;
@@ -288,7 +290,8 @@ st.markdown(
         padding: 14px;
         border-radius: 8px;
         border-right: 5px solid #388bfd;
-        margin-top: 15px;
+        margin-top: 10px;
+        margin-bottom: 15px;
         font-size: 16px;
         font-weight: bold;
         text-align: center;
@@ -556,289 +559,299 @@ if df is not None:
                 result = df[df[id_column].str.contains(search_query, na=False)]
 
             if not result.empty:
-                st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
+                num_results = len(result)
+                if num_results > 1:
+                    st.success(f"🎉 تم العثور على ({num_results}) شهادة مرتبطة بالرقم القومي:")
+                else:
+                    st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
 
-                # أخذ الصف الأول لعرض بيانات المعلم وحالته مرة واحدة فقط
-                first_row = result.iloc[0]
+                # المرور على جميع الشهادات المعثور عليها
+                for idx, row in result.iterrows():
+                    name_val = "غير متوفر"
+                    for c in df.columns:
+                        if any(
+                            k in c for k in ["اسم", "الاسم", "المعلم", "السيد"]
+                        ) and not any(
+                            k in c for k in ["قومي", "إدارة", "الادارة"]
+                        ):
+                            name_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
+                            break
 
-                name_val = "غير متوفر"
-                for c in df.columns:
-                    if any(
-                        k in c for k in ["اسم", "الاسم", "المعلم", "السيد"]
-                    ) and not any(
-                        k in c for k in ["قومي", "إدارة", "الادارة"]
-                    ):
-                        name_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
-                        break
+                    admin_val = "غير متوفر"
+                    for c in df.columns:
+                        if "الادارة" in c or "الإدارة" in c:
+                            admin_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
+                            break
 
-                admin_val = "غير متوفر"
-                for c in df.columns:
-                    if "الادارة" in c or "الإدارة" in c:
-                        admin_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
-                        break
+                    prog_val = "غير متوفر"
+                    for c in df.columns:
+                        if any(k in c for k in ["البرنامج", "الترقي", "التدريب"]):
+                            prog_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
+                            break
 
-                prog_val = "غير متوفر"
-                for c in df.columns:
-                    if any(k in c for k in ["البرنامج", "الترقي", "التدريب"]):
-                        prog_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
-                        break
+                    serial_val = "غير متوفر"
+                    for c in df.columns:
+                        if "مسلسل" in c or c.strip() == "م":
+                            serial_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
+                            break
 
-                serial_val = "غير متوفر"
-                for c in df.columns:
-                    if "مسلسل" in c or c.strip() == "م":
-                        serial_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
-                        break
+                    card_id = f"print-teacher-card-{idx}"
+                    status_id = f"print-status-box-{idx}"
 
-                # 1. عرض بطاقة بيانات المعلم
-                card_code = f"""
-                <div class="teacher-card" id="print-teacher-card">
-                    <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
-                    <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
-                    <div class="card-row"><b>الرقم القومي:</b> {first_row[id_column]}</div>
-                    <div class="card-row"><b>الإدارة التعليمية:</b> {admin_val}</div>
-                    <div class="card-row"><b>البرنامج التدريبي:</b> {prog_val}</div>
-                </div>
-                """
-                st.markdown(card_code, unsafe_allow_html=True)
+                    # 1. عرض بطاقة بيانات الشهادة
+                    card_code = f"""
+                    <div class="teacher-card" id="{card_id}">
+                        <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
+                        <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
+                        <div class="card-row"><b>الرقم القومي:</b> {row[id_column]}</div>
+                        <div class="card-row"><b>الإدارة التعليمية:</b> {admin_val}</div>
+                        <div class="card-row"><b>البرنامج التدريبي:</b> {prog_val}</div>
+                    </div>
+                    """
+                    st.markdown(card_code, unsafe_allow_html=True)
 
-                # 2. فحص حالة الشهادة وعرضها
-                status_html = ""
-                is_available = False
+                    # 2. فحص حالة الشهادة الحالية وعرضها
+                    status_html = ""
+                    is_available = False
 
-                if status_column and pd.notna(first_row[status_column]):
-                    status_val = str(first_row[status_column]).strip()
-                    if "لم تصل" in status_val:
-                        status_html = """
-                        <div class="status-red" id="print-status-box">
-                            🔴 لم تصل إلى الفرع حتى الآن<br>
-                            <span style="font-weight: normal; font-size: 13px;">يرجى الاستعلام في وقت لاحق.</span>
-                        </div>
-                        """
-                    elif "موجودة" in status_val:
-                        is_available = True
-                        status_html = """
-                        <div class="status-green" id="print-status-box">
-                            <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
-                            <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
-                        </div>
-                        """
-                    elif "تسليم" in status_val:
-                        status_html = """
-                        <div class="status-blue" id="print-status-box">
-                            🔵 تم تسليم الشهادة للمعلم
-                        </div>
-                        """
-                    else:
-                        status_html = f'<div class="status-blue" id="print-status-box">حالة الشهادة: {status_val}</div>'
+                    if status_column and pd.notna(row[status_column]):
+                        status_val = str(row[status_column]).strip()
+                        if "لم تصل" in status_val:
+                            status_html = f"""
+                            <div class="status-red" id="{status_id}">
+                                🔴 لم تصل إلى الفرع حتى الآن<br>
+                                <span style="font-weight: normal; font-size: 13px;">يرجى الاستعلام في وقت لاحق.</span>
+                            </div>
+                            """
+                        elif "موجودة" in status_val:
+                            is_available = True
+                            status_html = f"""
+                            <div class="status-green" id="{status_id}">
+                                <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
+                                <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
+                            </div>
+                            """
+                        elif "تسليم" in status_val:
+                            status_html = f"""
+                            <div class="status-blue" id="{status_id}">
+                                🔵 تم تسليم الشهادة للمعلم
+                            </div>
+                            """
+                        else:
+                            status_html = f'<div class="status-blue" id="{status_id}">حالة الشهادة: {status_val}</div>'
 
-                st.markdown(status_html, unsafe_allow_html=True)
+                    st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. إظهار زر الطباعة لطباعة الإفادة مع وضع العنوان تحت الشعار مباشرة
-                if is_available:
-                    components.html(
-                        f"""
-                        <div style="display: flex; justify-content: center; width: 100%;">
-                            <button onclick="printIsolatedCard()" style="
-                                background-color: #1f6beb;
-                                color: white;
-                                font-weight: bold;
-                                border-radius: 8px;
-                                border: none;
-                                padding: 12px 28px;
-                                font-size: 16px;
-                                cursor: pointer;
-                                font-family: 'Cairo', sans-serif, Arial;
-                                box-shadow: 0 4px 12px rgba(31,107,235,0.4);
-                                transition: background-color 0.2s;
-                            ">🖨️ طباعة إفادة الاستعلام</button>
-                        </div>
+                    # 3. إظهار زر الطباعة لهذه الشهادة تحديداً إن كانت موجودة بالفرع
+                    if is_available:
+                        components.html(
+                            f"""
+                            <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 25px;">
+                                <button onclick="printIsolatedCard_{idx}()" style="
+                                    background-color: #1f6beb;
+                                    color: white;
+                                    font-weight: bold;
+                                    border-radius: 8px;
+                                    border: none;
+                                    padding: 10px 24px;
+                                    font-size: 15px;
+                                    cursor: pointer;
+                                    font-family: 'Cairo', sans-serif, Arial;
+                                    box-shadow: 0 4px 12px rgba(31,107,235,0.4);
+                                    transition: background-color 0.2s;
+                                ">🖨️ طباعة إفادة الاستعلام لهذه الشهادة</button>
+                            </div>
 
-                        <script>
-                        function printIsolatedCard() {{
-                            var cardElem = window.parent.document.getElementById('print-teacher-card');
-                            var statusElem = window.parent.document.getElementById('print-status-box');
-                            
-                            var cardHtml = cardElem ? cardElem.outerHTML : '';
-                            var statusHtml = statusElem ? statusElem.outerHTML : '';
-                            
-                            var printWin = window.open('', '', 'width=650,height=850');
-                            printWin.document.write(`
-                                <!DOCTYPE html>
-                                <html dir="rtl" lang="ar">
-                                <head>
-                                    <meta charset="utf-8">
-                                    <title>إفادة استعلام - فرع الجيزة</title>
-                                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-                                    <style>
-                                        @page {{
-                                            size: 15cm 20cm;
-                                            margin: 0.3cm;
-                                        }}
-                                        html, body {{
-                                            margin: 0;
-                                            padding: 0;
-                                            background-color: #fff;
-                                            color: #000;
-                                            font-family: 'Cairo', sans-serif, Arial;
-                                            direction: rtl;
-                                            text-align: right;
-                                        }}
-                                        body {{
-                                            padding: 10px 12px;
-                                            box-sizing: border-box;
-                                        }}
-                                        .container {{
-                                            width: 100%;
-                                            max-width: 14cm;
-                                            margin: 0 auto;
-                                        }}
-                                        .print-header {{
-                                            text-align: center;
-                                            margin-bottom: 12px;
-                                            margin-top: 5px;
-                                        }}
-                                        .print-header img {{
-                                            width: 110px;
-                                            height: auto;
-                                            margin-bottom: 6px;
-                                        }}
-                                        .print-header-title {{
-                                            color: #0d233a;
-                                            font-size: 16px;
-                                            font-weight: 800;
-                                            margin-bottom: 4px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .print-header-subtitle {{
-                                            color: #d32f2f;
-                                            font-size: 14px;
-                                            font-weight: 700;
-                                            margin-bottom: 10px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .teacher-card {{
-                                            border: 2px solid #0d233a;
-                                            border-radius: 8px;
-                                            padding: 10px 14px;
-                                            margin-bottom: 8px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .card-row {{
-                                            font-size: 13px;
-                                            font-weight: 600;
-                                            margin-bottom: 6px;
-                                            color: #111;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .card-row b {{
-                                            color: #d32f2f;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .status-green {{
-                                            background-color: #f0fdf4;
-                                            color: #15803d;
-                                            border: 1.5px solid #15803d;
-                                            padding: 8px;
-                                            border-radius: 6px;
-                                            text-align: center;
-                                            font-size: 12px;
-                                            font-weight: bold;
-                                            margin-bottom: 8px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .pulse-text {{
-                                            color: #15803d;
-                                            font-size: 14px;
-                                            font-weight: bold;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .pickup-instructions {{
-                                            color: #15803d;
-                                            font-size: 11px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .working-hours-print {{
-                                            background-color: #fafafa;
-                                            border: 1.5px solid #0d233a;
-                                            border-right: 5px solid #d32f2f;
-                                            color: #111;
-                                            padding: 8px 12px;
-                                            border-radius: 6px;
-                                            font-size: 11px;
-                                            line-height: 1.5;
-                                            margin-bottom: 12px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .working-hours-title {{
-                                            color: #0d233a;
-                                            font-size: 12px;
-                                            font-weight: bold;
-                                            margin-bottom: 3px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .highlight {{
-                                            color: #d32f2f;
-                                            font-weight: bold;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .print-footer-signature {{
-                                            display: flex;
-                                            justify-content: center;
-                                            align-items: center;
-                                            width: 100%;
-                                            margin-top: 8px;
-                                            text-align: center;
-                                        }}
-                                        .signature-box {{
-                                            text-align: center;
-                                            font-size: 13px;
-                                            font-weight: bold;
-                                            color: #0d233a;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .signature-box b {{
-                                            color: #d32f2f;
-                                            font-size: 15px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                    </style>
-                                </head>
-                                <body>
-                                    <div class="container">
-                                        <div class="print-header">
-                                            <img src="{logo_src}" alt="شعار الأكاديمية">
-                                            <div class="print-header-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</div>
-                                            <div class="print-header-subtitle">إفادة استعلام عن شهادة القيادة والإشراف</div>
-                                        </div>
-                                        ${{cardHtml}}
-                                        ${{statusHtml}}
-                                        <div class="working-hours-print">
-                                            <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
-                                            • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
-                                            • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
-                                        </div>
-                                        <div class="print-footer-signature">
-                                            <div class="signature-box">
-                                                مدير إدارة الفرع<br>
-                                                <b>أ. أحمد الجنزوري</b>
+                            <script>
+                            function printIsolatedCard_{idx}() {{
+                                var cardElem = window.parent.document.getElementById('{card_id}');
+                                var statusElem = window.parent.document.getElementById('{status_id}');
+                                
+                                var cardHtml = cardElem ? cardElem.outerHTML : '';
+                                var statusHtml = statusElem ? statusElem.outerHTML : '';
+                                
+                                var printWin = window.open('', '', 'width=650,height=850');
+                                printWin.document.write(`
+                                    <!DOCTYPE html>
+                                    <html dir="rtl" lang="ar">
+                                    <head>
+                                        <meta charset="utf-8">
+                                        <title>إفادة استعلام - فرع الجيزة</title>
+                                        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+                                        <style>
+                                            @page {{
+                                                size: 15cm 20cm;
+                                                margin: 0.3cm;
+                                            }}
+                                            html, body {{
+                                                margin: 0;
+                                                padding: 0;
+                                                background-color: #fff;
+                                                color: #000;
+                                                font-family: 'Cairo', sans-serif, Arial;
+                                                direction: rtl;
+                                                text-align: right;
+                                            }}
+                                            body {{
+                                                padding: 10px 12px;
+                                                box-sizing: border-box;
+                                            }}
+                                            .container {{
+                                                width: 100%;
+                                                max-width: 14cm;
+                                                margin: 0 auto;
+                                            }}
+                                            .print-header {{
+                                                text-align: center;
+                                                margin-bottom: 12px;
+                                                margin-top: 5px;
+                                            }}
+                                            .print-header img {{
+                                                width: 110px;
+                                                height: auto;
+                                                margin-bottom: 6px;
+                                            }}
+                                            .print-header-title {{
+                                                color: #0d233a;
+                                                font-size: 16px;
+                                                font-weight: 800;
+                                                margin-bottom: 4px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .print-header-subtitle {{
+                                                color: #d32f2f;
+                                                font-size: 14px;
+                                                font-weight: 700;
+                                                margin-bottom: 10px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .teacher-card {{
+                                                border: 2px solid #0d233a;
+                                                border-radius: 8px;
+                                                padding: 10px 14px;
+                                                margin-bottom: 8px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .card-row {{
+                                                font-size: 13px;
+                                                font-weight: 600;
+                                                margin-bottom: 6px;
+                                                color: #111;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .card-row b {{
+                                                color: #d32f2f;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .status-green {{
+                                                background-color: #f0fdf4;
+                                                color: #15803d;
+                                                border: 1.5px solid #15803d;
+                                                padding: 8px;
+                                                border-radius: 6px;
+                                                text-align: center;
+                                                font-size: 12px;
+                                                font-weight: bold;
+                                                margin-bottom: 8px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .pulse-text {{
+                                                color: #15803d;
+                                                font-size: 14px;
+                                                font-weight: bold;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .pickup-instructions {{
+                                                color: #15803d;
+                                                font-size: 11px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .working-hours-print {{
+                                                background-color: #fafafa;
+                                                border: 1.5px solid #0d233a;
+                                                border-right: 5px solid #d32f2f;
+                                                color: #111;
+                                                padding: 8px 12px;
+                                                border-radius: 6px;
+                                                font-size: 11px;
+                                                line-height: 1.5;
+                                                margin-bottom: 12px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .working-hours-title {{
+                                                color: #0d233a;
+                                                font-size: 12px;
+                                                font-weight: bold;
+                                                margin-bottom: 3px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .highlight {{
+                                                color: #d32f2f;
+                                                font-weight: bold;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .print-footer-signature {{
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                width: 100%;
+                                                margin-top: 8px;
+                                                text-align: center;
+                                            }}
+                                            .signature-box {{
+                                                text-align: center;
+                                                font-size: 13px;
+                                                font-weight: bold;
+                                                color: #0d233a;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                            .signature-box b {{
+                                                color: #d32f2f;
+                                                font-size: 15px;
+                                                font-family: 'Cairo', sans-serif;
+                                            }}
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <div class="container">
+                                            <div class="print-header">
+                                                <img src="{logo_src}" alt="شعار الأكاديمية">
+                                                <div class="print-header-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</div>
+                                                <div class="print-header-subtitle">إفادة استعلام عن شهادة القيادة والإشراف</div>
+                                            </div>
+                                            ${{cardHtml}}
+                                            ${{statusHtml}}
+                                            <div class="working-hours-print">
+                                                <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
+                                                • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
+                                                • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
+                                            </div>
+                                            <div class="print-footer-signature">
+                                                <div class="signature-box">
+                                                    مدير إدارة الفرع<br>
+                                                    <b>أ. أحمد الجنزوري</b>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <script>
-                                        window.onload = function() {{
-                                            window.print();
-                                            setTimeout(function() {{ window.close(); }}, 500);
-                                        }};
-                                    <\/script>
-                                </body>
-                                </html>
-                            `);
-                            printWin.document.close();
-                        }}
-                        </script>
-                        """,
-                        height=60,
-                    )
+                                        <script>
+                                            window.onload = function() {{
+                                                window.print();
+                                                setTimeout(function() {{ window.close(); }}, 500);
+                                            }};
+                                        <\/script>
+                                    </body>
+                                    </html>
+                                `);
+                                printWin.document.close();
+                            }}
+                            </script>
+                            """,
+                            height=55,
+                        )
+
+                    # خط فاصل بين الشهادات في حالة وجود أكثر من شهادة
+                    if num_results > 1 and idx != result.index[-1]:
+                        st.markdown("<hr style='border: 1px dashed #30363d; margin: 20px 0;'>", unsafe_allow_html=True)
             else:
                 st.error(
                     "❌ عذراً، لم يتم العثور على بيانات بهذا الرقم القومي. تأكد من صحة الرقم المُدخل."
