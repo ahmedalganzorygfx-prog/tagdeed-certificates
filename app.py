@@ -24,6 +24,20 @@ st.markdown(
         font-family: 'Cairo', sans-serif, Arial;
         color: #e0e0e0;
     }
+    /* حاوية مخصصة لتوسيط الشعار تماماً في المنتصف */
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    .logo-container img {
+        width: 200px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
     /* تصميم رأس الصفحة بلون كحلي داكن فاخر ومتمركز */
     .header-box {
         background-color: #161b22;
@@ -228,26 +242,26 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# وضع الشعار تكبير العرض إلى 200px وتعديل الأعمدة لضمان التمركز
-col_spacer1, col_logo, col_spacer2 = st.columns([1, 1, 1])
-with col_logo:
-    logo_path = "logo.png"
-    if os.path.exists(logo_path):
-        st.image(logo_path, width=200)
-    else:
-        found = False
-        for file in os.listdir("."):
-            if file.lower().startswith("logo") and file.lower().endswith(
-                (".png", ".jpg", ".jpeg")
-            ):
-                st.image(file, width=200)
-                found = True
-                break
-        if not found:
-            st.image(
-                "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
-                width=180,
-            )
+# عرض اللوجو متمركزاً تماماً في منتصف الصفحة
+logo_file_path = "logo.png"
+if not os.path.exists(logo_file_path):
+    for file in os.listdir("."):
+        if file.lower().startswith("logo") and file.lower().endswith(
+            (".png", ".jpg", ".jpeg")
+        ):
+            logo_file_path = file
+            break
+    if not os.path.exists(logo_file_path):
+        logo_file_path = "https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+
+st.markdown(
+    f"""
+    <div class="logo-container">
+        <img src="{logo_file_path}" alt="Logo">
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # صندوق العنوان والبرامج التدريبية
 st.markdown(
