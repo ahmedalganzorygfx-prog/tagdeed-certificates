@@ -233,7 +233,7 @@ st.markdown(
     .teacher-card {
         background-color: #161b22;
         border: 1px solid #30363d;
-        padding: 20px;
+        padding: 22px;
         border-radius: 12px;
         margin-bottom: 20px;
         box-shadow: 0 6px 15px rgba(0,0,0,0.4);
@@ -242,7 +242,7 @@ st.markdown(
     }
     .card-title {
         color: #58a6ff;
-        font-size: 19px;
+        font-size: 20px;
         font-weight: bold;
         margin-bottom: 15px;
         border-bottom: 1px solid #30363d;
@@ -259,7 +259,7 @@ st.markdown(
         direction: rtl;
     }
     .card-row b {
-        color: #ffcc00 !important;
+        color: #58a6ff !important;
         font-weight: bold !important;
     }
     
@@ -318,9 +318,9 @@ st.markdown(
             text-shadow: 0 0 4px rgba(63, 185, 80, 0.4);
         }
         50% {
-            color: #ffe566;
+            color: #89dceb;
             transform: scale(1.06);
-            text-shadow: 0 0 12px rgba(255, 229, 102, 0.8);
+            text-shadow: 0 0 12px rgba(137, 220, 235, 0.8);
         }
         100% {
             color: #3fb950;
@@ -362,7 +362,7 @@ st.markdown(
         background-color: #2ea043;
     }
 
-    /* صندوق مواعيد العمل الرسمية بتصميم جديد ومبرز */
+    /* صندوق مواعيد العمل الرسمية */
     .working-hours-box {
         background-color: #161b22;
         border: 1px solid #30363d;
@@ -384,7 +384,7 @@ st.markdown(
         margin-bottom: 8px;
     }
     .working-hours-highlight {
-        color: #ffcc00 !important;
+        color: #58a6ff !important;
         font-weight: bold;
         font-size: 17px;
     }
@@ -473,7 +473,7 @@ st.markdown(
         padding: 8px 20px;
         background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
         border: 1px solid #30363d;
-        border-right: 4px solid #ffcc00;
+        border-right: 4px solid #58a6ff;
         border-radius: 8px;
         color: #e0e0e0;
         font-size: 14px;
@@ -481,68 +481,102 @@ st.markdown(
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .director-badge b {
-        color: #ffcc00;
+        color: #58a6ff;
         font-size: 15px;
     }
 
     /* ======================================================== */
-    /* 🖨️ تنسيقات الطباعة المخصصة بمقاس 15*21 سم (A5) بالألوان */
+    /* 🖨️ تنسيقات الطباعة المخصصة لصفحة كاملة مقاس (15*20 سم) */
     /* ======================================================== */
     @page {
-        size: 15cm 21cm;
-        margin: 0.8cm;
+        size: 15cm 20cm;
+        margin: 0.6cm;
     }
     @media print {
         body, html, .stApp {
             background-color: #ffffff !important;
             color: #000000 !important;
             width: 15cm !important;
-            height: 21cm !important;
+            height: 20cm !important;
             margin: 0 auto !important;
             padding: 0 !important;
         }
 
-        /* إخفاء العناصر غير المرغوبة أثناء الطباعة */
-        .logo-container, .header-box, .custom-footer, .map-container, 
+        /* إخفاء العناصر غير المطلوبة في الطباعة */
+        .custom-footer, .map-container, 
         .whatsapp-container, .stForm, .hand-container, 
-        .action-btn-container, .working-hours-box, iframe, hr,
+        .action-btn-container, iframe, hr,
         [data-testid="stHeader"], [data-testid="stToolbar"] {
             display: none !important;
         }
 
-        /* تنسيق بطاقة المعلم لتظهر ملونة وواضحة جداً */
+        /* إظهار رأس الإفادة والشعار عند الطباعة بشكل كامل */
+        .logo-container {
+            display: flex !important;
+            justify-content: center !important;
+            margin-bottom: 8px !important;
+        }
+        .logo-container img {
+            width: 120px !important;
+        }
+
+        .header-box {
+            background-color: #ffffff !important;
+            border: none !important;
+            border-bottom: 2px solid #0d233a !important;
+            border-radius: 0 !important;
+            color: #0d233a !important;
+            padding: 8px 0 !important;
+            margin-bottom: 15px !important;
+            box-shadow: none !important;
+        }
+        .header-box h2 {
+            color: #0d233a !important;
+            font-size: 20px !important;
+        }
+        .header-box .main-title {
+            color: #1f6beb !important;
+            font-size: 18px !important;
+        }
+        .highlight-yellow, .programs-text {
+            color: #0d233a !important;
+        }
+
+        /* تنسيق بطاقة المعلم لتأخذ كامل عرض الصفحة (15*20 سم) */
         .teacher-card {
             background-color: #ffffff !important;
-            border: 3px double #0d233a !important;
-            border-radius: 12px !important;
-            padding: 18px !important;
-            margin: 10px 0 !important;
+            border: 2px solid #0d233a !important;
+            border-radius: 10px !important;
+            padding: 20px !important;
+            margin: 12px 0 !important;
             box-shadow: none !important;
             direction: rtl !important;
             text-align: right !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
         }
         .card-title {
             color: #0d233a !important;
             font-size: 20px !important;
             font-weight: 800 !important;
-            border-bottom: 2px solid #c9a227 !important;
+            border-bottom: 2px solid #1f6beb !important;
             padding-bottom: 8px !important;
             margin-bottom: 16px !important;
             text-align: center !important;
         }
         .card-row {
-            color: #1e1e1e !important;
+            color: #111111 !important;
             font-size: 16px !important;
             font-weight: 600 !important;
             margin-bottom: 12px !important;
             line-height: 1.6 !important;
         }
         .card-row b {
-            color: #b8860b !important;
+            color: #0d233a !important;
             font-weight: 800 !important;
         }
 
-        /* تنسيق صناديق الحالات الملونة للطباعة */
+        /* تنسيق صناديق الحالات بدون ألوان ذهبية */
         .status-green {
             background-color: #e6f4ea !important;
             color: #137333 !important;
@@ -552,6 +586,7 @@ st.markdown(
             text-align: center !important;
             font-size: 16px !important;
             font-weight: bold !important;
+            margin-bottom: 15px !important;
         }
         .status-red {
             background-color: #fce8e6 !important;
@@ -562,6 +597,7 @@ st.markdown(
             text-align: center !important;
             font-size: 16px !important;
             font-weight: bold !important;
+            margin-bottom: 15px !important;
         }
         .status-blue {
             background-color: #e8f0fe !important;
@@ -572,6 +608,7 @@ st.markdown(
             text-align: center !important;
             font-size: 16px !important;
             font-weight: bold !important;
+            margin-bottom: 15px !important;
         }
         .pulse-text {
             color: #137333 !important;
@@ -582,6 +619,32 @@ st.markdown(
         .pickup-instructions {
             color: #137333 !important;
             font-size: 14px !important;
+        }
+
+        /* إضافة تنسيق بطاقة المواعيد الرسمية بأسفل الإفادة المطبوعة */
+        .working-hours-box {
+            display: block !important;
+            background-color: #f8f9fa !important;
+            border: 2px solid #0d233a !important;
+            border-right: 6px solid #1f6beb !important;
+            color: #111111 !important;
+            padding: 14px 18px !important;
+            border-radius: 8px !important;
+            margin-top: 20px !important;
+            font-size: 14px !important;
+            line-height: 1.7 !important;
+            box-shadow: none !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .working-hours-title {
+            color: #0d233a !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
+        .working-hours-highlight {
+            color: #1f6beb !important;
+            font-weight: bold !important;
         }
     }
     </style>
@@ -807,7 +870,7 @@ if df is not None:
                             font-family: 'Cairo', sans-serif, Arial;
                             box-shadow: 0 4px 12px rgba(31,107,235,0.4);
                             transition: background-color 0.2s;
-                        ">🖨️ طباعة إفادة الاستعلام (15×21 سم)</button>
+                        ">🖨️ طباعة إفادة الاستعلام</button>
                     </div>
                     """,
                     height=60,
@@ -828,7 +891,7 @@ whatsapp_share_text = "https://wa.me/?text=" + pd.Series([
     "🏛️ بوابة الاستعلام عن شهادات القيادة والإشراف - فرع الجيزة:\nاستعلم عن حالة شهادتك الآن من الرابط التالي:\nhttps://giza-academy.streamlit.app"
 ]).str.replace(" ", "%20").iloc[0]
 
-# صندوق مواعيد العمل الرسمية المحسن والمكبر
+# صندوق مواعيد العمل الرسمية (يظهر بالشاشة وبأسفل المطبوعة تلقائياً)
 st.markdown(
     """
     <div class="working-hours-box">
