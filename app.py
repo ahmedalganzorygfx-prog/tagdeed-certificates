@@ -489,7 +489,7 @@ if df is not None:
                                 """
                                 <div class="status-green">
                                     <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
-                                    <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة معتمدة + صورة البطاقة.</span>
+                                    <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
                                 </div>
                                 """,
                                 unsafe_allow_html=True,
