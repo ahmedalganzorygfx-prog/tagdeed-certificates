@@ -110,13 +110,14 @@ st.markdown(
         font-family: 'Cairo', sans-serif, Arial;
         color: #e0e0e0;
     }
-    /* حاوية مخصصة لتوسيط الشعار وصورة الاستلام تماماً في المنتصف */
+    /* حاوية مخصصة لتوسيط الشعار واسم الفرع في المنتصف */
     .logo-container {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         margin-top: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         width: 100%;
         text-align: center;
     }
@@ -124,13 +125,20 @@ st.markdown(
         width: 180px;
         height: auto;
         display: block;
-        margin: 0 auto;
+        margin: 0 auto 10px auto;
+    }
+    .branch-name-top {
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
     }
     .hand-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 10px;
+        margin-top: 5px;
         margin-bottom: 25px;
         width: 100%;
         text-align: center;
@@ -155,12 +163,6 @@ st.markdown(
         text-align: center;
         margin-bottom: 25px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-    .header-box h2 {
-        color: #ffffff;
-        font-weight: bold;
-        margin-bottom: 12px;
-        font-size: 22px;
     }
     /* تكبير وتنسيق العنوان الرئيسي بالترتيب الجديد */
     .header-box .main-title {
@@ -468,11 +470,12 @@ def get_hand_image_base64():
 logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
-# عرض اللوجو متمركزاً في المنتصف مع الصورة التعبيرية
+# عرض اللوجو متبوعاً باسم الفرع ثم الصورة التعبيرية
 st.markdown(
     f"""
     <div class="logo-container">
         <img src="{logo_src}" alt="Logo">
+        <div class="branch-name-top">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</div>
     </div>
     <div class="hand-container">
         <img src="{hand_src}" alt="استلام الشهادة">
@@ -485,7 +488,6 @@ st.markdown(
 st.markdown(
     """
     <div class="header-box">
-        <h2>🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</h2>
         <div class="main-title">الاستعلام عن شهادة القيادة والإشراف <span class="highlight-red">(تجديد - بدل فاقد)</span></div>
         <p><b>البرامج التدريبية :</b> <span class="programs-text">مدير ووكيل إدارة تعليمية &nbsp;|&nbsp; مدير ووكيل إدارة مدرسية &nbsp;|&nbsp; أساسيات التوجيه الفني</span></p>
     </div>
@@ -587,7 +589,7 @@ if df is not None:
                         serial_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
                         break
 
-                # 1. عرض بطاقة بيانات المعلم (تمت إزالة العنوان المكرر من داخلها)
+                # 1. عرض بطاقة بيانات المعلم
                 card_code = f"""
                 <div class="teacher-card" id="print-teacher-card">
                     <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
