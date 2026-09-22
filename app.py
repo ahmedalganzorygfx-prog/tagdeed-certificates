@@ -223,16 +223,19 @@ st.markdown(
     .whatsapp-btn:hover {
         background-color: #128c7e;
     }
-    /* تنسيق تذييل الصفحة (Footer) */
+    /* تصميم تذييل الصفحة الفاخر (Footer) */
     .custom-footer {
-        margin-top: 40px;
-        padding: 20px;
+        margin-top: 50px;
+        padding: 25px 20px;
         text-align: center;
-        border-top: 1px solid #30363d;
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
         color: #8b949e;
         font-size: 15px;
         direction: rtl;
         line-height: 1.8;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
     .map-container {
         border-radius: 12px;
@@ -240,7 +243,7 @@ st.markdown(
         border: 1px solid #30363d;
         box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         margin-top: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
     .map-btn {
         display: inline-block;
@@ -255,6 +258,24 @@ st.markdown(
     }
     .map-btn:hover {
         background-color: #2ea043;
+    }
+    /* تصميم تبويب توقيع الإدارة والمدير */
+    .director-badge {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 24px;
+        background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
+        border: 1px solid #30363d;
+        border-right: 4px solid #ffcc00;
+        border-radius: 8px;
+        color: #e0e0e0;
+        font-size: 15px;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .director-badge b {
+        color: #ffcc00;
+        font-size: 16px;
     }
     </style>
 """,
@@ -291,7 +312,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# صندوق العنوان الرئيسي مع إبراز عنوان الاستلام بخط كبير وعريض باللون الأصفر
+# صندوق العنوان الرئيسي
 st.markdown(
     """
     <div class="header-box">
@@ -447,7 +468,7 @@ else:
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
     )
 
-# تذييل الصفحة
+# تذييل الصفحة المطور والمجمل بالكامل
 st.markdown(
     """
     <div class="custom-footer">
@@ -474,7 +495,9 @@ st.markdown(
                 referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </div>
-        تصميم وتنفيذ <b>أحمد الجنزوري</b> - مدير الفرع
+        <div class="director-badge">
+            👔 تصميم وتنفيذ <b>أحمد الجنزوري</b> - مدير الفرع
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
