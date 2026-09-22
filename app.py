@@ -14,6 +14,14 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    /* إخفاء زر القلم والتعديل فقط */
+    button[title="Edit"], 
+    [data-testid="stHeaderEditButton"],
+    button[aria-label="Edit"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
     /* تغيير خلفية التطبيق بالكامل لتصبح داكنة */
     .stApp {
         background-color: #0e1117;
@@ -30,6 +38,7 @@ st.markdown(
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-top: 15px;
         margin-bottom: 20px;
         width: 100%;
         text-align: center;
@@ -211,7 +220,7 @@ st.markdown(
         background-color: #128c7e;
     }
     /* تنسيق تذييل الصفحة (Footer) */
-    .footer {
+    .custom-footer {
         margin-top: 40px;
         padding: 20px;
         text-align: center;
@@ -249,7 +258,7 @@ st.markdown(
 )
 
 
-# دالة قراءة الشعار وتحويله إلى Base64 لمنع انكسار الصورة
+# دالة قراءة الشعار وتحويله إلى Base64
 def get_image_base64(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as image_file:
@@ -278,7 +287,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# صندوق العنوان والموضوع مع تمييز (تجديد - بدل فاقد) باللون الأصفر
+# صندوق العنوان والموضوع
 st.markdown(
     """
     <div class="header-box">
@@ -293,7 +302,7 @@ st.markdown(
 st.markdown("---")
 
 
-# دالة قراءة البيانات وتسريعها عبر الذاكرة المخبأة (Caching)
+# دالة قراءة البيانات
 @st.cache_data(ttl=600)
 def load_data(file_path):
     if not os.path.exists(file_path):
@@ -434,10 +443,10 @@ else:
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
     )
 
-# تذييل الصفحة مع أرقام الواتساب والدعم الفني والعنوان التفصيلي
+# تذييل الصفحة
 st.markdown(
     """
-    <div class="footer">
+    <div class="custom-footer">
         💬 <b>أرقام الدعم الفني للتواصل عبر واتس آب:</b>
         <div class="whatsapp-container">
             <a href="https://wa.me/201069996245" target="_blank" class="whatsapp-btn">🟢 01069996245</a>
