@@ -2,7 +2,8 @@ import base64
 import os
 import pandas as pd
 import streamlit as st
-import streamlit_analytics
+# استخدام المكتبة الحديثة المتوافقة مع أحدث إصدارات Streamlit
+import streamlit_analytics2 as streamlit_analytics
 
 # إعداد الصفحة لتكون متمركزة في المنتصف (Centered Layout)
 st.set_page_config(
