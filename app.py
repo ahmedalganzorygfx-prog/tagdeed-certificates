@@ -420,7 +420,6 @@ if df is not None:
                 result = df[df[id_column].str.contains(search_query, na=False)]
 
             if not result.empty:
-                # استخدام st.success الأصلية للإبقاء على الصندوق الأخصر والأيقونة
                 st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
 
                 for idx, row in result.iterrows():
@@ -480,7 +479,7 @@ if df is not None:
                             st.markdown(
                                 """
                                 <div class="status-green">
-                                    <span class="pulse-text">🟢 موجودة بالفرع</span><br>
+                                    <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
                                     <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة معتمدة + صورة البطاقة.</span>
                                 </div>
                                 """,
