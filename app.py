@@ -236,16 +236,6 @@ st.markdown(
         text-align: right;
         direction: rtl;
     }
-    .card-title {
-        color: #58a6ff;
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #30363d;
-        padding-bottom: 8px;
-        text-align: right;
-        direction: rtl;
-    }
     .card-row {
         font-size: 17px;
         margin-bottom: 12px;
@@ -597,10 +587,9 @@ if df is not None:
                         serial_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
                         break
 
-                # 1. عرض بطاقة بيانات المعلم
+                # 1. عرض بطاقة بيانات المعلم (تمت إزالة العنوان المكرر من داخلها)
                 card_code = f"""
                 <div class="teacher-card" id="print-teacher-card">
-                    <div class="card-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة<br><span style="font-size: 14px; font-weight: normal; color: #d32f2f;">إفادة استعلام عن شهادة القيادة والإشراف</span></div>
                     <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
                     <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
                     <div class="card-row"><b>الرقم القومي:</b> {first_row[id_column]}</div>
@@ -642,7 +631,7 @@ if df is not None:
 
                 st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. إظهار زر الطباعة لطباعة الإفادة بخط Cairo كما كان سابقاً
+                # 3. إظهار زر الطباعة لطباعة الإفادة مع وضع العنوان تحت الشعار مباشرة
                 if is_available:
                     components.html(
                         f"""
@@ -709,23 +698,27 @@ if df is not None:
                                         .print-header img {{
                                             width: 110px;
                                             height: auto;
-                                            margin-bottom: 2px;
+                                            margin-bottom: 6px;
+                                        }}
+                                        .print-header-title {{
+                                            color: #0d233a;
+                                            font-size: 16px;
+                                            font-weight: 800;
+                                            margin-bottom: 4px;
+                                            font-family: 'Cairo', sans-serif;
+                                        }}
+                                        .print-header-subtitle {{
+                                            color: #d32f2f;
+                                            font-size: 14px;
+                                            font-weight: 700;
+                                            margin-bottom: 10px;
+                                            font-family: 'Cairo', sans-serif;
                                         }}
                                         .teacher-card {{
                                             border: 2px solid #0d233a;
                                             border-radius: 8px;
                                             padding: 10px 14px;
                                             margin-bottom: 8px;
-                                            font-family: 'Cairo', sans-serif;
-                                        }}
-                                        .card-title {{
-                                            color: #0d233a;
-                                            font-size: 15px;
-                                            font-weight: 800;
-                                            border-bottom: 2px solid #d32f2f;
-                                            padding-bottom: 4px;
-                                            margin-bottom: 8px;
-                                            text-align: center;
                                             font-family: 'Cairo', sans-serif;
                                         }}
                                         .card-row {{
@@ -812,6 +805,8 @@ if df is not None:
                                     <div class="container">
                                         <div class="print-header">
                                             <img src="{logo_src}" alt="شعار الأكاديمية">
+                                            <div class="print-header-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</div>
+                                            <div class="print-header-subtitle">إفادة استعلام عن شهادة القيادة والإشراف</div>
                                         </div>
                                         ${{cardHtml}}
                                         ${{statusHtml}}
