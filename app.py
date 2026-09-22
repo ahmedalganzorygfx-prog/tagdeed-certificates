@@ -348,10 +348,26 @@ st.markdown(
     .map-btn:hover {
         background-color: #2ea043;
     }
+    /* شارة عداد الزوار */
+    .visitor-badge {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 6px 18px;
+        background-color: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 20px;
+        color: #8b949e;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .visitor-badge span {
+        color: #58a6ff;
+    }
+
     /* تصميم تبويب توقيع الإدارة والمدير */
     .director-badge {
         display: inline-block;
-        margin-top: 15px;
+        margin-top: 12px;
         padding: 8px 20px;
         background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
         border: 1px solid #30363d;
@@ -365,22 +381,6 @@ st.markdown(
     .director-badge b {
         color: #ffcc00;
         font-size: 15px;
-    }
-
-    /* شارة عداد الزوار */
-    .visitor-badge {
-        display: inline-block;
-        margin-top: 12px;
-        padding: 6px 16px;
-        background-color: #0d1117;
-        border: 1px solid #30363d;
-        border-radius: 20px;
-        color: #8b949e;
-        font-size: 13px;
-        font-weight: bold;
-    }
-    .visitor-badge span {
-        color: #58a6ff;
     }
     </style>
 """,
@@ -573,7 +573,7 @@ else:
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
     )
 
-# تذييل الصفحة المطور والمجمل بالكامل مع عداد الزوار
+# تذييل الصفحة مع وضع العداد أولاً ثم تبويب التوقيع
 st.markdown(
     f"""
     <div class="custom-footer">
@@ -600,12 +600,12 @@ st.markdown(
                 referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </div>
-        <div class="director-badge">
-            👔 تصميم وتنفيذ <b>أحمد الجنزوري</b> - مدير الفرع
-        </div>
-        <br>
         <div class="visitor-badge">
             👁️ إجمالي عدد زيارات البوابة: <span>{visitor_count:,}</span> زيارة
+        </div>
+        <br>
+        <div class="director-badge">
+            👔 تصميم وتنفيذ <b>أحمد الجنزوري</b> - مدير الفرع
         </div>
     </div>
     """,
