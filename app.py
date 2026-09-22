@@ -3,10 +3,10 @@ import os
 import pandas as pd
 import streamlit as st
 
-# إعداد الصفحة لتكون عريضة ودعم اللغة العربية من اليمين لليسار (RTL)
+# إعداد الصفحة لتكون متمركزة في المنتصف بدلاً من العرض الكامل (Centered Layout)
 st.set_page_config(
     page_title="الاستعلام عن تجديد الشهادة - فرع الجيزة",
-    layout="wide",
+    layout="centered",
     page_icon="🏛️",
 )
 
@@ -14,6 +14,14 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    /* تقليص وتوسيط حاوية المحتوى الرئيسية */
+    .block-container {
+        max-width: 800px !important;
+        padding-top: 2rem !important;
+        padding-bottom: 3rem !important;
+        margin: 0 auto !important;
+    }
+
     /* إخفاء زر القلم والتعديل فقط */
     button[title="Edit"], 
     [data-testid="stHeaderEditButton"],
@@ -44,7 +52,7 @@ st.markdown(
         text-align: center;
     }
     .logo-container img {
-        width: 200px;
+        width: 180px;
         height: auto;
         display: block;
         margin: 0 auto;
@@ -53,7 +61,7 @@ st.markdown(
     .header-box {
         background-color: #161b22;
         border: 1px solid #30363d;
-        padding: 25px;
+        padding: 22px;
         border-radius: 12px;
         color: white;
         text-align: center;
@@ -64,18 +72,19 @@ st.markdown(
         color: #ffffff;
         font-weight: bold;
         margin-bottom: 12px;
+        font-size: 22px;
     }
     /* تكبير وتنسيق العنوان الرئيسي بالترتيب الجديد */
     .header-box .main-title {
         color: #58a6ff;
-        font-size: 28px !important;
+        font-size: 24px !important;
         font-weight: bold !important;
         margin-bottom: 12px;
         line-height: 1.4;
     }
     .header-box p {
         color: #8b949e;
-        font-size: 15px;
+        font-size: 14px;
         margin: 0;
     }
     /* تنسيق النص الملون والمميز داخل العنوان والبرامج */
@@ -89,7 +98,7 @@ st.markdown(
     }
     /* تنسيق مميز بخط أكبر ولون لافت لتعليمات الاستلام */
     .pickup-instructions {
-        font-size: 17px !important;
+        font-size: 16px !important;
         color: #ffe566 !important;
         font-weight: bold;
         margin-top: 8px;
@@ -104,7 +113,7 @@ st.markdown(
     [data-testid="stAlert"] * {
         color: #ffcc00 !important;
         font-weight: bold !important;
-        font-size: 18px !important;
+        font-size: 17px !important;
     }
 
     /* زر البحث */
@@ -136,7 +145,7 @@ st.markdown(
     .teacher-card {
         background-color: #161b22;
         border: 1px solid #30363d;
-        padding: 22px;
+        padding: 20px;
         border-radius: 12px;
         margin-bottom: 20px;
         box-shadow: 0 6px 15px rgba(0,0,0,0.4);
@@ -145,7 +154,7 @@ st.markdown(
     }
     .card-title {
         color: #58a6ff;
-        font-size: 20px;
+        font-size: 19px;
         font-weight: bold;
         margin-bottom: 15px;
         border-bottom: 1px solid #30363d;
@@ -155,7 +164,7 @@ st.markdown(
     }
     /* تنسيق ألوان بيانات المعلم: العناوين بالأصفر العريض والبيانات بالأبيض الناصع */
     .card-row {
-        font-size: 18px;
+        font-size: 17px;
         margin-bottom: 12px;
         color: #ffffff !important;
         font-weight: 500;
@@ -223,7 +232,7 @@ st.markdown(
         }
         50% {
             color: #ffe566;
-            transform: scale(1.08);
+            transform: scale(1.06);
             text-shadow: 0 0 12px rgba(255, 229, 102, 0.8);
         }
         100% {
@@ -235,7 +244,7 @@ st.markdown(
     .pulse-text {
         display: inline-block;
         animation: colorPulseGlow 1.2s infinite ease-in-out;
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: 900 !important;
         margin-bottom: 5px;
     }
@@ -244,7 +253,7 @@ st.markdown(
     .whatsapp-container {
         display: flex;
         justify-content: center;
-        gap: 12px;
+        gap: 10px;
         flex-wrap: wrap;
         margin-top: 10px;
         margin-bottom: 15px;
@@ -267,14 +276,14 @@ st.markdown(
     }
     /* تصميم تذييل الصفحة الفاخر (Footer) */
     .custom-footer {
-        margin-top: 50px;
-        padding: 25px 20px;
+        margin-top: 40px;
+        padding: 20px;
         text-align: center;
         background-color: #161b22;
         border: 1px solid #30363d;
         border-radius: 12px;
         color: #8b949e;
-        font-size: 15px;
+        font-size: 14px;
         direction: rtl;
         line-height: 1.8;
         box-shadow: 0 4px 15px rgba(0,0,0,0.4);
@@ -285,7 +294,7 @@ st.markdown(
         border: 1px solid #30363d;
         box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         margin-top: 15px;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
     .map-btn {
         display: inline-block;
@@ -305,19 +314,19 @@ st.markdown(
     .director-badge {
         display: inline-block;
         margin-top: 15px;
-        padding: 10px 24px;
+        padding: 8px 20px;
         background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
         border: 1px solid #30363d;
         border-right: 4px solid #ffcc00;
         border-radius: 8px;
         color: #e0e0e0;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: bold;
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .director-badge b {
         color: #ffcc00;
-        font-size: 16px;
+        font-size: 15px;
     }
     </style>
 """,
@@ -398,7 +407,7 @@ if df is not None:
             break
 
     st.markdown(
-        '<div style="text-align: right; direction: rtl; font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #ffffff;">💡 أدخل الرقم القومي الخاص بك (14 رقماً) ثم اضغط على زر بحث:</div>',
+        '<div style="text-align: right; direction: rtl; font-size: 17px; font-weight: bold; margin-bottom: 10px; color: #ffffff;">💡 أدخل الرقم القومي الخاص بك (14 رقماً) ثم اضغط على زر بحث:</div>',
         unsafe_allow_html=True,
     )
 
@@ -530,7 +539,7 @@ st.markdown(
             <iframe 
                 src="https://maps.google.com/maps?q=30.06776,31.20915&hl=ar&z=17&output=embed" 
                 width="100%" 
-                height="400" 
+                height="350" 
                 style="border:0;" 
                 allowfullscreen="" 
                 loading="lazy" 
