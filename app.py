@@ -610,8 +610,10 @@ if df is not None:
                 """
                 st.markdown(card_code, unsafe_allow_html=True)
 
-                # 2. نص حالة الشهادة ليتم استخراجها في المطبوعة
+                # 2. فحص حالة الشهادة وعرضها
                 status_html = ""
+                is_available = False  # متغير للتحقق مما إذا كانت الشهادة موجودة بالفرع
+
                 if status_column and pd.notna(first_row[status_column]):
                     status_val = str(first_row[status_column]).strip()
                     if "لم تصل" in status_val:
@@ -622,6 +624,7 @@ if df is not None:
                         </div>
                         """
                     elif "موجودة" in status_val:
+                        is_available = True  # الشهادة موجودة بالفرع
                         status_html = """
                         <div class="status-green" id="print-status-box">
                             <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
@@ -639,185 +642,164 @@ if df is not None:
 
                 st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. دالة JavaScript لفتح نافذة طباعة مخصصة متضمنة اللوجو وأنزال البيانات لمنتصف الصفحة
-                components.html(
-                    f"""
-                    <div style="display: flex; justify-content: center; width: 100%;">
-                        <button onclick="printIsolatedCard()" style="
-                            background-color: #1f6beb;
-                            color: white;
-                            font-weight: bold;
-                            border-radius: 8px;
-                            border: none;
-                            padding: 12px 28px;
-                            font-size: 16px;
-                            cursor: pointer;
-                            font-family: 'Cairo', sans-serif, Arial;
-                            box-shadow: 0 4px 12px rgba(31,107,235,0.4);
-                            transition: background-color 0.2s;
-                        ">🖨️ طباعة إفادة الاستعلام</button>
-                    </div>
+                # 3. إظهار زر الطباعة فقط إذا كانت الشهادة موجودة بالفرع
+                if is_available:
+                    components.html(
+                        f"""
+                        <div style="display: flex; justify-content: center; width: 100%;">
+                            <button onclick="printIsolatedCard()" style="
+                                background-color: #1f6beb;
+                                color: white;
+                                font-weight: bold;
+                                border-radius: 8px;
+                                border: none;
+                                padding: 12px 28px;
+                                font-size: 16px;
+                                cursor: pointer;
+                                font-family: 'Cairo', sans-serif, Arial;
+                                box-shadow: 0 4px 12px rgba(31,107,235,0.4);
+                                transition: background-color 0.2s;
+                            ">🖨️ طباعة إفادة الاستعلام</button>
+                        </div>
 
-                    <script>
-                    function printIsolatedCard() {{
-                        var cardElem = window.parent.document.getElementById('print-teacher-card');
-                        var statusElem = window.parent.document.getElementById('print-status-box');
-                        
-                        var cardHtml = cardElem ? cardElem.outerHTML : '';
-                        var statusHtml = statusElem ? statusElem.outerHTML : '';
-                        
-                        var printWin = window.open('', '', 'width=650,height=850');
-                        printWin.document.write(`
-                            <!DOCTYPE html>
-                            <html dir="rtl" lang="ar">
-                            <head>
-                                <meta charset="utf-8">
-                                <title>إفادة استعلام - فرع الجيزة</title>
-                                <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-                                <style>
-                                    @page {{
-                                        size: 15cm 20cm;
-                                        margin: 0.5cm;
-                                    }}
-                                    body {{
-                                        font-family: 'Cairo', sans-serif;
-                                        direction: rtl;
-                                        text-align: right;
-                                        background-color: #fff;
-                                        color: #000;
-                                        margin: 0;
-                                        padding: 15px 10px;
-                                        box-sizing: border-box;
-                                        display: flex;
-                                        flex-direction: column;
-                                        justify-content: center;
-                                        min-height: 19cm;
-                                    }}
-                                    .print-header {{
-                                        text-align: center;
-                                        margin-bottom: 25px;
-                                        margin-top: 15px;
-                                    }}
-                                    .print-header img {{
-                                        width: 120px;
-                                        height: auto;
-                                        margin-bottom: 8px;
-                                    }}
-                                    .teacher-card {{
-                                        border: 2px solid #0d233a;
-                                        border-radius: 8px;
-                                        padding: 14px 18px;
-                                        margin-bottom: 12px;
-                                    }}
-                                    .card-title {{
-                                        color: #0d233a;
-                                        font-size: 16px;
-                                        font-weight: 800;
-                                        border-bottom: 2px solid #d32f2f;
-                                        padding-bottom: 6px;
-                                        margin-bottom: 12px;
-                                        text-align: center;
-                                    }}
-                                    .card-row {{
-                                        font-size: 14px;
-                                        font-weight: 600;
-                                        margin-bottom: 8px;
-                                        color: #111;
-                                    }}
-                                    .card-row b {{
-                                        color: #d32f2f;
-                                    }}
-                                    .status-green {{
-                                        background-color: #f0fdf4;
-                                        color: #15803d;
-                                        border: 1.5px solid #15803d;
-                                        padding: 10px;
-                                        border-radius: 6px;
-                                        text-align: center;
-                                        font-size: 13px;
-                                        font-weight: bold;
-                                        margin-bottom: 12px;
-                                    }}
-                                    .status-red {{
-                                        background-color: #fef2f2;
-                                        color: #b91c1c;
-                                        border: 1.5px solid #b91c1c;
-                                        padding: 10px;
-                                        border-radius: 6px;
-                                        text-align: center;
-                                        font-size: 13px;
-                                        font-weight: bold;
-                                        margin-bottom: 12px;
-                                    }}
-                                    .status-blue {{
-                                        background-color: #eff6ff;
-                                        color: #1d4ed8;
-                                        border: 1.5px solid #1d4ed8;
-                                        padding: 10px;
-                                        border-radius: 6px;
-                                        text-align: center;
-                                        font-size: 13px;
-                                        font-weight: bold;
-                                        margin-bottom: 12px;
-                                    }}
-                                    .pulse-text {{
-                                        color: #15803d;
-                                        font-size: 15px;
-                                        font-weight: bold;
-                                    }}
-                                    .pickup-instructions {{
-                                        color: #15803d;
-                                        font-size: 12px;
-                                    }}
-                                    .working-hours-print {{
-                                        background-color: #fafafa;
-                                        border: 1.5px solid #0d233a;
-                                        border-right: 5px solid #d32f2f;
-                                        color: #111;
-                                        padding: 10px 14px;
-                                        border-radius: 6px;
-                                        font-size: 12px;
-                                        line-height: 1.6;
-                                        margin-top: 5px;
-                                    }}
-                                    .working-hours-title {{
-                                        color: #0d233a;
-                                        font-size: 13px;
-                                        font-weight: bold;
-                                        margin-bottom: 4px;
-                                    }}
-                                    .highlight {{
-                                        color: #d32f2f;
-                                        font-weight: bold;
-                                    }}
-                                </style>
-                            </head>
-                            <body>
-                                <div class="print-header">
-                                    <img src="{logo_src}" alt="شعار الأكاديمية">
-                                </div>
-                                ${{cardHtml}}
-                                ${{statusHtml}}
-                                <div class="working-hours-print">
-                                    <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
-                                    • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
-                                    • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
-                                </div>
-                                <script>
-                                    window.onload = function() {{
-                                        window.print();
-                                        setTimeout(function() {{ window.close(); }}, 500);
-                                    }};
-                                <\/script>
-                            </body>
-                            </html>
-                        `);
-                        printWin.document.close();
-                    }}
-                    </script>
-                    """,
-                    height=60,
-                )
+                        <script>
+                        function printIsolatedCard() {{
+                            var cardElem = window.parent.document.getElementById('print-teacher-card');
+                            var statusElem = window.parent.document.getElementById('print-status-box');
+                            
+                            var cardHtml = cardElem ? cardElem.outerHTML : '';
+                            var statusHtml = statusElem ? statusElem.outerHTML : '';
+                            
+                            var printWin = window.open('', '', 'width=650,height=850');
+                            printWin.document.write(`
+                                <!DOCTYPE html>
+                                <html dir="rtl" lang="ar">
+                                <head>
+                                    <meta charset="utf-8">
+                                    <title>إفادة استعلام - فرع الجيزة</title>
+                                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+                                    <style>
+                                        @page {{
+                                            size: 15cm 20cm;
+                                            margin: 0.5cm;
+                                        }}
+                                        body {{
+                                            font-family: 'Cairo', sans-serif;
+                                            direction: rtl;
+                                            text-align: right;
+                                            background-color: #fff;
+                                            color: #000;
+                                            margin: 0;
+                                            padding: 15px 10px;
+                                            box-sizing: border-box;
+                                            display: flex;
+                                            flex-direction: column;
+                                            justify-content: center;
+                                            min-height: 19cm;
+                                        }}
+                                        .print-header {{
+                                            text-align: center;
+                                            margin-bottom: 25px;
+                                            margin-top: 15px;
+                                        }}
+                                        .print-header img {{
+                                            width: 120px;
+                                            height: auto;
+                                            margin-bottom: 8px;
+                                        }}
+                                        .teacher-card {{
+                                            border: 2px solid #0d233a;
+                                            border-radius: 8px;
+                                            padding: 14px 18px;
+                                            margin-bottom: 12px;
+                                        }}
+                                        .card-title {{
+                                            color: #0d233a;
+                                            font-size: 16px;
+                                            font-weight: 800;
+                                            border-bottom: 2px solid #d32f2f;
+                                            padding-bottom: 6px;
+                                            margin-bottom: 12px;
+                                            text-align: center;
+                                        }}
+                                        .card-row {{
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            margin-bottom: 8px;
+                                            color: #111;
+                                        }}
+                                        .card-row b {{
+                                            color: #d32f2f;
+                                        }}
+                                        .status-green {{
+                                            background-color: #f0fdf4;
+                                            color: #15803d;
+                                            border: 1.5px solid #15803d;
+                                            padding: 10px;
+                                            border-radius: 6px;
+                                            text-align: center;
+                                            font-size: 13px;
+                                            font-weight: bold;
+                                            margin-bottom: 12px;
+                                        }}
+                                        .pulse-text {{
+                                            color: #15803d;
+                                            font-size: 15px;
+                                            font-weight: bold;
+                                        }}
+                                        .pickup-instructions {{
+                                            color: #15803d;
+                                            font-size: 12px;
+                                        }}
+                                        .working-hours-print {{
+                                            background-color: #fafafa;
+                                            border: 1.5px solid #0d233a;
+                                            border-right: 5px solid #d32f2f;
+                                            color: #111;
+                                            padding: 10px 14px;
+                                            border-radius: 6px;
+                                            font-size: 12px;
+                                            line-height: 1.6;
+                                            margin-top: 5px;
+                                        }}
+                                        .working-hours-title {{
+                                            color: #0d233a;
+                                            font-size: 13px;
+                                            font-weight: bold;
+                                            margin-bottom: 4px;
+                                        }}
+                                        .highlight {{
+                                            color: #d32f2f;
+                                            font-weight: bold;
+                                        }}
+                                    </style>
+                                </head>
+                                <body>
+                                    <div class="print-header">
+                                        <img src="{logo_src}" alt="شعار الأكاديمية">
+                                    </div>
+                                    ${{cardHtml}}
+                                    ${{statusHtml}}
+                                    <div class="working-hours-print">
+                                        <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
+                                        • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
+                                        • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
+                                    </div>
+                                    <script>
+                                        window.onload = function() {{
+                                            window.print();
+                                            setTimeout(function() {{ window.close(); }}, 500);
+                                        }};
+                                    <\/script>
+                                </body>
+                                </html>
+                            `);
+                            printWin.document.close();
+                        }}
+                        </script>
+                        """,
+                        height=60,
+                    )
             else:
                 st.error(
                     "❌ عذراً، لم يتم العثور على بيانات بهذا الرقم القومي. تأكد من صحة الرقم المُدخل."
