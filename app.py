@@ -83,6 +83,8 @@ components.html(ga_script, height=0, width=0)
 st.markdown(
     """
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
     /* تقليص وتوسيط حاوية المحتوى الرئيسية */
     .block-container {
         max-width: 800px !important;
@@ -107,7 +109,7 @@ st.markdown(
     html, body, [class*="css"] {
         direction: rtl;
         text-align: right;
-        font-family: 'Cairo', sans-serif, Arial;
+        font-family: 'Amiri', 'Cairo', serif;
         color: #e0e0e0;
     }
     /* حاوية مخصصة لتوسيط الشعار وصورة الاستلام تماماً في المنتصف */
@@ -155,25 +157,29 @@ st.markdown(
         text-align: center;
         margin-bottom: 25px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        font-family: 'Amiri', serif;
     }
     .header-box h2 {
         color: #ffffff;
         font-weight: bold;
         margin-bottom: 12px;
-        font-size: 22px;
+        font-size: 24px;
+        font-family: 'Amiri', serif;
     }
     /* تكبير وتنسيق العنوان الرئيسي بالترتيب الجديد */
     .header-box .main-title {
         color: #58a6ff;
-        font-size: 24px !important;
+        font-size: 26px !important;
         font-weight: bold !important;
         margin-bottom: 12px;
         line-height: 1.4;
+        font-family: 'Amiri', serif;
     }
     .header-box p {
         color: #8b949e;
-        font-size: 14px;
+        font-size: 16px;
         margin: 0;
+        font-family: 'Amiri', serif;
     }
     .highlight-red {
         color: #ff5555 !important;
@@ -642,7 +648,7 @@ if df is not None:
 
                 st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. إظهار زر الطباعة لطباعة الإفادة مع التوقيع المتمركز والخط الموحد Cairo
+                # 3. إظهار زر الطباعة لطباعة الإفادة بفونت Amiri المميز وتوقيع مدير إدارة الفرع
                 if is_available:
                     components.html(
                         f"""
@@ -656,7 +662,7 @@ if df is not None:
                                 padding: 12px 28px;
                                 font-size: 16px;
                                 cursor: pointer;
-                                font-family: 'Cairo', sans-serif, Arial;
+                                font-family: 'Amiri', 'Cairo', serif;
                                 box-shadow: 0 4px 12px rgba(31,107,235,0.4);
                                 transition: background-color 0.2s;
                             ">🖨️ طباعة إفادة الاستعلام</button>
@@ -677,7 +683,7 @@ if df is not None:
                                 <head>
                                     <meta charset="utf-8">
                                     <title>إفادة استعلام - فرع الجيزة</title>
-                                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+                                    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
                                     <style>
                                         @page {{
                                             size: 15cm 20cm;
@@ -688,7 +694,7 @@ if df is not None:
                                             padding: 0;
                                             background-color: #fff;
                                             color: #000;
-                                            font-family: 'Cairo', sans-serif, Arial;
+                                            font-family: 'Amiri', serif;
                                             direction: rtl;
                                             text-align: right;
                                         }}
@@ -716,28 +722,28 @@ if df is not None:
                                             border-radius: 8px;
                                             padding: 10px 14px;
                                             margin-bottom: 8px;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .card-title {{
                                             color: #0d233a;
-                                            font-size: 15px;
-                                            font-weight: 800;
+                                            font-size: 17px;
+                                            font-weight: 700;
                                             border-bottom: 2px solid #d32f2f;
                                             padding-bottom: 4px;
                                             margin-bottom: 8px;
                                             text-align: center;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .card-row {{
-                                            font-size: 13px;
-                                            font-weight: 600;
+                                            font-size: 15px;
+                                            font-weight: 700;
                                             margin-bottom: 6px;
                                             color: #111;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .card-row b {{
                                             color: #d32f2f;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .status-green {{
                                             background-color: #f0fdf4;
@@ -746,21 +752,21 @@ if df is not None:
                                             padding: 8px;
                                             border-radius: 6px;
                                             text-align: center;
-                                            font-size: 12px;
+                                            font-size: 14px;
                                             font-weight: bold;
                                             margin-bottom: 8px;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .pulse-text {{
                                             color: #15803d;
-                                            font-size: 14px;
+                                            font-size: 16px;
                                             font-weight: bold;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .pickup-instructions {{
                                             color: #15803d;
-                                            font-size: 11px;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-size: 13px;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .working-hours-print {{
                                             background-color: #fafafa;
@@ -769,22 +775,22 @@ if df is not None:
                                             color: #111;
                                             padding: 8px 12px;
                                             border-radius: 6px;
-                                            font-size: 11px;
-                                            line-height: 1.5;
+                                            font-size: 13px;
+                                            line-height: 1.6;
                                             margin-bottom: 12px;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .working-hours-title {{
                                             color: #0d233a;
-                                            font-size: 12px;
+                                            font-size: 14px;
                                             font-weight: bold;
                                             margin-bottom: 3px;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .highlight {{
                                             color: #d32f2f;
                                             font-weight: bold;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .print-footer-signature {{
                                             display: flex;
@@ -796,15 +802,15 @@ if df is not None:
                                         }}
                                         .signature-box {{
                                             text-align: center;
-                                            font-size: 13px;
+                                            font-size: 15px;
                                             font-weight: bold;
                                             color: #0d233a;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-family: 'Amiri', serif;
                                         }}
                                         .signature-box b {{
                                             color: #d32f2f;
-                                            font-size: 15px;
-                                            font-family: 'Cairo', sans-serif;
+                                            font-size: 17px;
+                                            font-family: 'Amiri', serif;
                                         }}
                                     </style>
                                 </head>
@@ -822,7 +828,7 @@ if df is not None:
                                         </div>
                                         <div class="print-footer-signature">
                                             <div class="signature-box">
-                                                مدير الفرع<br>
+                                                مدير إدارة الفرع<br>
                                                 <b>أ. أحمد الجنزوري</b>
                                             </div>
                                         </div>
@@ -908,7 +914,7 @@ st.markdown(
         </div>
         <br>
         <div class="director-badge">
-            👔 تصميم وتنفيذ <b>أحمد الجنزوري</b> - مدير الفرع
+            👔 تصميم وتنفيذ <b>أحمد الجنزوري</b> - مدير إدارة الفرع
         </div>
     </div>
     """,
