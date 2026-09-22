@@ -99,6 +99,15 @@ st.markdown(
         direction: rtl;
         text-align: right;
     }
+    
+    /* ضبط لون النص فقط داخل تنبيه النجاح الخضراء الأصلي ليكون أصفر عريض */
+    [data-testid="stAlertContainer"] [data-testid="stNotificationContentSuccess"] p,
+    [data-testid="stAlertContainer"] [data-testid="stNotificationContentSuccess"] div {
+        color: #ffcc00 !important;
+        font-weight: bold !important;
+        font-size: 18px !important;
+    }
+
     /* زر البحث */
     .stFormSubmitButton > button {
         background-color: #21262d;
@@ -158,20 +167,7 @@ st.markdown(
         color: #ffcc00 !important;
         font-weight: bold !important;
     }
-    /* تنسيق رسالة النجاح باللون الأصفر العريض */
-    .success-msg-yellow {
-        background-color: rgba(255, 204, 0, 0.12);
-        border: 1px solid rgba(255, 204, 0, 0.3);
-        border-right: 5px solid #ffcc00;
-        color: #ffcc00 !important;
-        padding: 14px 20px;
-        border-radius: 8px;
-        font-size: 18px !important;
-        font-weight: bold !important;
-        margin-bottom: 20px;
-        text-align: right;
-        direction: rtl;
-    }
+    
     /* تنسيق صناديق الحالات المخصصة */
     .status-red {
         background-color: rgba(248, 81, 73, 0.15);
@@ -425,11 +421,8 @@ if df is not None:
                 result = df[df[id_column].str.contains(search_query, na=False)]
 
             if not result.empty:
-                # رسالة النجاح باللون الأصفر العريض
-                st.markdown(
-                    '<div class="success-msg-yellow">🎉 تم العثور على بيانات الشهادة بنجاح:</div>',
-                    unsafe_allow_html=True,
-                )
+                # الاستعانة بدالة st.success الأصلية لحفظ خلفية الصندوق الافتراضية
+                st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
 
                 for idx, row in result.iterrows():
                     name_val = "غير متوفر"
