@@ -486,72 +486,38 @@ st.markdown(
     }
 
     /* ========================================================================= */
-    /* 🖨️ تنسيقات الطباعة الخاصة بصفحة واحدة مقاس 15*20 سم باللونين الكحلي والأحمر */
+    /* 🖨️ إعدادات الطباعة الصارمة لضبط المحتوى كاملاً في صفحة واحدة بدون زيادات */
     /* ========================================================================= */
     @page {
         size: 15cm 20cm;
-        margin: 0.5cm;
+        margin: 0.4cm;
     }
     @media print {
         body, html, .stApp {
             background-color: #ffffff !important;
             color: #000000 !important;
-            width: 15cm !important;
-            height: 20cm !important;
-            margin: 0 auto !important;
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
             padding: 0 !important;
             overflow: hidden !important;
         }
 
-        /* إخفاء العناصر غير المطلوبة في الطباعة لضمان بقائها في صفحة واحدة */
-        .custom-footer, .map-container, 
+        /* إخفاء الهيدر الرئيسي وتنبيهات النجاح والأيقونات من المطبوعة تماماً */
+        .header-box, .logo-container, .custom-footer, .map-container, 
         .whatsapp-container, .stForm, .hand-container, 
-        .action-btn-container, iframe, hr,
-        [data-testid="stHeader"], [data-testid="stToolbar"] {
+        .action-btn-container, iframe, hr, [data-testid="stToast"],
+        [data-testid="stAlert"], [data-testid="stHeader"], [data-testid="stToolbar"] {
             display: none !important;
         }
 
-        /* إظهار الشعار ورأس الصفحة بألوان كحلية وحمراء */
-        .logo-container {
-            display: flex !important;
-            justify-content: center !important;
-            margin-bottom: 5px !important;
-        }
-        .logo-container img {
-            width: 90px !important;
-        }
-
-        .header-box {
-            background-color: #ffffff !important;
-            border: none !important;
-            border-bottom: 2px solid #0d233a !important;
-            border-radius: 0 !important;
-            color: #0d233a !important;
-            padding: 4px 0 !important;
-            margin-bottom: 10px !important;
-            box-shadow: none !important;
-        }
-        .header-box h2 {
-            color: #0d233a !important;
-            font-size: 16px !important;
-            margin-bottom: 4px !important;
-        }
-        .header-box .main-title {
-            color: #d32f2f !important;
-            font-size: 15px !important;
-            margin-bottom: 4px !important;
-        }
-        .highlight-red, .programs-text {
-            color: #d32f2f !important;
-        }
-
-        /* تنسيق بطاقة المعلم مقاس 15*20 باللون الكحلي والأحمر */
+        /* تنسيق بطاقة المعلم لتكون الواجهة الرئيسية المطبوعة */
         .teacher-card {
             background-color: #ffffff !important;
             border: 2px solid #0d233a !important;
             border-radius: 8px !important;
-            padding: 12px 16px !important;
-            margin: 8px 0 !important;
+            padding: 12px 15px !important;
+            margin: 0 0 10px 0 !important;
             box-shadow: none !important;
             direction: rtl !important;
             text-align: right !important;
@@ -564,7 +530,7 @@ st.markdown(
             font-weight: 800 !important;
             border-bottom: 2px solid #d32f2f !important;
             padding-bottom: 6px !important;
-            margin-bottom: 10px !important;
+            margin-bottom: 12px !important;
             text-align: center !important;
         }
         .card-row {
@@ -579,7 +545,7 @@ st.markdown(
             font-weight: 800 !important;
         }
 
-        /* تنسيق صناديق الحالات باللون الأحمر والكحلي */
+        /* صناديق الحالات باللون الأحمر والكحلي المحسنة للطباعة */
         .status-green {
             background-color: #f0fdf4 !important;
             color: #15803d !important;
@@ -615,7 +581,7 @@ st.markdown(
         }
         .pulse-text {
             color: #15803d !important;
-            font-size: 16px !important;
+            font-size: 15px !important;
             font-weight: bold !important;
             animation: none !important;
         }
@@ -624,7 +590,7 @@ st.markdown(
             font-size: 12px !important;
         }
 
-        /* بطاقة المواعيد الرسمية بالأسفل باللون الكحلي والأحمر */
+        /* بطاقة المواعيد الرسمية بأسفل الإفادة المطبوعة */
         .working-hours-box {
             display: block !important;
             background-color: #fafafa !important;
@@ -633,7 +599,7 @@ st.markdown(
             color: #111111 !important;
             padding: 10px 14px !important;
             border-radius: 6px !important;
-            margin-top: 10px !important;
+            margin-top: 8px !important;
             font-size: 12px !important;
             line-height: 1.6 !important;
             box-shadow: none !important;
@@ -809,7 +775,7 @@ if df is not None:
                 # 1. عرض بطاقة بيانات المعلم مرة واحدة فقط
                 card_code = f"""
                 <div class="teacher-card" id="printable-card">
-                    <div class="card-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة<br><span style="font-size: 15px; font-weight: normal; color: #d32f2f;">إفادة استعلام عن شهادة القيادة والإشراف</span></div>
+                    <div class="card-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة<br><span style="font-size: 14px; font-weight: normal; color: #d32f2f;">إفادة استعلام عن شهادة القيادة والإشراف</span></div>
                     <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
                     <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
                     <div class="card-row"><b>الرقم القومي:</b> {first_row[id_column]}</div>
@@ -873,7 +839,7 @@ if df is not None:
                             font-family: 'Cairo', sans-serif, Arial;
                             box-shadow: 0 4px 12px rgba(31,107,235,0.4);
                             transition: background-color 0.2s;
-                        ">🖨️ طباعة إفادة الاستعلام (15×20 سم)</button>
+                        ">🖨️ طباعة إفادة الاستعلام</button>
                     </div>
                     """,
                     height=60,
