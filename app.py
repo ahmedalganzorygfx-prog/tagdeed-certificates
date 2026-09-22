@@ -65,10 +65,10 @@ st.markdown(
         font-weight: bold;
         margin-bottom: 12px;
     }
-    /* تكبير وتنسيق العنوان الرئيسي */
+    /* تكبير وتنسيق العنوان الرئيسي بالترتيب الجديد */
     .header-box .main-title {
         color: #58a6ff;
-        font-size: 26px !important;
+        font-size: 28px !important;
         font-weight: bold !important;
         margin-bottom: 12px;
         line-height: 1.4;
@@ -145,7 +145,7 @@ st.markdown(
         text-align: right;
         direction: rtl;
     }
-    /* تعديل لون خط البيانات ليصبح أبيض ناصع جداً وبخط واضح */
+    /* لون خط البيانات أبيض ناصع ببروز قوي */
     .card-row {
         font-size: 17px;
         margin-bottom: 12px;
@@ -205,7 +205,7 @@ st.markdown(
         border-left: 1px solid rgba(56, 139, 253, 0.2);
     }
 
-    /* تأثير الوميض الديناميكي مع تغيير اللون وتكبير الخط */
+    /* تأثير الوميض المتوهج مع تغير الألوان والخط العريض */
     @keyframes colorPulseGlow {
         0% {
             color: #3fb950;
@@ -345,12 +345,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# صندوق العنوان الرئيسي
+# صندوق العنوان الرئيسي بالترتيب الجديد المطلوب
 st.markdown(
     """
     <div class="header-box">
         <h2>🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</h2>
-        <div class="main-title">الاستعلام عن <span class="highlight-yellow">(تجديد - بدل فاقد)</span> شهادة القيادة والإشراف</div>
+        <div class="main-title">الاستعلام عن شهادة القيادة والإشراف <span class="highlight-yellow">(تجديد - بدل فاقد)</span></div>
         <p><b>البرامج التدريبية :</b> <span class="programs-text">مدير ووكيل إدارة تعليمية &nbsp;|&nbsp; مدير ووكيل إدارة مدرسية &nbsp;|&nbsp; أساسيات التوجيه الفني</span></p>
     </div>
     """,
