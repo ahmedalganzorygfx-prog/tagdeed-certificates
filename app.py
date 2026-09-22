@@ -639,9 +639,9 @@ if df is not None:
 
                 st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. دالة JavaScript متطورة لفتح نافذة طباعة معزولة 100% بمقاس 15*20 سم صفحة واحدة
+                # 3. دالة JavaScript لفتح نافذة طباعة مخصصة متضمنة اللوجو وأنزال البيانات لمنتصف الصفحة
                 components.html(
-                    """
+                    f"""
                     <div style="display: flex; justify-content: center; width: 100%;">
                         <button onclick="printIsolatedCard()" style="
                             background-color: #1f6beb;
@@ -659,14 +659,14 @@ if df is not None:
                     </div>
 
                     <script>
-                    function printIsolatedCard() {
+                    function printIsolatedCard() {{
                         var cardElem = window.parent.document.getElementById('print-teacher-card');
                         var statusElem = window.parent.document.getElementById('print-status-box');
                         
                         var cardHtml = cardElem ? cardElem.outerHTML : '';
                         var statusHtml = statusElem ? statusElem.outerHTML : '';
                         
-                        var printWin = window.open('', '', 'width=650,height=800');
+                        var printWin = window.open('', '', 'width=650,height=850');
                         printWin.document.write(`
                             <!DOCTYPE html>
                             <html dir="rtl" lang="ar">
@@ -675,27 +675,41 @@ if df is not None:
                                 <title>إفادة استعلام - فرع الجيزة</title>
                                 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
                                 <style>
-                                    @page {
+                                    @page {{
                                         size: 15cm 20cm;
-                                        margin: 0.4cm;
-                                    }
-                                    body {
+                                        margin: 0.5cm;
+                                    }}
+                                    body {{
                                         font-family: 'Cairo', sans-serif;
                                         direction: rtl;
                                         text-align: right;
                                         background-color: #fff;
                                         color: #000;
                                         margin: 0;
-                                        padding: 10px;
+                                        padding: 15px 10px;
                                         box-sizing: border-box;
-                                    }
-                                    .teacher-card {
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: center;
+                                        min-height: 19cm;
+                                    }}
+                                    .print-header {{
+                                        text-align: center;
+                                        margin-bottom: 25px;
+                                        margin-top: 15px;
+                                    }}
+                                    .print-header img {{
+                                        width: 120px;
+                                        height: auto;
+                                        margin-bottom: 8px;
+                                    }}
+                                    .teacher-card {{
                                         border: 2px solid #0d233a;
                                         border-radius: 8px;
-                                        padding: 12px 16px;
-                                        margin-bottom: 10px;
-                                    }
-                                    .card-title {
+                                        padding: 14px 18px;
+                                        margin-bottom: 12px;
+                                    }}
+                                    .card-title {{
                                         color: #0d233a;
                                         font-size: 16px;
                                         font-weight: 800;
@@ -703,17 +717,17 @@ if df is not None:
                                         padding-bottom: 6px;
                                         margin-bottom: 12px;
                                         text-align: center;
-                                    }
-                                    .card-row {
+                                    }}
+                                    .card-row {{
                                         font-size: 14px;
                                         font-weight: 600;
                                         margin-bottom: 8px;
                                         color: #111;
-                                    }
-                                    .card-row b {
+                                    }}
+                                    .card-row b {{
                                         color: #d32f2f;
-                                    }
-                                    .status-green {
+                                    }}
+                                    .status-green {{
                                         background-color: #f0fdf4;
                                         color: #15803d;
                                         border: 1.5px solid #15803d;
@@ -722,9 +736,9 @@ if df is not None:
                                         text-align: center;
                                         font-size: 13px;
                                         font-weight: bold;
-                                        margin-bottom: 10px;
-                                    }
-                                    .status-red {
+                                        margin-bottom: 12px;
+                                    }}
+                                    .status-red {{
                                         background-color: #fef2f2;
                                         color: #b91c1c;
                                         border: 1.5px solid #b91c1c;
@@ -733,9 +747,9 @@ if df is not None:
                                         text-align: center;
                                         font-size: 13px;
                                         font-weight: bold;
-                                        margin-bottom: 10px;
-                                    }
-                                    .status-blue {
+                                        margin-bottom: 12px;
+                                    }}
+                                    .status-blue {{
                                         background-color: #eff6ff;
                                         color: #1d4ed8;
                                         border: 1.5px solid #1d4ed8;
@@ -744,18 +758,18 @@ if df is not None:
                                         text-align: center;
                                         font-size: 13px;
                                         font-weight: bold;
-                                        margin-bottom: 10px;
-                                    }
-                                    .pulse-text {
+                                        margin-bottom: 12px;
+                                    }}
+                                    .pulse-text {{
                                         color: #15803d;
                                         font-size: 15px;
                                         font-weight: bold;
-                                    }
-                                    .pickup-instructions {
+                                    }}
+                                    .pickup-instructions {{
                                         color: #15803d;
                                         font-size: 12px;
-                                    }
-                                    .working-hours-print {
+                                    }}
+                                    .working-hours-print {{
                                         background-color: #fafafa;
                                         border: 1.5px solid #0d233a;
                                         border-right: 5px solid #d32f2f;
@@ -764,38 +778,42 @@ if df is not None:
                                         border-radius: 6px;
                                         font-size: 12px;
                                         line-height: 1.6;
-                                    }
-                                    .working-hours-title {
+                                        margin-top: 5px;
+                                    }}
+                                    .working-hours-title {{
                                         color: #0d233a;
                                         font-size: 13px;
                                         font-weight: bold;
                                         margin-bottom: 4px;
-                                    }
-                                    .highlight {
+                                    }}
+                                    .highlight {{
                                         color: #d32f2f;
                                         font-weight: bold;
-                                    }
+                                    }}
                                 </style>
                             </head>
                             <body>
-                                ${cardHtml}
-                                ${statusHtml}
+                                <div class="print-header">
+                                    <img src="{logo_src}" alt="شعار الأكاديمية">
+                                </div>
+                                ${{cardHtml}}
+                                ${{statusHtml}}
                                 <div class="working-hours-print">
                                     <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
                                     • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
                                     • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
                                 </div>
                                 <script>
-                                    window.onload = function() {
+                                    window.onload = function() {{
                                         window.print();
-                                        setTimeout(function() { window.close(); }, 500);
-                                    };
+                                        setTimeout(function() {{ window.close(); }}, 500);
+                                    }};
                                 <\/script>
                             </body>
                             </html>
                         `);
                         printWin.document.close();
-                    }
+                    }}
                     </script>
                     """,
                     height=60,
