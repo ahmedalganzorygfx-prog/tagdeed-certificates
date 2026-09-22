@@ -65,7 +65,7 @@ st.markdown(
         font-weight: bold;
         margin-bottom: 12px;
     }
-    /* تكبير وتنسيق العنوان الرئيسي المطلوب */
+    /* تكبير وتنسيق العنوان الرئيسي */
     .header-box .main-title {
         color: #58a6ff;
         font-size: 26px !important;
@@ -198,6 +198,28 @@ st.markdown(
         border-bottom: 1px solid rgba(56, 139, 253, 0.2);
         border-left: 1px solid rgba(56, 139, 253, 0.2);
     }
+
+    /* تأثير الوميض (Blinking / Pulse Glow) على كلمة موجودة بالفرع */
+    @keyframes pulseGlow {
+        0% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.3;
+            transform: scale(1.03);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    .pulse-text {
+        display: inline-block;
+        animation: pulseGlow 1.5s infinite ease-in-out;
+        font-size: 18px;
+    }
+
     /* تنسيق أزرار الواتساب للتواصل والدعم الفني */
     .whatsapp-container {
         display: flex;
@@ -437,7 +459,7 @@ if df is not None:
                             st.markdown(
                                 """
                                 <div class="status-green">
-                                    🟢 موجودة بالفرع<br>
+                                    <span class="pulse-text">🟢 موجودة بالفرع</span><br>
                                     <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة معتمدة + صورة البطاقة.</span>
                                 </div>
                                 """,
