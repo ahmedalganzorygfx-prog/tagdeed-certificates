@@ -346,24 +346,6 @@ st.markdown(
         margin-top: 15px;
         margin-bottom: 15px;
     }
-    .print-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 10px 22px;
-        background-color: #1f6beb;
-        color: white !important;
-        font-weight: bold;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        font-size: 15px;
-        text-decoration: none;
-        transition: background-color 0.2s;
-    }
-    .print-btn:hover {
-        background-color: #388bfd;
-    }
     .share-whatsapp-btn {
         display: inline-flex;
         align-items: center;
@@ -381,22 +363,31 @@ st.markdown(
         background-color: #2ea043;
     }
 
-    /* صندوق مواعيد العمل الرسمية */
+    /* صندوق مواعيد العمل الرسمية بتصميم جديد ومبرز */
     .working-hours-box {
         background-color: #161b22;
         border: 1px solid #30363d;
-        border-right: 4px solid #58a6ff;
-        padding: 15px 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-        margin-bottom: 15px;
+        border-right: 5px solid #58a6ff;
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin-top: 25px;
+        margin-bottom: 20px;
         text-align: right;
-        color: #e0e0e0;
-        font-size: 14px;
-        line-height: 1.7;
+        color: #ffffff;
+        font-size: 16px;
+        line-height: 1.8;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .working-hours-box b {
+    .working-hours-title {
         color: #58a6ff;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+    .working-hours-highlight {
+        color: #ffcc00 !important;
+        font-weight: bold;
+        font-size: 17px;
     }
 
     /* تنسيق أزرار الواتساب للتواصل والدعم الفني */
@@ -505,7 +496,7 @@ st.markdown(
             background-color: white !important;
         }
         .header-box, .custom-footer, .map-container, .whatsapp-container, 
-        .stForm, .hand-container, .action-btn-container, .working-hours-box {
+        .stForm, .hand-container, .action-btn-container, .working-hours-box, iframe {
             display: none !important;
         }
         .teacher-card {
@@ -724,14 +715,26 @@ if df is not None:
                             unsafe_allow_html=True,
                         )
 
-                # 3. زر طباعة الإفادة مباشرة بعد الصندوق الوحيد
-                st.markdown(
+                # 3. زر الطباعة التفاعلي المضبوط لإطلاق أمر الطباعة للنافذة الرئيسية بالكامل
+                components.html(
                     """
-                    <div class="action-btn-container">
-                        <button class="print-btn" onclick="window.print()">🖨️ طباعة إفادة الاستعلام</button>
+                    <div style="display: flex; justify-content: center; width: 100%;">
+                        <button onclick="window.parent.print()" style="
+                            background-color: #1f6beb;
+                            color: white;
+                            font-weight: bold;
+                            border-radius: 8px;
+                            border: none;
+                            padding: 12px 28px;
+                            font-size: 16px;
+                            cursor: pointer;
+                            font-family: 'Cairo', sans-serif, Arial;
+                            box-shadow: 0 4px 12px rgba(31,107,235,0.4);
+                            transition: background-color 0.2s;
+                        ">🖨️ طباعة إفادة الاستعلام</button>
                     </div>
                     """,
-                    unsafe_allow_html=True,
+                    height=60,
                 )
             else:
                 st.error(
@@ -749,13 +752,13 @@ whatsapp_share_text = "https://wa.me/?text=" + pd.Series([
     "🏛️ بوابة الاستعلام عن شهادات القيادة والإشراف - فرع الجيزة:\nاستعلم عن حالة شهادتك الآن من الرابط التالي:\nhttps://giza-academy.streamlit.app"
 ]).str.replace(" ", "%20").iloc[0]
 
-# صندوق مواعيد العمل الرسمية
+# صندوق مواعيد العمل الرسمية المحسن والمكبر
 st.markdown(
     """
     <div class="working-hours-box">
-        ⏰ <b>مواعيد العمل الرسمية بالفرع واستلام الشهادات:</b><br>
-        • من الأحد إلى الخميس: من الساعة <b>9:00 صباحاً</b> حتى الساعة <b>2:00 ظهراً</b>.<br>
-        • الإجازات الرسمية: الجمعة والسبت والعطلات الرسمية بالدولة.
+        <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
+        • من الأحد إلى الخميس: من الساعة <span class="working-hours-highlight">9:00 صباحاً</span> حتى الساعة <span class="working-hours-highlight">2:00 ظهراً</span>.<br>
+        • الإجازات الرسمية: <span class="working-hours-highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
     </div>
     """,
     unsafe_allow_html=True,
