@@ -79,19 +79,38 @@ st.markdown(
         font-family: 'Cairo', sans-serif, Arial;
         color: #e0e0e0;
     }
-    /* حاوية مخصصة لتوسيط الشعار تماماً في المنتصف */
+    /* حاوية مخصصة لتوسيط الشعار وصورة الاستلام تماماً في المنتصف */
     .logo-container {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         width: 100%;
         text-align: center;
     }
     .logo-container img {
         width: 180px;
         height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    .hand-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px;
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: center;
+    }
+    .hand-container img {
+        width: 220px;
+        max-width: 80%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        border: 1px solid #30363d;
         display: block;
         margin: 0 auto;
     }
@@ -405,13 +424,29 @@ def get_image_base64(file_path):
     return "https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
 
 
+# دالة قراءة صورة استلام الشهادة وتحويلها إلى Base64
+def get_hand_image_base64():
+    for filename in ["certificate_hand.png", "hand.png", "hand.jpg", "hand.jpeg"]:
+        if os.path.exists(filename):
+            with open(filename, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode()
+                ext = filename.split(".")[-1].lower()
+                return f"data:image/{ext};base64,{encoded_string}"
+    # رابط صورة تعبيرية افتراضية لشهادة واستلام
+    return "https://cdn-icons-png.flaticon.com/512/2912/2912761.png"
+
+
 logo_src = get_image_base64("logo.png")
+hand_src = get_hand_image_base64()
 
 # عرض اللوجو متمركزاً في المنتصف
 st.markdown(
     f"""
     <div class="logo-container">
         <img src="{logo_src}" alt="Logo">
+    </div>
+    <div class="hand-container">
+        <img src="{hand_src}" alt="استلام الشهادة">
     </div>
     """,
     unsafe_allow_html=True,
