@@ -79,10 +79,18 @@ ga_script = f"""
 """
 components.html(ga_script, height=0, width=0)
 
-# تطبيق التنسيق عبر CSS
+# تطبيق التنسيق عبر CSS مع إصلاح خط المعاينة وتماسك الحروف العربية
 st.markdown(
     """
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+    * {
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        font-feature-settings: "liga" 1, "calt" 1 !important;
+        -webkit-font-smoothing: antialiased;
+    }
+
     /* تقليص وتوسيط حاوية المحتوى الرئيسية */
     .block-container {
         max-width: 800px !important;
@@ -107,7 +115,6 @@ st.markdown(
     html, body, [class*="css"] {
         direction: rtl;
         text-align: right;
-        font-family: 'Cairo', sans-serif, Arial;
         color: #e0e0e0;
     }
     /* حاوية مخصصة لتوسيط الشعار وصورة الاستلام تماماً في المنتصف */
@@ -158,37 +165,40 @@ st.markdown(
     }
     .header-box h2 {
         color: #ffffff;
-        font-weight: bold;
+        font-weight: 800;
         margin-bottom: 12px;
         font-size: 22px;
+        letter-spacing: normal !important;
     }
     /* تكبير وتنسيق العنوان الرئيسي بالترتيب الجديد */
     .header-box .main-title {
         color: #58a6ff;
         font-size: 24px !important;
-        font-weight: bold !important;
+        font-weight: 800 !important;
         margin-bottom: 12px;
-        line-height: 1.4;
+        line-height: 1.5;
+        letter-spacing: normal !important;
     }
     .header-box p {
         color: #8b949e;
         font-size: 14px;
         margin: 0;
+        line-height: 1.6;
     }
     /* تنسيق النص الملون والمميز داخل العنوان والبرامج */
     .highlight-yellow {
         color: #ffcc00 !important;
-        font-weight: bold;
+        font-weight: 800;
     }
     .programs-text {
         color: #ffcc00 !important;
-        font-weight: bold;
+        font-weight: 700;
     }
     /* تنسيق مميز بخط أكبر ولون لافت لتعليمات الاستلام */
     .pickup-instructions {
         font-size: 16px !important;
         color: #ffe566 !important;
-        font-weight: bold;
+        font-weight: 700;
         margin-top: 8px;
         display: block;
     }
@@ -200,7 +210,7 @@ st.markdown(
     /* تغيير لون الكلام فقط داخل صندوق التنبيه الأخضر دون تغيير الخلفية */
     [data-testid="stAlert"] * {
         color: #ffcc00 !important;
-        font-weight: bold !important;
+        font-weight: 700 !important;
         font-size: 17px !important;
     }
 
@@ -211,7 +221,7 @@ st.markdown(
         width: 100%;
         border-radius: 6px;
         border: 1px solid #30363d;
-        font-weight: bold;
+        font-weight: 700;
     }
     .stFormSubmitButton > button:hover {
         background-color: #30363d;
@@ -220,7 +230,7 @@ st.markdown(
     /* جعل تسمية خانة الإدخال باللون الأبيض */
     .stTextInput label {
         color: #ffffff !important;
-        font-weight: bold !important;
+        font-weight: 700 !important;
     }
     /* تصميم خانة الإدخال لتتناغم مع التصميم الداكن */
     .stTextInput input {
@@ -243,7 +253,7 @@ st.markdown(
     .card-title {
         color: #58a6ff;
         font-size: 19px;
-        font-weight: bold;
+        font-weight: 800;
         margin-bottom: 15px;
         border-bottom: 1px solid #30363d;
         padding-bottom: 8px;
@@ -255,13 +265,13 @@ st.markdown(
         font-size: 17px;
         margin-bottom: 12px;
         color: #ffffff !important;
-        font-weight: 500;
+        font-weight: 600;
         text-align: right;
         direction: rtl;
     }
     .card-row b {
         color: #ffcc00 !important;
-        font-weight: bold !important;
+        font-weight: 700 !important;
     }
     
     /* تنسيق صناديق الحالات المخصصة */
@@ -273,7 +283,7 @@ st.markdown(
         border-right: 5px solid #f85149;
         margin-top: 15px;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: 700;
         text-align: center;
         direction: rtl;
         border-top: 1px solid rgba(248, 81, 73, 0.2);
@@ -288,7 +298,7 @@ st.markdown(
         border-right: 5px solid #2ea043;
         margin-top: 15px;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: 700;
         text-align: center;
         direction: rtl;
         border-top: 1px solid rgba(46, 160, 67, 0.2);
@@ -303,7 +313,7 @@ st.markdown(
         border-right: 5px solid #388bfd;
         margin-top: 15px;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: 700;
         text-align: center;
         direction: rtl;
         border-top: 1px solid rgba(56, 139, 253, 0.2);
@@ -353,7 +363,7 @@ st.markdown(
         padding: 6px 14px;
         background-color: #25d366;
         color: white !important;
-        font-weight: bold;
+        font-weight: 700;
         border-radius: 20px;
         text-decoration: none;
         font-size: 14px;
@@ -390,7 +400,7 @@ st.markdown(
         padding: 8px 18px;
         background-color: #238636;
         color: white !important;
-        font-weight: bold;
+        font-weight: 700;
         border-radius: 6px;
         text-decoration: none;
         transition: background-color 0.2s;
@@ -408,7 +418,7 @@ st.markdown(
         border-radius: 20px;
         color: #8b949e;
         font-size: 13px;
-        font-weight: bold;
+        font-weight: 700;
     }
     .visitor-badge span {
         color: #58a6ff;
@@ -425,7 +435,7 @@ st.markdown(
         border-radius: 8px;
         color: #e0e0e0;
         font-size: 14px;
-        font-weight: bold;
+        font-weight: 700;
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .director-badge b {
