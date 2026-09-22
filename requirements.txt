@@ -1,4 +1,4 @@
 streamlit
 pandas
 openpyxl
-streamlit-analytics
+streamlit-analytics2
