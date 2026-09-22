@@ -11,6 +11,30 @@ st.set_page_config(
     page_icon="🏛️",
 )
 
+
+# دالة لحساب وعرض عدد زوار الصفحة
+def get_and_update_visitor_count():
+    count_file = "visitors.txt"
+    if not os.path.exists(count_file):
+        with open(count_file, "w") as f:
+            f.write("0")
+
+    try:
+        with open(count_file, "r+") as f:
+            content = f.read().strip()
+            count = int(content) if content.isdigit() else 0
+            count += 1
+            f.seek(0)
+            f.write(str(count))
+            f.truncate()
+    except Exception:
+        count = 1
+    return count
+
+
+# تسجيل زيارة جديدة
+visitor_count = get_and_update_visitor_count()
+
 # تفعيل تتبع Google Analytics
 ga_id = "G-2V7DFZWVXJ"
 ga_script = f"""
@@ -342,6 +366,22 @@ st.markdown(
         color: #ffcc00;
         font-size: 15px;
     }
+
+    /* شارة عداد الزوار */
+    .visitor-badge {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 6px 16px;
+        background-color: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 20px;
+        color: #8b949e;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .visitor-badge span {
+        color: #58a6ff;
+    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -533,9 +573,9 @@ else:
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
     )
 
-# تذييل الصفحة المطور والمجمل بالكامل
+# تذييل الصفحة المطور والمجمل بالكامل مع عداد الزوار
 st.markdown(
-    """
+    f"""
     <div class="custom-footer">
         💬 <b>أرقام الدعم الفني للتواصل عبر واتس آب:</b>
         <div class="whatsapp-container">
@@ -562,6 +602,10 @@ st.markdown(
         </div>
         <div class="director-badge">
             👔 تصميم وتنفيذ <b>أحمد الجنزوري</b> - مدير الفرع
+        </div>
+        <br>
+        <div class="visitor-badge">
+            👁️ إجمالي عدد زيارات البوابة: <span>{visitor_count:,}</span> زيارة
         </div>
     </div>
     """,
