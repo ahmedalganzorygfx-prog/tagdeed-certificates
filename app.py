@@ -99,17 +99,17 @@ st.markdown(
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 5px;
-        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 25px;
         width: 100%;
         text-align: center;
     }
     .hand-container img {
-        width: 220px;
-        max-width: 80%;
+        width: 380px;
+        max-width: 95%;
         height: auto;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
         border: 1px solid #30363d;
         display: block;
         margin: 0 auto;
@@ -439,7 +439,7 @@ def get_hand_image_base64():
 logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
-# عرض اللوجو متمركزاً في المنتصف
+# عرض اللوجو متمركزاً في المنتصف مع الصورة التعبيرية بحجم أكبر
 st.markdown(
     f"""
     <div class="logo-container">
