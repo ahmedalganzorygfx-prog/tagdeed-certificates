@@ -145,9 +145,9 @@ st.markdown(
         text-align: right;
         direction: rtl;
     }
-    /* لون خط البيانات أبيض ناصع ببروز قوي */
+    /* تنسيق ألوان بيانات المعلم: العناوين بالأصفر العريض والبيانات بالأبيض الناصع */
     .card-row {
-        font-size: 17px;
+        font-size: 18px;
         margin-bottom: 12px;
         color: #ffffff !important;
         font-weight: 500;
@@ -155,8 +155,22 @@ st.markdown(
         direction: rtl;
     }
     .card-row b {
-        color: #ffffff !important;
-        font-weight: bold;
+        color: #ffcc00 !important;
+        font-weight: bold !important;
+    }
+    /* تنسيق رسالة النجاح باللون الأصفر العريض */
+    .success-msg-yellow {
+        background-color: rgba(255, 204, 0, 0.12);
+        border: 1px solid rgba(255, 204, 0, 0.3);
+        border-right: 5px solid #ffcc00;
+        color: #ffcc00 !important;
+        padding: 14px 20px;
+        border-radius: 8px;
+        font-size: 18px !important;
+        font-weight: bold !important;
+        margin-bottom: 20px;
+        text-align: right;
+        direction: rtl;
     }
     /* تنسيق صناديق الحالات المخصصة */
     .status-red {
@@ -345,7 +359,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# صندوق العنوان الرئيسي بالترتيب الجديد المطلوب
+# صندوق العنوان الرئيسي
 st.markdown(
     """
     <div class="header-box">
@@ -411,7 +425,11 @@ if df is not None:
                 result = df[df[id_column].str.contains(search_query, na=False)]
 
             if not result.empty:
-                st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
+                # رسالة النجاح باللون الأصفر العريض
+                st.markdown(
+                    '<div class="success-msg-yellow">🎉 تم العثور على بيانات الشهادة بنجاح:</div>',
+                    unsafe_allow_html=True,
+                )
 
                 for idx, row in result.iterrows():
                     name_val = "غير متوفر"
