@@ -642,7 +642,7 @@ if df is not None:
             if not result.empty:
                 st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
 
-                # أخذ الصف الأول فقط لعرض بيانات المعلم مرة واحدة
+                # أخذ الصف الأول لعرض بيانات المعلم وحالته مرة واحدة فقط
                 first_row = result.iloc[0]
 
                 name_val = "غير متوفر"
@@ -673,7 +673,7 @@ if df is not None:
                         serial_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
                         break
 
-                # عرض بطاقة بيانات المعلم مرة واحدة فقط
+                # 1. عرض بطاقة بيانات المعلم مرة واحدة فقط
                 card_code = f"""
                 <div class="teacher-card" id="printable-card">
                     <div class="card-title">👤 بيانات المعلم - إفادة استعلام</div>
@@ -686,46 +686,45 @@ if df is not None:
                 """
                 st.markdown(card_code, unsafe_allow_html=True)
 
-                # عرض حالة أو حالات الشهادة المندرجين تحت هذا الرقم القومي
-                for idx, row in result.iterrows():
-                    if status_column and pd.notna(row[status_column]):
-                        status_val = str(row[status_column]).strip()
-                        if "لم تصل" in status_val:
-                            st.markdown(
-                                """
-                                <div class="status-red">
-                                    🔴 لم تصل إلى الفرع حتى الآن<br>
-                                    <span style="font-weight: normal; font-size: 14px; color: #8b949e;">يرجى الاستعلام في وقت لاحق.</span>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
-                        elif "موجودة" in status_val:
-                            st.markdown(
-                                """
-                                <div class="status-green">
-                                    <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
-                                    <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
-                        elif "تسليم" in status_val:
-                            st.markdown(
-                                """
-                                <div class="status-blue">
-                                    🔵 تم تسليم الشهادة للمعلم
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
-                        else:
-                            st.markdown(
-                                f'<div class="status-blue">حالة الشهادة: {status_val}</div>',
-                                unsafe_allow_html=True,
-                            )
+                # 2. عرض صندوق حالة الشهادة مرة واحدة فقط
+                if status_column and pd.notna(first_row[status_column]):
+                    status_val = str(first_row[status_column]).strip()
+                    if "لم تصل" in status_val:
+                        st.markdown(
+                            """
+                            <div class="status-red">
+                                🔴 لم تصل إلى الفرع حتى الآن<br>
+                                <span style="font-weight: normal; font-size: 14px; color: #8b949e;">يرجى الاستعلام في وقت لاحق.</span>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                    elif "موجودة" in status_val:
+                        st.markdown(
+                            """
+                            <div class="status-green">
+                                <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
+                                <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                    elif "تسليم" in status_val:
+                        st.markdown(
+                            """
+                            <div class="status-blue">
+                                🔵 تم تسليم الشهادة للمعلم
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                    else:
+                        st.markdown(
+                            f'<div class="status-blue">حالة الشهادة: {status_val}</div>',
+                            unsafe_allow_html=True,
+                        )
 
-                # زر طباعة الإفادة مباشرة بعد كارت المعلم والحالات
+                # 3. زر طباعة الإفادة مباشرة بعد الصندوق الوحيد
                 st.markdown(
                     """
                     <div class="action-btn-container">
