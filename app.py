@@ -229,7 +229,7 @@ st.markdown(
         border: 1px solid #30363d !important;
         border-radius: 6px !important;
     }
-    /* تصميم بطاقة بيانات المعلم الداكنة */
+    /* تصميم بطاقة بيانات المعلم الداكنة للشاشة */
     .teacher-card {
         background-color: #161b22;
         border: 1px solid #30363d;
@@ -250,7 +250,6 @@ st.markdown(
         text-align: right;
         direction: rtl;
     }
-    /* تنسيق ألوان بيانات المعلم: العناوين بالأصفر العريض والبيانات بالأبيض الناصع */
     .card-row {
         font-size: 17px;
         margin-bottom: 12px;
@@ -486,26 +485,103 @@ st.markdown(
         font-size: 15px;
     }
 
-    /* تنسيق إخفاء العناصر أثناء الطباعة */
+    /* ======================================================== */
+    /* 🖨️ تنسيقات الطباعة المخصصة بمقاس 15*21 سم (A5) بالألوان */
+    /* ======================================================== */
+    @page {
+        size: 15cm 21cm;
+        margin: 0.8cm;
+    }
     @media print {
-        body {
-            background-color: white !important;
-            color: black !important;
+        body, html, .stApp {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            width: 15cm !important;
+            height: 21cm !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
         }
-        .stApp {
-            background-color: white !important;
-        }
-        .header-box, .custom-footer, .map-container, .whatsapp-container, 
-        .stForm, .hand-container, .action-btn-container, .working-hours-box, iframe {
+
+        /* إخفاء العناصر غير المرغوبة أثناء الطباعة */
+        .logo-container, .header-box, .custom-footer, .map-container, 
+        .whatsapp-container, .stForm, .hand-container, 
+        .action-btn-container, .working-hours-box, iframe, hr,
+        [data-testid="stHeader"], [data-testid="stToolbar"] {
             display: none !important;
         }
+
+        /* تنسيق بطاقة المعلم لتظهر ملونة وواضحة جداً */
         .teacher-card {
-            border: 2px solid #000 !important;
-            background-color: white !important;
-            color: black !important;
+            background-color: #ffffff !important;
+            border: 3px double #0d233a !important;
+            border-radius: 12px !important;
+            padding: 18px !important;
+            margin: 10px 0 !important;
+            box-shadow: none !important;
+            direction: rtl !important;
+            text-align: right !important;
         }
-        .card-row, .card-row b, .card-title {
-            color: black !important;
+        .card-title {
+            color: #0d233a !important;
+            font-size: 20px !important;
+            font-weight: 800 !important;
+            border-bottom: 2px solid #c9a227 !important;
+            padding-bottom: 8px !important;
+            margin-bottom: 16px !important;
+            text-align: center !important;
+        }
+        .card-row {
+            color: #1e1e1e !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            margin-bottom: 12px !important;
+            line-height: 1.6 !important;
+        }
+        .card-row b {
+            color: #b8860b !important;
+            font-weight: 800 !important;
+        }
+
+        /* تنسيق صناديق الحالات الملونة للطباعة */
+        .status-green {
+            background-color: #e6f4ea !important;
+            color: #137333 !important;
+            border: 2px solid #137333 !important;
+            padding: 14px !important;
+            border-radius: 8px !important;
+            text-align: center !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
+        .status-red {
+            background-color: #fce8e6 !important;
+            color: #c5221f !important;
+            border: 2px solid #c5221f !important;
+            padding: 14px !important;
+            border-radius: 8px !important;
+            text-align: center !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
+        .status-blue {
+            background-color: #e8f0fe !important;
+            color: #1a73e8 !important;
+            border: 2px solid #1a73e8 !important;
+            padding: 14px !important;
+            border-radius: 8px !important;
+            text-align: center !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
+        .pulse-text {
+            color: #137333 !important;
+            font-size: 18px !important;
+            font-weight: bold !important;
+            animation: none !important;
+        }
+        .pickup-instructions {
+            color: #137333 !important;
+            font-size: 14px !important;
         }
     }
     </style>
@@ -667,7 +743,7 @@ if df is not None:
                 # 1. عرض بطاقة بيانات المعلم مرة واحدة فقط
                 card_code = f"""
                 <div class="teacher-card" id="printable-card">
-                    <div class="card-title">👤 بيانات المعلم - إفادة استعلام</div>
+                    <div class="card-title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة<br><span style="font-size: 16px; font-weight: normal;">إفادة استعلام عن شهادة القيادة والإشراف</span></div>
                     <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
                     <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
                     <div class="card-row"><b>الرقم القومي:</b> {first_row[id_column]}</div>
@@ -685,7 +761,7 @@ if df is not None:
                             """
                             <div class="status-red">
                                 🔴 لم تصل إلى الفرع حتى الآن<br>
-                                <span style="font-weight: normal; font-size: 14px; color: #8b949e;">يرجى الاستعلام في وقت لاحق.</span>
+                                <span style="font-weight: normal; font-size: 14px;">يرجى الاستعلام في وقت لاحق.</span>
                             </div>
                             """,
                             unsafe_allow_html=True,
@@ -731,7 +807,7 @@ if df is not None:
                             font-family: 'Cairo', sans-serif, Arial;
                             box-shadow: 0 4px 12px rgba(31,107,235,0.4);
                             transition: background-color 0.2s;
-                        ">🖨️ طباعة إفادة الاستعلام</button>
+                        ">🖨️ طباعة إفادة الاستعلام (15×21 سم)</button>
                     </div>
                     """,
                     height=60,
