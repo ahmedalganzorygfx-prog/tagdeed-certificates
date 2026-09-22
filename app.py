@@ -145,12 +145,18 @@ st.markdown(
         text-align: right;
         direction: rtl;
     }
+    /* تعديل لون خط البيانات ليصبح أبيض ناصع جداً وبخط واضح */
     .card-row {
-        font-size: 16px;
-        margin-bottom: 10px;
-        color: #c9d1d9;
+        font-size: 17px;
+        margin-bottom: 12px;
+        color: #ffffff !important;
+        font-weight: 500;
         text-align: right;
         direction: rtl;
+    }
+    .card-row b {
+        color: #ffffff !important;
+        font-weight: bold;
     }
     /* تنسيق صناديق الحالات المخصصة */
     .status-red {
@@ -383,7 +389,7 @@ if df is not None:
             break
 
     st.markdown(
-        '<div style="text-align: right; direction: rtl; font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #c9d1d9;">💡 أدخل الرقم القومي الخاص بك (14 رقماً) ثم اضغط على زر بحث:</div>',
+        '<div style="text-align: right; direction: rtl; font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #ffffff;">💡 أدخل الرقم القومي الخاص بك (14 رقماً) ثم اضغط على زر بحث:</div>',
         unsafe_allow_html=True,
     )
 
