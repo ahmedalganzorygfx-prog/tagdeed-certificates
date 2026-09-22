@@ -228,25 +228,25 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# وضع الشعار في منتصف الصفحة تماماً من الأعلى
-col_spacer1, col_logo, col_spacer2 = st.columns([2, 1, 2])
+# وضع الشعار تكبير العرض إلى 200px وتعديل الأعمدة لضمان التمركز
+col_spacer1, col_logo, col_spacer2 = st.columns([1, 1, 1])
 with col_logo:
     logo_path = "logo.png"
     if os.path.exists(logo_path):
-        st.image(logo_path, width=130)
+        st.image(logo_path, width=200)
     else:
         found = False
         for file in os.listdir("."):
             if file.lower().startswith("logo") and file.lower().endswith(
                 (".png", ".jpg", ".jpeg")
             ):
-                st.image(file, width=130)
+                st.image(file, width=200)
                 found = True
                 break
         if not found:
             st.image(
                 "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
-                width=110,
+                width=180,
             )
 
 # صندوق العنوان والبرامج التدريبية
