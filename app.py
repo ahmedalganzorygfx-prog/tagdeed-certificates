@@ -642,7 +642,7 @@ if df is not None:
 
                 st.markdown(status_html, unsafe_allow_html=True)
 
-                # 3. إظهار زر الطباعة لطباعة الإفادة مع التوقيع والتوسيط
+                # 3. إظهار زر الطباعة لطباعة الإفادة مقاس 15*20 في صفحة واحدة مدمجة بالكامل
                 if is_available:
                     components.html(
                         f"""
@@ -681,25 +681,20 @@ if df is not None:
                                     <style>
                                         @page {{
                                             size: 15cm 20cm;
-                                            margin: 0.5cm;
+                                            margin: 0.3cm;
                                         }}
                                         html, body {{
-                                            height: 100%;
                                             margin: 0;
                                             padding: 0;
-                                        }}
-                                        body {{
+                                            background-color: #fff;
+                                            color: #000;
                                             font-family: 'Cairo', sans-serif;
                                             direction: rtl;
                                             text-align: right;
-                                            background-color: #fff;
-                                            color: #000;
-                                            padding: 10px 15px;
+                                        }}
+                                        body {{
+                                            padding: 10px 12px;
                                             box-sizing: border-box;
-                                            display: flex;
-                                            flex-direction: column;
-                                            justify-content: center;
-                                            align-items: center;
                                         }}
                                         .container {{
                                             width: 100%;
@@ -708,32 +703,33 @@ if df is not None:
                                         }}
                                         .print-header {{
                                             text-align: center;
-                                            margin-bottom: 20px;
+                                            margin-bottom: 12px;
+                                            margin-top: 5px;
                                         }}
                                         .print-header img {{
-                                            width: 130px;
+                                            width: 110px;
                                             height: auto;
-                                            margin-bottom: 5px;
+                                            margin-bottom: 2px;
                                         }}
                                         .teacher-card {{
                                             border: 2px solid #0d233a;
                                             border-radius: 8px;
-                                            padding: 14px 18px;
-                                            margin-bottom: 12px;
+                                            padding: 10px 14px;
+                                            margin-bottom: 8px;
                                         }}
                                         .card-title {{
                                             color: #0d233a;
-                                            font-size: 16px;
+                                            font-size: 15px;
                                             font-weight: 800;
                                             border-bottom: 2px solid #d32f2f;
-                                            padding-bottom: 6px;
-                                            margin-bottom: 12px;
+                                            padding-bottom: 4px;
+                                            margin-bottom: 8px;
                                             text-align: center;
                                         }}
                                         .card-row {{
-                                            font-size: 14px;
+                                            font-size: 13px;
                                             font-weight: 600;
-                                            margin-bottom: 8px;
+                                            margin-bottom: 6px;
                                             color: #111;
                                         }}
                                         .card-row b {{
@@ -743,38 +739,38 @@ if df is not None:
                                             background-color: #f0fdf4;
                                             color: #15803d;
                                             border: 1.5px solid #15803d;
-                                            padding: 10px;
+                                            padding: 8px;
                                             border-radius: 6px;
                                             text-align: center;
-                                            font-size: 13px;
+                                            font-size: 12px;
                                             font-weight: bold;
-                                            margin-bottom: 12px;
+                                            margin-bottom: 8px;
                                         }}
                                         .pulse-text {{
                                             color: #15803d;
-                                            font-size: 15px;
+                                            font-size: 14px;
                                             font-weight: bold;
                                         }}
                                         .pickup-instructions {{
                                             color: #15803d;
-                                            font-size: 12px;
+                                            font-size: 11px;
                                         }}
                                         .working-hours-print {{
                                             background-color: #fafafa;
                                             border: 1.5px solid #0d233a;
                                             border-right: 5px solid #d32f2f;
                                             color: #111;
-                                            padding: 10px 14px;
+                                            padding: 8px 12px;
                                             border-radius: 6px;
-                                            font-size: 12px;
-                                            line-height: 1.6;
-                                            margin-bottom: 20px;
+                                            font-size: 11px;
+                                            line-height: 1.5;
+                                            margin-bottom: 15px;
                                         }}
                                         .working-hours-title {{
                                             color: #0d233a;
-                                            font-size: 13px;
+                                            font-size: 12px;
                                             font-weight: bold;
-                                            margin-bottom: 4px;
+                                            margin-bottom: 3px;
                                         }}
                                         .highlight {{
                                             color: #d32f2f;
@@ -785,18 +781,18 @@ if df is not None:
                                             justify-content: flex-start;
                                             align-items: center;
                                             width: 100%;
-                                            padding-right: 15px;
-                                            margin-top: 10px;
+                                            padding-right: 10px;
+                                            margin-top: 5px;
                                         }}
                                         .signature-box {{
                                             text-align: right;
-                                            font-size: 14px;
+                                            font-size: 13px;
                                             font-weight: bold;
                                             color: #0d233a;
                                         }}
                                         .signature-box b {{
                                             color: #d32f2f;
-                                            font-size: 15px;
+                                            font-size: 14px;
                                         }}
                                     </style>
                                 </head>
