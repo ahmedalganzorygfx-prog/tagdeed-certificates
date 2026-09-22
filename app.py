@@ -337,6 +337,68 @@ st.markdown(
         margin-bottom: 5px;
     }
 
+    /* أزرار الإجراءات والمشاركة والطباعة */
+    .action-btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+    .print-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px;
+        background-color: #1f6beb;
+        color: white !important;
+        font-weight: bold;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+    .print-btn:hover {
+        background-color: #388bfd;
+    }
+    .share-whatsapp-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px;
+        background-color: #238636;
+        color: white !important;
+        font-weight: bold;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.2s;
+    }
+    .share-whatsapp-btn:hover {
+        background-color: #2ea043;
+    }
+
+    /* صندوق مواعيد العمل الرسمية */
+    .working-hours-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-right: 4px solid #58a6ff;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        text-align: right;
+        color: #e0e0e0;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+    .working-hours-box b {
+        color: #58a6ff;
+    }
+
     /* تنسيق أزرار الواتساب للتواصل والدعم الفني */
     .whatsapp-container {
         display: flex;
@@ -432,6 +494,29 @@ st.markdown(
         color: #ffcc00;
         font-size: 15px;
     }
+
+    /* تنسيق إخفاء العناصر أثناء الطباعة */
+    @media print {
+        body {
+            background-color: white !important;
+            color: black !important;
+        }
+        .stApp {
+            background-color: white !important;
+        }
+        .header-box, .custom-footer, .map-container, .whatsapp-container, 
+        .stForm, .hand-container, .action-btn-container, .working-hours-box {
+            display: none !important;
+        }
+        .teacher-card {
+            border: 2px solid #000 !important;
+            background-color: white !important;
+            color: black !important;
+        }
+        .card-row, .card-row b, .card-title {
+            color: black !important;
+        }
+    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -526,12 +611,15 @@ if df is not None:
             break
 
     st.markdown(
-        '<div style="text-align: right; direction: rtl; font-size: 17px; font-weight: bold; margin-bottom: 10px; color: #ffffff;">💡 أدخل الرقم القومي الخاص بك (14 رقماً) ثم اضغط على زر بحث:</div>',
+        '<div style="text-align: right; direction: rtl; font-size: 17px; font-weight: bold; margin-bottom: 10px; color: #ffffff;">💡 أدخل الرقم القومي الخاص بك (14 رقماً أو آخر 4 أرقام) ثم اضغط على زر بحث:</div>',
         unsafe_allow_html=True,
     )
 
     with st.form(key="search_form"):
-        search_query = st.text_input("الرقم القومي:", max_chars=14).strip()
+        # إظهار لوحة أرقام الموبايل (type="number" / inputmode="numeric")
+        search_query = st.text_input(
+            "الرقم القومي (أو آخر 4 أرقام):", max_chars=14
+        ).strip()
         submit_button = st.form_submit_button(label="🔍 بحث")
 
     if submit_button:
@@ -542,7 +630,12 @@ if df is not None:
                 .str.replace(r"\.0$", "", regex=True)
                 .str.strip()
             )
-            result = df[df[id_column] == search_query]
+
+            # ميزة 1: البحث بالرقم القومي الكلي أو آخر 4 أرقام منه
+            if len(search_query) == 14:
+                result = df[df[id_column] == search_query]
+            else:
+                result = df[df[id_column].str.endswith(search_query, na=False)]
 
             if result.empty:
                 result = df[df[id_column].str.contains(search_query, na=False)]
@@ -580,8 +673,8 @@ if df is not None:
                             break
 
                     card_code = f"""
-                    <div class="teacher-card">
-                        <div class="card-title">👤 بيانات المعلم</div>
+                    <div class="teacher-card" id="printable-card">
+                        <div class="card-title">👤 بيانات المعلم - إفادة استعلام</div>
                         <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
                         <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
                         <div class="card-row"><b>الرقم القومي:</b> {row[id_column]}</div>
@@ -627,6 +720,16 @@ if df is not None:
                                 f'<div class="status-blue">حالة الشهادة: {status_val}</div>',
                                 unsafe_allow_html=True,
                             )
+
+                # ميزة 2: إضافة زر طباعة الإفادة مباشرة
+                st.markdown(
+                    """
+                    <div class="action-btn-container">
+                        <button class="print-btn" onclick="window.print()">🖨️ طباعة إفادة الاستعلام</button>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
             else:
                 st.error(
                     "❌ عذراً، لم يتم العثور على بيانات بهذا الرقم القومي. تأكد من صحة الرقم المُدخل."
@@ -638,10 +741,33 @@ else:
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
     )
 
-# تذييل الصفحة مع وضع العداد أولاً ثم تبويب التوقيع
+# ميزة 6: زر مشاركة رابط البوابة عبر الواتساب مع المعلمين
+whatsapp_share_text = "https://wa.me/?text=" + pd.Series([
+    "🏛️ بوابة الاستعلام عن شهادات القيادة والإشراف - فرع الجيزة:\nاستعلم عن حالة شهادتك الآن من الرابط التالي:\nhttps://giza-academy.streamlit.app"
+]).str.replace(" ", "%20").iloc[0]
+
+# ميزة 3: صندوق مواعيد العمل الرسمية
+st.markdown(
+    """
+    <div class="working-hours-box">
+        ⏰ <b>مواعيد العمل الرسمية بالفرع واستلام الشهادات:</b><br>
+        • من الأحد إلى الخميس: من الساعة <b>9:00 صباحاً</b> حتى الساعة <b>2:00 ظهراً</b>.<br>
+        • الإجازات الرسمية: الجمعة والسبت والعطلات الرسمية بالدولة.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# تذييل الصفحة المطور مع الأزرار التفاعلية
 st.markdown(
     f"""
     <div class="custom-footer">
+        <div class="action-btn-container">
+            <a href="{whatsapp_share_text}" target="_blank" class="share-whatsapp-btn">
+                📲 مشاركة رابط البوابة مع الزملاء عبر واتس آب
+            </a>
+        </div>
+        <br>
         💬 <b>أرقام الدعم الفني للتواصل عبر واتس آب:</b>
         <div class="whatsapp-container">
             <a href="https://wa.me/201069996245" target="_blank" class="whatsapp-btn">🟢 01069996245</a>
