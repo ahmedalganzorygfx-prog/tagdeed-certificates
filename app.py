@@ -344,20 +344,20 @@ st.markdown(
         gap: 12px;
         flex-wrap: wrap;
         margin-top: 15px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
     .print-btn {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 8px 18px;
+        padding: 10px 22px;
         background-color: #1f6beb;
         color: white !important;
         font-weight: bold;
         border-radius: 8px;
         border: none;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 15px;
         text-decoration: none;
         transition: background-color 0.2s;
     }
@@ -616,7 +616,6 @@ if df is not None:
     )
 
     with st.form(key="search_form"):
-        # إظهار لوحة أرقام الموبايل (type="number" / inputmode="numeric")
         search_query = st.text_input(
             "الرقم القومي (أو آخر 4 أرقام):", max_chars=14
         ).strip()
@@ -631,7 +630,7 @@ if df is not None:
                 .str.strip()
             )
 
-            # ميزة 1: البحث بالرقم القومي الكلي أو آخر 4 أرقام منه
+            # البحث بالرقم القومي الكلي أو آخر 4 أرقام منه
             if len(search_query) == 14:
                 result = df[df[id_column] == search_query]
             else:
@@ -643,47 +642,52 @@ if df is not None:
             if not result.empty:
                 st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
 
+                # أخذ الصف الأول فقط لعرض بيانات المعلم مرة واحدة
+                first_row = result.iloc[0]
+
+                name_val = "غير متوفر"
+                for c in df.columns:
+                    if any(
+                        k in c for k in ["اسم", "الاسم", "المعلم", "السيد"]
+                    ) and not any(
+                        k in c for k in ["قومي", "إدارة", "الادارة"]
+                    ):
+                        name_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
+                        break
+
+                admin_val = "غير متوفر"
+                for c in df.columns:
+                    if "الادارة" in c or "الإدارة" in c:
+                        admin_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
+                        break
+
+                prog_val = "غير متوفر"
+                for c in df.columns:
+                    if any(k in c for k in ["البرنامج", "الترقي", "التدريب"]):
+                        prog_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
+                        break
+
+                serial_val = "غير متوفر"
+                for c in df.columns:
+                    if "مسلسل" in c or c.strip() == "م":
+                        serial_val = str(first_row[c]) if pd.notna(first_row[c]) else "غير متوفر"
+                        break
+
+                # عرض بطاقة بيانات المعلم مرة واحدة فقط
+                card_code = f"""
+                <div class="teacher-card" id="printable-card">
+                    <div class="card-title">👤 بيانات المعلم - إفادة استعلام</div>
+                    <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
+                    <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
+                    <div class="card-row"><b>الرقم القومي:</b> {first_row[id_column]}</div>
+                    <div class="card-row"><b>الإدارة التعليمية:</b> {admin_val}</div>
+                    <div class="card-row"><b>البرنامج التدريبي:</b> {prog_val}</div>
+                </div>
+                """
+                st.markdown(card_code, unsafe_allow_html=True)
+
+                # عرض حالة أو حالات الشهادة المندرجين تحت هذا الرقم القومي
                 for idx, row in result.iterrows():
-                    name_val = "غير متوفر"
-                    for c in df.columns:
-                        if any(
-                            k in c for k in ["اسم", "الاسم", "المعلم", "السيد"]
-                        ) and not any(
-                            k in c for k in ["قومي", "إدارة", "الادارة"]
-                        ):
-                            name_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
-                            break
-
-                    admin_val = "غير متوفر"
-                    for c in df.columns:
-                        if "الادارة" in c or "الإدارة" in c:
-                            admin_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
-                            break
-
-                    prog_val = "غير متوفر"
-                    for c in df.columns:
-                        if any(k in c for k in ["البرنامج", "الترقي", "التدريب"]):
-                            prog_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
-                            break
-
-                    serial_val = "غير متوفر"
-                    for c in df.columns:
-                        if "مسلسل" in c or c.strip() == "م":
-                            serial_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
-                            break
-
-                    card_code = f"""
-                    <div class="teacher-card" id="printable-card">
-                        <div class="card-title">👤 بيانات المعلم - إفادة استعلام</div>
-                        <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
-                        <div class="card-row"><b>اسم المعلم:</b> {name_val}</div>
-                        <div class="card-row"><b>الرقم القومي:</b> {row[id_column]}</div>
-                        <div class="card-row"><b>الإدارة التعليمية:</b> {admin_val}</div>
-                        <div class="card-row"><b>البرنامج التدريبي:</b> {prog_val}</div>
-                    </div>
-                    """
-                    st.markdown(card_code, unsafe_allow_html=True)
-
                     if status_column and pd.notna(row[status_column]):
                         status_val = str(row[status_column]).strip()
                         if "لم تصل" in status_val:
@@ -721,7 +725,7 @@ if df is not None:
                                 unsafe_allow_html=True,
                             )
 
-                # ميزة 2: إضافة زر طباعة الإفادة مباشرة
+                # زر طباعة الإفادة مباشرة بعد كارت المعلم والحالات
                 st.markdown(
                     """
                     <div class="action-btn-container">
@@ -741,12 +745,12 @@ else:
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
     )
 
-# ميزة 6: زر مشاركة رابط البوابة عبر الواتساب مع المعلمين
+# زر مشاركة رابط البوابة عبر الواتساب مع المعلمين
 whatsapp_share_text = "https://wa.me/?text=" + pd.Series([
     "🏛️ بوابة الاستعلام عن شهادات القيادة والإشراف - فرع الجيزة:\nاستعلم عن حالة شهادتك الآن من الرابط التالي:\nhttps://giza-academy.streamlit.app"
 ]).str.replace(" ", "%20").iloc[0]
 
-# ميزة 3: صندوق مواعيد العمل الرسمية
+# صندوق مواعيد العمل الرسمية
 st.markdown(
     """
     <div class="working-hours-box">
