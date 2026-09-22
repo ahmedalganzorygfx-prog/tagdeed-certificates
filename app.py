@@ -63,15 +63,19 @@ st.markdown(
     .header-box h2 {
         color: #ffffff;
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
-    .header-box h4 {
+    /* تكبير وتنسيق العنوان الرئيسي المطلوب */
+    .header-box .main-title {
         color: #58a6ff;
-        margin-bottom: 8px;
+        font-size: 26px !important;
+        font-weight: bold !important;
+        margin-bottom: 12px;
+        line-height: 1.4;
     }
     .header-box p {
         color: #8b949e;
-        font-size: 14px;
+        font-size: 15px;
         margin: 0;
     }
     /* تنسيق النص الملون والمميز داخل العنوان والبرامج */
@@ -287,12 +291,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# صندوق العنوان والموضوع
+# صندوق العنوان الرئيسي مع إبراز عنوان الاستلام بخط كبير وعريض باللون الأصفر
 st.markdown(
     """
     <div class="header-box">
         <h2>🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</h2>
-        <h4>الاستعلام عن <span class="highlight-yellow">(تجديد - بدل فاقد)</span> شهادة القيادة والإشراف</h4>
+        <div class="main-title">الاستعلام عن <span class="highlight-yellow">(تجديد - بدل فاقد)</span> شهادة القيادة والإشراف</div>
         <p><b>البرامج التدريبية :</b> <span class="programs-text">مدير ووكيل إدارة تعليمية &nbsp;|&nbsp; مدير ووكيل إدارة مدرسية &nbsp;|&nbsp; أساسيات التوجيه الفني</span></p>
     </div>
     """,
