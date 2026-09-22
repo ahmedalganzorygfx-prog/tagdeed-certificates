@@ -12,27 +12,58 @@ st.set_page_config(
 )
 
 
-# دالة لحساب وعرض عدد زوار الصفحة
+# دالة إجبارية لتصفير العداد
+def reset_visitor_count():
+    count_file = "visitors.txt"
+    with open(count_file, "w") as f:
+        f.write("0")
+    return 0
+
+
+# دالة حساب وعرض عدد الزوار مع استثناء الآدمن
 def get_and_update_visitor_count():
     count_file = "visitors.txt"
+
+    # التحقق من وجود المعاملات في الرابط (Query Params)
+    query_params = st.query_params
+
+    # 1. حالة التصفير عبر الرابط (?reset=true)
+    if query_params.get("reset") == "true":
+        st.toast("🧹 تم تصفير عداد الزيارات بنجاح!")
+        return reset_visitor_count()
+
+    # 2. حالة الدخول كآدمن (?admin=true)
+    if query_params.get("admin") == "true":
+        st.session_state["is_admin"] = True
+
+    # إنشاء الملف إن لم يكن موجوداً
     if not os.path.exists(count_file):
         with open(count_file, "w") as f:
             f.write("0")
 
+    # قراءة العدد الحالي
     try:
-        with open(count_file, "r+") as f:
+        with open(count_file, "r") as f:
             content = f.read().strip()
             count = int(content) if content.isdigit() else 0
-            count += 1
-            f.seek(0)
-            f.write(str(count))
-            f.truncate()
     except Exception:
-        count = 1
+        count = 0
+
+    # زيادة العداد فقط إذا لم تكن هذه الجلسة جلسة آدمن ولم تُحتسب من قبل
+    is_admin = st.session_state.get("is_admin", False)
+    if not is_admin and not st.session_state.get("counted_this_session", False):
+        count += 1
+        st.session_state["counted_this_session"] = True
+        try:
+            with open(count_file, "w") as f:
+                f.write(str(count))
+        except Exception:
+            pass
+
     return count
 
 
-# تسجيل زيارة جديدة
+# تسجيل وتنفيذ الزيارة
 visitor_count = get_and_update_visitor_count()
 
 # تفعيل تتبع Google Analytics
@@ -432,14 +463,13 @@ def get_hand_image_base64():
                 encoded_string = base64.b64encode(image_file.read()).decode()
                 ext = filename.split(".")[-1].lower()
                 return f"data:image/{ext};base64,{encoded_string}"
-    # رابط صورة تعبيرية افتراضية لشهادة واستلام
     return "https://cdn-icons-png.flaticon.com/512/2912/2912761.png"
 
 
 logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
-# عرض اللوجو متمركزاً في المنتصف مع الصورة التعبيرية بحجم أكبر
+# عرض اللوجو متمركزاً في المنتصف مع الصورة التعبيرية
 st.markdown(
     f"""
     <div class="logo-container">
