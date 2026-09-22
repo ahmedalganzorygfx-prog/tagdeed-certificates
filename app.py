@@ -171,7 +171,7 @@ st.markdown(
     .status-green {
         background-color: rgba(46, 160, 67, 0.15);
         color: #3fb950;
-        padding: 14px;
+        padding: 16px;
         border-radius: 8px;
         border-right: 5px solid #2ea043;
         margin-top: 15px;
@@ -199,25 +199,30 @@ st.markdown(
         border-left: 1px solid rgba(56, 139, 253, 0.2);
     }
 
-    /* تأثير الوميض (Blinking / Pulse Glow) على كلمة موجودة بالفرع */
-    @keyframes pulseGlow {
+    /* تأثير الوميض الديناميكي مع تغيير اللون وتكبير الخط */
+    @keyframes colorPulseGlow {
         0% {
-            opacity: 1;
+            color: #3fb950;
             transform: scale(1);
+            text-shadow: 0 0 4px rgba(63, 185, 80, 0.4);
         }
         50% {
-            opacity: 0.3;
-            transform: scale(1.03);
+            color: #ffe566;
+            transform: scale(1.08);
+            text-shadow: 0 0 12px rgba(255, 229, 102, 0.8);
         }
         100% {
-            opacity: 1;
+            color: #3fb950;
             transform: scale(1);
+            text-shadow: 0 0 4px rgba(63, 185, 80, 0.4);
         }
     }
     .pulse-text {
         display: inline-block;
-        animation: pulseGlow 1.5s infinite ease-in-out;
-        font-size: 18px;
+        animation: colorPulseGlow 1.2s infinite ease-in-out;
+        font-size: 22px !important;
+        font-weight: 900 !important;
+        margin-bottom: 5px;
     }
 
     /* تنسيق أزرار الواتساب للتواصل والدعم الفني */
