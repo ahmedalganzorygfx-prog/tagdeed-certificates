@@ -823,7 +823,7 @@ if df is not None:
                                             ${{statusHtml}}
                                             <div class="working-hours-print">
                                                 <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
-                                                • من الأحد إلى الخميس: من الساعة <span class="highlight">9:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
+                                                • من الأحد إلى الخميس: من الساعة <span class="highlight">10:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
                                                 • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
                                             </div>
                                             <div class="print-footer-signature">
@@ -873,7 +873,7 @@ st.markdown(
     """
     <div class="working-hours-box">
         <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
-        • من الأحد إلى الخميس: من الساعة <span class="working-hours-highlight">9:00 صباحاً</span> حتى الساعة <span class="working-hours-highlight">2:00 ظهراً</span>.<br>
+        • من الأحد إلى الخميس: من الساعة <span class="working-hours-highlight">10:00 صباحاً</span> حتى الساعة <span class="working-hours-highlight">2:00 ظهراً</span>.<br>
         • الإجازات الرسمية: <span class="working-hours-highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
     </div>
     """,
