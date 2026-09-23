@@ -255,7 +255,7 @@ st.markdown(
         font-weight: bold !important;
     }
 
-    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة بالكامل RTL ونقل السهم لجهة اليسار */
+    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة ونقل سهم الفتح لجهة اليسار تماماً */
     [data-testid="stExpander"] {
         background-color: #161b22 !important;
         border: 1px solid #30363d !important;
@@ -294,7 +294,7 @@ st.markdown(
     [data-testid="stExpander"] summary svg {
         fill: #58a6ff !important;
         margin-right: 0 !important;
-        margin-left: 10px !important;
+        margin-left: auto !important;
     }
 
     .faq-answer-box {
@@ -609,9 +609,9 @@ if df is not None:
         submit_button = st.form_submit_button(label="🔍 بحث")
 
     # ==========================================
-    # قسم الأسئلة الشائعة والدعم الذاتي (وضع علامة الاستفهام آخر الجملة والسهم يسار)
+    # قسم الأسئلة الشائعة والدعم الذاتي (وضع علامة الاستفهام العربية في آخر الجملة والسهم يسار)
     # ==========================================
-    with st.expander("الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل) ❓"):
+    with st.expander("الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل) ؟"):
         st.markdown(
             """
             <div class="faq-answer-box">
