@@ -625,6 +625,12 @@ if df is not None:
                     """
                     st.markdown(card_code, unsafe_allow_html=True)
 
+                    # تحديد المستندات المطلوب إحضارها بحسب نوع الشهادة (تجديد/بدل فاقد vs جديد)
+                    if any(kw in cert_type_val for kw in ["تجديد", "فاقد"]):
+                        required_docs_text = "📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة."
+                    else:
+                        required_docs_text = "📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صورة البطاقة."
+
                     # 2. فحص حالة الشهادة الحالية وعرضها
                     status_html = ""
                     is_available = False
@@ -643,7 +649,7 @@ if df is not None:
                             status_html = f"""
                             <div class="status-green" id="{status_id}">
                                 <span class="pulse-text">🟢 الشهادة موجودة بالفرع</span><br>
-                                <span class="pickup-instructions">📌 يرجى التوجه لمقر الفرع لاستلامها مع احضار صحيفة أحوال إلكترونية حديثة + صورة البطاقة.</span>
+                                <span class="pickup-instructions">{required_docs_text}</span>
                             </div>
                             """
                         elif "تسليم" in status_val:
