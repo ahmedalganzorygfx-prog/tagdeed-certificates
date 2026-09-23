@@ -255,26 +255,30 @@ st.markdown(
         font-weight: bold !important;
     }
 
-    /* تنسيق قسم الأسئلة الشائعة */
+    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة لتأخذ اتجاه اليمين وحجم خط أكبر */
     .streamlit-expanderHeader {
         background-color: #161b22 !important;
         color: #58a6ff !important;
         font-weight: bold !important;
         border: 1px solid #30363d !important;
         border-radius: 8px !important;
-        font-size: 16px !important;
+        font-size: 18px !important;
+        direction: rtl !important;
+        text-align: right !important;
     }
     .faq-answer-box {
         background-color: #161b22;
         border: 1px solid #30363d;
-        border-right: 4px solid #58a6ff;
-        padding: 15px;
+        border-right: 5px solid #58a6ff;
+        padding: 18px;
         border-radius: 8px;
-        margin-top: 5px;
+        margin-top: 8px;
         margin-bottom: 15px;
-        line-height: 1.8;
-        font-size: 15px;
+        line-height: 1.9;
+        font-size: 17px;
         color: #e0e0e0;
+        direction: rtl !important;
+        text-align: right !important;
     }
     
     /* تنسيق صناديق الحالات المخصصة */
@@ -574,27 +578,28 @@ if df is not None:
         submit_button = st.form_submit_button(label="🔍 بحث")
 
     # ==========================================
-    # قسم الأسئلة الشائعة والدعم الذاتي (FAQ Accordion)
+    # قسم الأسئلة الشائعة والدعم الذاتي (مضبوط جهة اليمين وبخط أكبر)
     # ==========================================
     with st.expander("❓ الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل)"):
         st.markdown(
             """
             <div class="faq-answer-box">
-                <b style="color:#58a6ff; font-size:16px;">📄 1. ما هي الأوراق والمستندات المطلوبة للاستلام؟</b><br>
+                <b style="color:#58a6ff; font-size:18px;">📄 1. ما هي الأوراق والمستندات المطلوبة للاستلام؟</b><br>
                 • <b>شهادة جديدة (أول مرة):</b> إحضار صورة بطاقة الرقم القومي سارية + الأصل للاطلاع.<br>
                 • <b>تجديد الشهادة:</b> إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي سارية.<br>
                 • <b>بدل فاقد:</b> إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي + نموذج طلب بدل الفاقد من الفرع.
             </div>
             
             <div class="faq-answer-box">
-                <b style="color:#58a6ff; font-size:16px;">📜 2. هل يجوز استلام الشهادة بالإنابة عن المعلم؟</b><br>
+                <b style="color:#58a6ff; font-size:18px;">📜 2. هل يجوز استلام الشهادة بالإنابة عن المعلم؟</b><br>
                 • <b>نعم، يجوز فقط في الحالات التالية:</b><br>
-                &nbsp;&nbsp;1. وجود <b>توكيل رسمي عام أو خاص</b> يبيح استلام الشهادات والأوراق الرسمية من الأكاديمية.<br>
-                &nbsp;&nbsp;2. أقارب الدرجة الأولى (الوالد/الوالدة، الزوج/الزوجة، الأبناء) مع إثبات درجة القرابة وصورة بطاقة الرقم القومي لكل منهما.
+                &nbsp;&nbsp;1. وجود <b>تفويض رسمي لاستلام الشهادة معتمد بشعار المدرسة أو التوجيه</b> + صورة بطاقة المفَوِّض والمفَوَّض إليه.<br>
+                &nbsp;&nbsp;2. وجود <b>توكيل رسمي عام أو خاص</b> يبيح استلام الشهادات والأوراق الرسمية من الأكاديمية.<br>
+                &nbsp;&nbsp;3. أقارب الدرجة الأولى (الوالد/الوالدة، الزوج/الزوجة، الأبناء) مع إثبات درجة القرابة وصورة بطاقة الرقم القومي لكل منهما.
             </div>
 
             <div class="faq-answer-box">
-                <b style="color:#58a6ff; font-size:16px;">⏳ 3. ماذا تفعل إذا كانت حالة الشهادة "لم تصل إلى الفرع حتى الآن"؟</b><br>
+                <b style="color:#58a6ff; font-size:18px;">⏳ 3. ماذا تفعل إذا كانت حالة الشهادة "لم تصل إلى الفرع حتى الآن"؟</b><br>
                 • تعني هذه الحالة أن ملفات ودفعات الشهادات الصادرة من المقر الرئيسي ما زالت قيد الطباعة أو الاعتماد المالي والتوزيع.<br>
                 • <b>المتابعة:</b> يُرجى إعادة الاستعلام عبر البوابة أسبوعياً حيث يتم تحديث قاعدة البيانات فور وصول أي دفعات جديدة إلى الفرع.
             </div>
