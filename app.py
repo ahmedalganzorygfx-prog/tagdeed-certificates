@@ -255,19 +255,40 @@ st.markdown(
         font-weight: bold !important;
     }
 
-    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة لتأخذ اتجاه اليمين وحجم خط أكبر */
-    .streamlit-expanderHeader {
+    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة بالكامل RTL بخط كبير وواضح */
+    [data-testid="stExpander"] {
         background-color: #161b22 !important;
-        color: #58a6ff !important;
-        font-weight: bold !important;
         border: 1px solid #30363d !important;
         border-radius: 8px !important;
-        font-size: 18px !important;
+        margin-top: 15px !important;
+        margin-bottom: 20px !important;
+    }
+    [data-testid="stExpander"] details {
+        background-color: #161b22 !important;
+        border-radius: 8px !important;
+    }
+    [data-testid="stExpander"] summary {
+        background-color: #161b22 !important;
+        color: #58a6ff !important;
         direction: rtl !important;
         text-align: right !important;
+        font-size: 20px !important;
+        font-weight: bold !important;
+        padding: 12px 18px !important;
+        border-radius: 8px !important;
     }
+    [data-testid="stExpander"] summary span p {
+        font-size: 20px !important;
+        font-weight: bold !important;
+        color: #58a6ff !important;
+        margin: 0 !important;
+    }
+    [data-testid="stExpander"] summary svg {
+        fill: #58a6ff !important;
+    }
+
     .faq-answer-box {
-        background-color: #161b22;
+        background-color: #0d1117;
         border: 1px solid #30363d;
         border-right: 5px solid #58a6ff;
         padding: 18px;
@@ -578,7 +599,7 @@ if df is not None:
         submit_button = st.form_submit_button(label="🔍 بحث")
 
     # ==========================================
-    # قسم الأسئلة الشائعة والدعم الذاتي (معدل بعد حذف بند التوكيل)
+    # قسم الأسئلة الشائعة والدعم الذاتي (العنوان بالتنسيق الداكن الجديد)
     # ==========================================
     with st.expander("❓ الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل)"):
         st.markdown(
