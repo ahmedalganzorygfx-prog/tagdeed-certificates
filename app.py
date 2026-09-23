@@ -337,7 +337,7 @@ st.markdown(
     }
     .share-whatsapp-btn:hover { background-color: #2ea043; }
 
-    /* صندوق مواعيد العمل الرسمية */
+    /* صندوق مواعيد استلام الشهادات */
     .working-hours-box {
         background-color: #161b22;
         border: 1px solid #30363d;
@@ -822,7 +822,7 @@ if df is not None:
                                             ${{cardHtml}}
                                             ${{statusHtml}}
                                             <div class="working-hours-print">
-                                                <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
+                                                <div class="working-hours-title">⏰ مواعيد استلام الشهادات:</div>
                                                 • من الأحد إلى الخميس: من الساعة <span class="highlight">10:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
                                                 • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
                                             </div>
@@ -868,11 +868,11 @@ whatsapp_share_text = "https://wa.me/?text=" + pd.Series([
     "🏛️ بوابة الاستعلام عن شهادات القيادة والإشراف - فرع الجيزة:\nاستعلم عن حالة شهادتك الآن من الرابط التالي:\nhttps://giza-academy.streamlit.app"
 ]).str.replace(" ", "%20").iloc[0]
 
-# صندوق مواعيد العمل الرسمية في البوابة
+# صندوق مواعيد استلام الشهادات في البوابة
 st.markdown(
     """
     <div class="working-hours-box">
-        <div class="working-hours-title">⏰ مواعيد العمل الرسمية بالفرع واستلام الشهادات:</div>
+        <div class="working-hours-title">⏰ مواعيد استلام الشهادات:</div>
         • من الأحد إلى الخميس: من الساعة <span class="working-hours-highlight">10:00 صباحاً</span> حتى الساعة <span class="working-hours-highlight">2:00 ظهراً</span>.<br>
         • الإجازات الرسمية: <span class="working-hours-highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
     </div>
