@@ -255,7 +255,7 @@ st.markdown(
         font-weight: bold !important;
     }
 
-    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة ونقل سهم الفتح لجهة اليسار تماماً */
+    /* ضبط شريط Expander: الرمز ❓ جهة اليمين والسهم جهة اليسار */
     [data-testid="stExpander"] {
         background-color: #161b22 !important;
         border: 1px solid #30363d !important;
@@ -279,7 +279,7 @@ st.markdown(
         padding: 12px 18px !important;
         border-radius: 8px !important;
         display: flex !important;
-        flex-direction: row-reverse !important;
+        flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
     }
@@ -291,10 +291,11 @@ st.markdown(
         direction: rtl !important;
         text-align: right !important;
     }
+    /* جعل سهم الفتح والطي يستقر في الجهة اليسرى بالكامل */
     [data-testid="stExpander"] summary svg {
         fill: #58a6ff !important;
-        margin-right: 0 !important;
-        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-left: 0 !important;
     }
 
     .faq-answer-box {
@@ -609,9 +610,9 @@ if df is not None:
         submit_button = st.form_submit_button(label="🔍 بحث")
 
     # ==========================================
-    # قسم الأسئلة الشائعة والدعم الذاتي (وضع علامة الاستفهام العربية في آخر الجملة والسهم يسار)
+    # قسم الأسئلة الشائعة والدعم الذاتي (❓ بالجهة اليمنى والسهم جهة اليسار)
     # ==========================================
-    with st.expander("الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل) ؟"):
+    with st.expander("❓ الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل)"):
         st.markdown(
             """
             <div class="faq-answer-box">
