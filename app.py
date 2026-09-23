@@ -79,7 +79,7 @@ ga_script = f"""
 """
 components.html(ga_script, height=0, width=0)
 
-# تطبيق التنسيق عبر CSS لشاشة العرض
+# تطبيق التنسيق عبر CSS لشاشة العرض (تم تغيير درجات الأحمر إلى الأصفر الذهبي)
 st.markdown(
     """
     <style>
@@ -178,16 +178,16 @@ st.markdown(
         margin: 0;
     }
     .highlight-red {
-        color: #ff5555 !important;
+        color: #ffc107 !important;
         font-weight: bold;
     }
     .programs-text {
-        color: #ff5555 !important;
+        color: #ffc107 !important;
         font-weight: bold;
     }
     .pickup-instructions {
         font-size: 16px !important;
-        color: #ff7777 !important;
+        color: #ffc107 !important;
         font-weight: bold;
         margin-top: 8px;
         display: block;
@@ -198,7 +198,7 @@ st.markdown(
     }
 
     [data-testid="stAlert"] * {
-        color: #ff5555 !important;
+        color: #ffc107 !important;
         font-weight: bold !important;
         font-size: 17px !important;
     }
@@ -247,26 +247,26 @@ st.markdown(
         direction: rtl;
     }
     .card-row b {
-        color: #ff5555 !important;
+        color: #ffc107 !important;
         font-weight: bold !important;
     }
     
     /* تنسيق صناديق الحالات المخصصة */
     .status-red {
-        background-color: rgba(248, 81, 73, 0.15);
-        color: #ff7b72;
+        background-color: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
         padding: 14px;
         border-radius: 8px;
-        border-right: 5px solid #f85149;
+        border-right: 5px solid #ffc107;
         margin-top: 10px;
         margin-bottom: 15px;
         font-size: 16px;
         font-weight: bold;
         text-align: center;
         direction: rtl;
-        border-top: 1px solid rgba(248, 81, 73, 0.2);
-        border-bottom: 1px solid rgba(248, 81, 73, 0.2);
-        border-left: 1px solid rgba(248, 81, 73, 0.2);
+        border-top: 1px solid rgba(255, 193, 7, 0.2);
+        border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+        border-left: 1px solid rgba(255, 193, 7, 0.2);
     }
     .status-green {
         background-color: rgba(46, 160, 67, 0.15);
@@ -303,7 +303,7 @@ st.markdown(
 
     @keyframes colorPulseGlow {
         0% { color: #3fb950; transform: scale(1); }
-        50% { color: #ff7777; transform: scale(1.06); }
+        50% { color: #ffc107; transform: scale(1.06); }
         100% { color: #3fb950; transform: scale(1); }
     }
     .pulse-text {
@@ -359,7 +359,7 @@ st.markdown(
         margin-bottom: 8px;
     }
     .working-hours-highlight {
-        color: #ff5555 !important;
+        color: #ffc107 !important;
         font-weight: bold;
         font-size: 17px;
     }
@@ -430,7 +430,7 @@ st.markdown(
         padding: 8px 20px;
         background: linear-gradient(135deg, #21262d 0%, #161b22 100%);
         border: 1px solid #30363d;
-        border-right: 4px solid #ff5555;
+        border-right: 4px solid #ffc107;
         border-radius: 8px;
         color: #e0e0e0;
         font-size: 14px;
@@ -619,7 +619,7 @@ if df is not None:
                         if "لم تصل" in status_val:
                             status_html = f"""
                             <div class="status-red" id="{status_id}">
-                                🔴 لم تصل إلى الفرع حتى الآن<br>
+                                🟡 لم تصل إلى الفرع حتى الآن<br>
                                 <span style="font-weight: normal; font-size: 13px;">يرجى الاستعلام في وقت لاحق.</span>
                             </div>
                             """
@@ -642,7 +642,7 @@ if df is not None:
 
                     st.markdown(status_html, unsafe_allow_html=True)
 
-                    # 3. إظهار زر الطباعة لهذه الشهادة تحديداً إن كانت موجودة بالفرع
+                    # 3. إظهار زر الطباعة لهذه الشهادة تحديداً إن كانت موجودة بالفرع (الاحتفاظ بالتنسيق والوان الطباعة دون تغيير)
                     if is_available:
                         components.html(
                             f"""
