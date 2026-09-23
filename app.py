@@ -1,5 +1,6 @@
 import base64
 import os
+import re
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
@@ -79,7 +80,7 @@ ga_script = f"""
 """
 components.html(ga_script, height=0, width=0)
 
-# تطبيق التنسيق عبر CSS لشاشة العرض (تم تغيير درجات الأحمر إلى الأصفر الذهبي)
+# تطبيق التنسيق عبر CSS لشاشة العرض
 st.markdown(
     """
     <style>
@@ -201,6 +202,12 @@ st.markdown(
         color: #ffc107 !important;
         font-weight: bold !important;
         font-size: 17px !important;
+    }
+
+    /* أزرار الراديو والتسميات */
+    .stRadio label {
+        color: #ffffff !important;
+        font-weight: bold !important;
     }
 
     /* زر البحث */
@@ -501,6 +508,24 @@ st.markdown(
 st.markdown("---")
 
 
+# دالة تطبيع ومعالجة النصوص لتلافي أخطاء الهمزات والمسافات والياءات
+def clean_text(text):
+    if not isinstance(text, str):
+        return ""
+    text = text.strip()
+    # توحيد الألفات والهمزات
+    text = re.sub(r"[أإآ]", "ا", text)
+    # توحيد الياء والألف المقصورة
+    text = re.sub(r"ى", "ي", text)
+    # توحيد التاء المربوطة والهاء
+    text = re.sub(r"ة", "ه", text)
+    # إزالة المسافات بين عبد و الاسم الموصول (عبد الله / عبدالله)
+    text = re.sub(r"عبد\s+", "عبد", text)
+    # حذف أي مسافات زائدة متكررة
+    text = re.sub(r"\s+", " ", text)
+    return text.lower()
+
+
 # دالة قراءة البيانات
 @st.cache_data(ttl=600)
 def load_data(file_path):
@@ -515,6 +540,7 @@ excel_file = "certificates.xlsx"
 df = load_data(excel_file)
 
 if df is not None:
+    # تحديد عمود الرقم القومي
     id_column = None
     for col in df.columns:
         if any(keyword in col for keyword in ["قومي", "الرقم", "ID"]):
@@ -523,6 +549,16 @@ if df is not None:
     if id_column is None:
         id_column = df.columns[0]
 
+    # تحديد عمود الاسم
+    name_column = None
+    for col in df.columns:
+        if any(keyword in col for keyword in ["اسم", "الاسم", "المعلم", "السيد"]) and not any(
+            keyword in col for keyword in ["قومي", "إدارة", "الادارة"]
+        ):
+            name_column = col
+            break
+
+    # تحديد عمود حالة الشهادة
     status_column = None
     for col in df.columns:
         if any(keyword in col for keyword in ["حالة", "الشهادة"]):
@@ -530,52 +566,59 @@ if df is not None:
             break
 
     st.markdown(
-        '<div style="text-align: right; direction: rtl; font-size: 17px; font-weight: bold; margin-bottom: 10px; color: #ffffff;">💡 أدخل الرقم القومي الخاص بك (14 رقماً أو آخر 4 أرقام) ثم اضغط على زر بحث:</div>',
+        '<div style="text-align: right; direction: rtl; font-size: 17px; font-weight: bold; margin-bottom: 10px; color: #ffffff;">💡 اختر طريقة البحث، ثم أدخل البيانات واضغط على زر بحث:</div>',
         unsafe_allow_html=True,
     )
 
     with st.form(key="search_form"):
-        search_query = st.text_input(
-            "الرقم القومي (أو آخر 4 أرقام):", max_chars=14
-        ).strip()
+        search_type = st.radio(
+            "طريقة البحث:",
+            options=["بالرقم القومي (14 رقماً أو آخر 4 أرقام)", "باسم المعلم (كامل أو أجزاء منه)"],
+            horizontal=True,
+        )
+
+        if "الرقم القومي" in search_type:
+            search_query = st.text_input("أدخل الرقم القومي:", max_chars=14).strip()
+        else:
+            search_query = st.text_input("أدخل اسم المعلم:").strip()
+
         submit_button = st.form_submit_button(label="🔍 بحث")
 
     if submit_button:
         if search_query:
-            df[id_column] = (
-                df[id_column]
-                .astype(str)
-                .str.replace(r"\.0$", "", regex=True)
-                .str.strip()
-            )
+            result = pd.DataFrame()
 
-            # البحث بالرقم القومي الكلي أو آخر 4 أرقام منه
-            if len(search_query) == 14:
-                result = df[df[id_column] == search_query]
+            if "الرقم القومي" in search_type:
+                df[id_column] = (
+                    df[id_column]
+                    .astype(str)
+                    .str.replace(r"\.0$", "", regex=True)
+                    .str.strip()
+                )
+                if len(search_query) == 14:
+                    result = df[df[id_column] == search_query]
+                else:
+                    result = df[df[id_column].str.endswith(search_query, na=False)]
+
+                if result.empty:
+                    result = df[df[id_column].str.contains(search_query, na=False)]
             else:
-                result = df[df[id_column].str.endswith(search_query, na=False)]
-
-            if result.empty:
-                result = df[df[id_column].str.contains(search_query, na=False)]
+                if name_column:
+                    # تنظيف البحث وقاعدة البيانات لتلافي أخطاء الكتابة والهمزات والمسافات
+                    cleaned_search = clean_text(search_query)
+                    cleaned_names = df[name_column].astype(str).apply(clean_text)
+                    result = df[cleaned_names.str.contains(cleaned_search, na=False)]
 
             if not result.empty:
                 num_results = len(result)
                 if num_results > 1:
-                    st.success(f"🎉 تم العثور على ({num_results}) شهادة مرتبطة بالرقم القومي:")
+                    st.success(f"🎉 تم العثور على ({num_results}) نتيجة/شهادة متطابقة:")
                 else:
                     st.success("🎉 تم العثور على بيانات الشهادة بنجاح:")
 
                 # المرور على جميع الشهادات المعثور عليها
                 for idx, row in result.iterrows():
-                    name_val = "غير متوفر"
-                    for c in df.columns:
-                        if any(
-                            k in c for k in ["اسم", "الاسم", "المعلم", "السيد"]
-                        ) and not any(
-                            k in c for k in ["قومي", "إدارة", "الادارة"]
-                        ):
-                            name_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
-                            break
+                    name_val = str(row[name_column]) if name_column and pd.notna(row[name_column]) else "غير متوفر"
 
                     admin_val = "غير متوفر"
                     for c in df.columns:
@@ -642,7 +685,7 @@ if df is not None:
 
                     st.markdown(status_html, unsafe_allow_html=True)
 
-                    # 3. إظهار زر الطباعة لهذه الشهادة تحديداً إن كانت موجودة بالفرع (الاحتفاظ بالتنسيق والوان الطباعة دون تغيير)
+                    # 3. إظهار زر الطباعة لهذه الشهادة تحديداً إن كانت موجودة بالفرع
                     if is_available:
                         components.html(
                             f"""
@@ -849,15 +892,15 @@ if df is not None:
                             height=55,
                         )
 
-                    # خط فاصل بين الشهادات في حالة وجود أكثر من شهادة
+                    # خط فاصل بين الشهادات في حالة وجود أكثر من نتيجة
                     if num_results > 1 and idx != result.index[-1]:
                         st.markdown("<hr style='border: 1px dashed #30363d; margin: 20px 0;'>", unsafe_allow_html=True)
             else:
                 st.error(
-                    "❌ عذراً، لم يتم العثور على بيانات بهذا الرقم القومي. تأكد من صحة الرقم المُدخل."
+                    "❌ عذراً، لم يتم العثور على بيانات بهذا البحث. تأكد من صحة البيانات المُدخلة."
                 )
         else:
-            st.warning("⚠️ برجاء كتابة الرقم القومي أولاً قبل الضغط على بحث.")
+            st.warning("⚠️ برجاء كتابة كلمة البحث أولاً قبل الضغط على بحث.")
 else:
     st.warning(
         "⚠️ جاري تجهيز قاعدة البيانات أو أن ملف الكشف غير متوفر حالياً. برجاء التأكد من رفع ملف (certificates.xlsx) في مجلد المشروع على GitHub."
