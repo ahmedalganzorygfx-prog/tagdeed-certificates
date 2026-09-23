@@ -603,16 +603,16 @@ if df is not None:
                             serial_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
                             break
 
-                    cert_type_val = "غير متوفر"
+                    cert_type_val = "جديد"
                     if type_column and pd.notna(row[type_column]):
-                        cert_type_val = str(row[type_column]).strip()
+                        val_str = str(row[type_column]).strip()
+                        if val_str:
+                            cert_type_val = val_str
 
                     card_id = f"print-teacher-card-{idx}"
                     status_id = f"print-status-box-{idx}"
 
-                    # 1. عرض بطاقة بيانات الشهادة
-                    type_row_html = f'<div class="card-row"><b>نوع الشهادة:</b> {cert_type_val}</div>' if cert_type_val != "غير متوفر" else ""
-
+                    # 1. عرض بطاقة بيانات الشهادة مع إضافة سطر نوع الشهادة دائماً
                     card_code = f"""
                     <div class="teacher-card" id="{card_id}">
                         <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
@@ -620,7 +620,7 @@ if df is not None:
                         <div class="card-row"><b>الرقم القومي:</b> {row[id_column]}</div>
                         <div class="card-row"><b>الإدارة التعليمية:</b> {admin_val}</div>
                         <div class="card-row"><b>البرنامج التدريبي:</b> {prog_val}</div>
-                        {type_row_html}
+                        <div class="card-row"><b>نوع الشهادة:</b> {cert_type_val}</div>
                     </div>
                     """
                     st.markdown(card_code, unsafe_allow_html=True)
