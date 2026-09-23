@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 
 # إعداد الصفحة لتكون متمركزة في المنتصف (Centered Layout)
 st.set_page_config(
-    page_title="الاستعلام عن تجديد الشهادة - فرع الجيزة",
+    page_title="الاستعلام عن الشهادات - فرع الجيزة",
     layout="centered",
     page_icon="🏛️",
 )
@@ -492,7 +492,7 @@ st.markdown(
 st.markdown(
     """
     <div class="header-box">
-        <div class="main-title">الاستعلام عن شهادة القيادة والإشراف <span class="highlight-red">(تجديد - بدل فاقد)</span></div>
+        <div class="main-title">الاستعلام عن شهادة القيادة والإشراف <span class="highlight-red">(جديد - تجديد - بدل فاقد)</span></div>
         <p><b>البرامج التدريبية :</b> <span class="programs-text">مدير ووكيل إدارة تعليمية &nbsp;|&nbsp; مدير ووكيل إدارة مدرسية &nbsp;|&nbsp; أساسيات التوجيه الفني</span></p>
     </div>
     """,
@@ -524,6 +524,13 @@ if df is not None:
             break
     if id_column is None:
         id_column = df.columns[0]
+
+    # تحديد عمود نوع الشهادة
+    type_column = None
+    for col in df.columns:
+        if any(keyword in col for keyword in ["نوع", "النوع"]):
+            type_column = col
+            break
 
     # تحديد عمود حالة الشهادة
     status_column = None
@@ -573,7 +580,7 @@ if df is not None:
                         if any(
                             k in c for k in ["اسم", "الاسم", "المعلم", "السيد"]
                         ) and not any(
-                            k in c for k in ["قومي", "إدارة", "الادارة"]
+                            k in c for k in ["قومي", "إدارة", "الادارة", "نوع"]
                         ):
                             name_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
                             break
@@ -596,10 +603,16 @@ if df is not None:
                             serial_val = str(row[c]) if pd.notna(row[c]) else "غير متوفر"
                             break
 
+                    cert_type_val = "غير متوفر"
+                    if type_column and pd.notna(row[type_column]):
+                        cert_type_val = str(row[type_column]).strip()
+
                     card_id = f"print-teacher-card-{idx}"
                     status_id = f"print-status-box-{idx}"
 
                     # 1. عرض بطاقة بيانات الشهادة
+                    type_row_html = f'<div class="card-row"><b>نوع الشهادة:</b> {cert_type_val}</div>' if cert_type_val != "غير متوفر" else ""
+
                     card_code = f"""
                     <div class="teacher-card" id="{card_id}">
                         <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
@@ -607,6 +620,7 @@ if df is not None:
                         <div class="card-row"><b>الرقم القومي:</b> {row[id_column]}</div>
                         <div class="card-row"><b>الإدارة التعليمية:</b> {admin_val}</div>
                         <div class="card-row"><b>البرنامج التدريبي:</b> {prog_val}</div>
+                        {type_row_html}
                     </div>
                     """
                     st.markdown(card_code, unsafe_allow_html=True)
