@@ -255,17 +255,19 @@ st.markdown(
         font-weight: bold !important;
     }
 
-    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة بالكامل RTL بخط كبير وواضح */
+    /* ضبط وتنسيق عنوان وحاوية الأسئلة الشائعة بالكامل RTL ونقل السهم لجهة اليسار */
     [data-testid="stExpander"] {
         background-color: #161b22 !important;
         border: 1px solid #30363d !important;
         border-radius: 8px !important;
         margin-top: 15px !important;
         margin-bottom: 20px !important;
+        direction: rtl !important;
     }
     [data-testid="stExpander"] details {
         background-color: #161b22 !important;
         border-radius: 8px !important;
+        direction: rtl !important;
     }
     [data-testid="stExpander"] summary {
         background-color: #161b22 !important;
@@ -276,15 +278,23 @@ st.markdown(
         font-weight: bold !important;
         padding: 12px 18px !important;
         border-radius: 8px !important;
+        display: flex !important;
+        flex-direction: row-reverse !important;
+        justify-content: space-between !important;
+        align-items: center !important;
     }
     [data-testid="stExpander"] summary span p {
         font-size: 20px !important;
         font-weight: bold !important;
         color: #58a6ff !important;
         margin: 0 !important;
+        direction: rtl !important;
+        text-align: right !important;
     }
     [data-testid="stExpander"] summary svg {
         fill: #58a6ff !important;
+        margin-right: 0 !important;
+        margin-left: 10px !important;
     }
 
     .faq-answer-box {
@@ -599,9 +609,9 @@ if df is not None:
         submit_button = st.form_submit_button(label="🔍 بحث")
 
     # ==========================================
-    # قسم الأسئلة الشائعة والدعم الذاتي (العنوان بالتنسيق الداكن الجديد)
+    # قسم الأسئلة الشائعة والدعم الذاتي (وضع علامة الاستفهام آخر الجملة والسهم يسار)
     # ==========================================
-    with st.expander("❓ الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل)"):
+    with st.expander("الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل) ❓"):
         st.markdown(
             """
             <div class="faq-answer-box">
