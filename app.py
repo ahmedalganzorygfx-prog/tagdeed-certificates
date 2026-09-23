@@ -135,6 +135,7 @@ st.markdown(
         margin-bottom: 15px;
         text-align: center;
     }
+    /* ضبط حجم الصورة لتتطابق تماماً مع أبعاد وحجم بطاقات المعلمين */
     .hand-container {
         display: flex;
         justify-content: center;
@@ -142,17 +143,17 @@ st.markdown(
         margin-top: 5px;
         margin-bottom: 25px;
         width: 100%;
-        text-align: center;
+        box-sizing: border-box;
     }
     .hand-container img {
-        width: 380px;
-        max-width: 95%;
+        width: 100%;
+        max-width: 100%;
         height: auto;
         border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
         border: 1px solid #30363d;
         display: block;
-        margin: 0 auto;
+        object-fit: cover;
     }
     /* تصميم رأس الصفحة بلون كحلي داكن فاخر ومتمركز */
     .header-box {
@@ -238,6 +239,8 @@ st.markdown(
         box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         text-align: right;
         direction: rtl;
+        width: 100%;
+        box-sizing: border-box;
     }
     .card-row {
         font-size: 17px;
@@ -474,7 +477,7 @@ def get_hand_image_base64():
 logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
-# عرض اللوجو متبوعاً باسم الفرع ثم الصورة التعبيرية
+# عرض اللوجو متبوعاً باسم الفرع ثم الصورة التعبيرية بمقاس البطاقة
 st.markdown(
     f"""
     <div class="logo-container">
@@ -612,7 +615,7 @@ if df is not None:
                     card_id = f"print-teacher-card-{idx}"
                     status_id = f"print-status-box-{idx}"
 
-                    # 1. عرض بطاقة بيانات الشهادة مع إضافة سطر نوع الشهادة دائماً
+                    # 1. عرض بطاقة بيانات الشهادة بالمقاس المطابق لصورة العرض
                     card_code = f"""
                     <div class="teacher-card" id="{card_id}">
                         <div class="card-row"><b>رقم المسلسل:</b> {serial_val}</div>
