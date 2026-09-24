@@ -583,7 +583,7 @@ df = load_data(excel_file)
 # ==========================================
 # لوحة الإدارة المحمية بكلمة مرور لتعديل وإضافة الشهادات
 # ==========================================
-ADMIN_PASSWORD = "Giza2026Admin"  # يمكنك تغيير كلمة المرور السرية من هنا
+ADMIN_PASSWORD = "Giza2026Admin"  # كلمة المرور السرية
 
 if st.session_state.get("is_admin_mode", False):
     st.markdown("### 🔒 تسجيل دخول لوحة إدارة البيانات")
@@ -814,24 +814,36 @@ if df is not None:
 
                     st.markdown(status_html, unsafe_allow_html=True)
 
-                    # 3. إظهار زر الطباعة لهذه الشهادة تحديداً إن كانت موجودة بالفرع
+                    # 3. إظهار زر الطباعة وإمكانية طباعة نموذج التفويض المباشر
                     if is_available:
                         components.html(
                             f"""
-                            <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: center; gap: 12px; width: 100%; flex-wrap: wrap; margin-bottom: 25px;">
                                 <button onclick="printIsolatedCard_{idx}()" style="
                                     background-color: #1f6beb;
                                     color: white;
                                     font-weight: bold;
                                     border-radius: 8px;
                                     border: none;
-                                    padding: 10px 24px;
-                                    font-size: 15px;
+                                    padding: 10px 20px;
+                                    font-size: 14px;
                                     cursor: pointer;
                                     font-family: 'Cairo', sans-serif, Arial;
                                     box-shadow: 0 4px 12px rgba(31,107,235,0.4);
-                                    transition: background-color 0.2s;
-                                ">🖨️ طباعة إفادة الاستعلام لهذه الشهادة</button>
+                                ">🖨️ طباعة إفادة الاستعلام</button>
+                                
+                                <button onclick="printAuthForm_{idx}()" style="
+                                    background-color: #238636;
+                                    color: white;
+                                    font-weight: bold;
+                                    border-radius: 8px;
+                                    border: none;
+                                    padding: 10px 20px;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    font-family: 'Cairo', sans-serif, Arial;
+                                    box-shadow: 0 4px 12px rgba(35,134,54,0.4);
+                                ">📄 طباعة صيغة التفويض (PDF)</button>
                             </div>
 
                             <script>
@@ -851,137 +863,22 @@ if df is not None:
                                         <title>إفادة استعلام - فرع الجيزة</title>
                                         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
                                         <style>
-                                            @page {{
-                                                size: 15cm 20cm;
-                                                margin: 0.3cm;
-                                            }}
-                                            html, body {{
-                                                margin: 0;
-                                                padding: 0;
-                                                background-color: #fff;
-                                                color: #000;
-                                                font-family: 'Cairo', sans-serif, Arial;
-                                                direction: rtl;
-                                                text-align: right;
-                                            }}
-                                            body {{
-                                                padding: 10px 12px;
-                                                box-sizing: border-box;
-                                            }}
-                                            .container {{
-                                                width: 100%;
-                                                max-width: 14cm;
-                                                margin: 0 auto;
-                                            }}
-                                            .print-header {{
-                                                text-align: center;
-                                                margin-bottom: 12px;
-                                                margin-top: 5px;
-                                            }}
-                                            .print-header img {{
-                                                width: 110px;
-                                                height: auto;
-                                                margin-bottom: 6px;
-                                            }}
-                                            .print-header-title {{
-                                                color: #0d233a;
-                                                font-size: 16px;
-                                                font-weight: 800;
-                                                margin-bottom: 4px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .print-header-subtitle {{
-                                                color: #d32f2f;
-                                                font-size: 14px;
-                                                font-weight: 700;
-                                                margin-bottom: 10px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .teacher-card {{
-                                                border: 2px solid #0d233a;
-                                                border-radius: 8px;
-                                                padding: 10px 14px;
-                                                margin-bottom: 8px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .card-row {{
-                                                font-size: 13px;
-                                                font-weight: 600;
-                                                margin-bottom: 6px;
-                                                color: #111;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .card-row b {{
-                                                color: #d32f2f;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .status-green {{
-                                                background-color: #f0fdf4;
-                                                color: #15803d;
-                                                border: 1.5px solid #15803d;
-                                                padding: 8px;
-                                                border-radius: 6px;
-                                                text-align: center;
-                                                font-size: 12px;
-                                                font-weight: bold;
-                                                margin-bottom: 8px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .pulse-text {{
-                                                color: #15803d;
-                                                font-size: 14px;
-                                                font-weight: bold;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .pickup-instructions {{
-                                                color: #15803d;
-                                                font-size: 11px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .working-hours-print {{
-                                                background-color: #fafafa;
-                                                border: 1.5px solid #0d233a;
-                                                border-right: 5px solid #d32f2f;
-                                                color: #111;
-                                                padding: 8px 12px;
-                                                border-radius: 6px;
-                                                font-size: 11px;
-                                                line-height: 1.5;
-                                                margin-bottom: 12px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .working-hours-title {{
-                                                color: #0d233a;
-                                                font-size: 12px;
-                                                font-weight: bold;
-                                                margin-bottom: 3px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .highlight {{
-                                                color: #d32f2f;
-                                                font-weight: bold;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .print-footer-signature {{
-                                                display: flex;
-                                                justify-content: center;
-                                                align-items: center;
-                                                width: 100%;
-                                                margin-top: 8px;
-                                                text-align: center;
-                                            }}
-                                            .signature-box {{
-                                                text-align: center;
-                                                font-size: 13px;
-                                                font-weight: bold;
-                                                color: #0d233a;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
-                                            .signature-box b {{
-                                                color: #d32f2f;
-                                                font-size: 15px;
-                                                font-family: 'Cairo', sans-serif;
-                                            }}
+                                            @page {{ size: 15cm 20cm; margin: 0.3cm; }}
+                                            html, body {{ margin: 0; padding: 0; background-color: #fff; color: #000; font-family: 'Cairo', sans-serif; direction: rtl; text-align: right; }}
+                                            body {{ padding: 10px 12px; box-sizing: border-box; }}
+                                            .container {{ width: 100%; max-width: 14cm; margin: 0 auto; }}
+                                            .print-header {{ text-align: center; margin-bottom: 12px; margin-top: 5px; }}
+                                            .print-header img {{ width: 110px; height: auto; margin-bottom: 6px; }}
+                                            .print-header-title {{ color: #0d233a; font-size: 16px; font-weight: 800; margin-bottom: 4px; }}
+                                            .print-header-subtitle {{ color: #d32f2f; font-size: 14px; font-weight: 700; margin-bottom: 10px; }}
+                                            .teacher-card {{ border: 2px solid #0d233a; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }}
+                                            .card-row {{ font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #111; }}
+                                            .card-row b {{ color: #d32f2f; }}
+                                            .status-green {{ background-color: #f0fdf4; color: #15803d; border: 1.5px solid #15803d; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 8px; }}
+                                            .working-hours-print {{ background-color: #fafafa; border: 1.5px solid #0d233a; border-right: 5px solid #d32f2f; color: #111; padding: 8px 12px; border-radius: 6px; font-size: 11px; line-height: 1.5; margin-bottom: 12px; }}
+                                            .print-footer-signature {{ display: flex; justify-content: center; align-items: center; width: 100%; margin-top: 8px; text-align: center; }}
+                                            .signature-box {{ text-align: center; font-size: 13px; font-weight: bold; color: #0d233a; }}
+                                            .signature-box b {{ color: #d32f2f; font-size: 15px; }}
                                         </style>
                                     </head>
                                     <body>
@@ -994,23 +891,74 @@ if df is not None:
                                             ${{cardHtml}}
                                             ${{statusHtml}}
                                             <div class="working-hours-print">
-                                                <div class="working-hours-title">⏰ مواعيد استلام الشهادات:</div>
-                                                • من الأحد إلى الخميس: من الساعة <span class="highlight">10:00 صباحاً</span> حتى الساعة <span class="highlight">2:00 ظهراً</span>.<br>
-                                                • الإجازات الرسمية: <span class="highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
+                                                <b>⏰ مواعيد استلام الشهادات:</b> من الأحد للخميس (10:00 ص حتى 2:00 ظ) بمقر الفرع.
                                             </div>
                                             <div class="print-footer-signature">
-                                                <div class="signature-box">
-                                                    مدير إدارة الفرع<br>
-                                                    <b>أ. أحمد الجنزوري</b>
-                                                </div>
+                                                <div class="signature-box">مدير إدارة الفرع<br><b>أ. أحمد الجنزوري</b></div>
                                             </div>
                                         </div>
-                                        <script>
-                                            window.onload = function() {{
-                                                window.print();
-                                                setTimeout(function() {{ window.close(); }}, 500);
-                                            }};
-                                        <\/script>
+                                        <script>window.onload = function() {{ window.print(); setTimeout(function() {{ window.close(); }}, 500); }};<\/script>
+                                    </body>
+                                    </html>
+                                `);
+                                printWin.document.close();
+                            }}
+
+                            function printAuthForm_{idx}() {{
+                                var printWin = window.open('', '', 'width=750,height=950');
+                                printWin.document.write(`
+                                    <!DOCTYPE html>
+                                    <html dir="rtl" lang="ar">
+                                    <head>
+                                        <meta charset="utf-8">
+                                        <title>نموذج تفويض استلام شهادة - فرع الجيزة</title>
+                                        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+                                        <style>
+                                            @page {{ size: A4; margin: 1.2cm; }}
+                                            body {{ font-family: 'Cairo', sans-serif; direction: rtl; text-align: right; color: #000; line-height: 1.8; padding: 10px; }}
+                                            .header {{ text-align: center; border-bottom: 2px solid #000; padding-bottom: 12px; margin-bottom: 20px; }}
+                                            .header img {{ width: 100px; height: auto; }}
+                                            .title {{ font-size: 20px; font-weight: bold; margin-top: 6px; }}
+                                            .subtitle {{ font-size: 16px; font-weight: bold; color: #d32f2f; margin-bottom: 10px; }}
+                                            .section-box {{ border: 1.5px solid #000; padding: 15px; border-radius: 8px; margin-bottom: 18px; }}
+                                            .field-line {{ font-size: 15px; font-weight: 600; margin-bottom: 12px; }}
+                                            .docs-title {{ font-size: 16px; font-weight: bold; color: #0d233a; margin-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }}
+                                            .signature-grid {{ display: flex; justify-content: space-between; margin-top: 25px; text-align: center; font-weight: bold; }}
+                                            .stamp-box {{ border: 2px dashed #000; width: 150px; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #555; margin: 0 auto; }}
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <div class="header">
+                                            <img src="{logo_src}" alt="شعار الأكاديمية">
+                                            <div class="title">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</div>
+                                            <div class="subtitle">نموذج وتفويض رسمي لاستلام شهادة القيادة والإشراف</div>
+                                        </div>
+
+                                        <div class="section-box">
+                                            <div class="field-line">أقر أنا المعلم/ <b>{name_val}</b></div>
+                                            <div class="field-line">الرقم القومي: <b>{row[id_column]}</b> &nbsp;&nbsp;|&nbsp;&nbsp; الإدارة التعليمية: <b>{admin_val}</b></div>
+                                            <div class="field-line">بأنني قمت بتفويض السيد/ ........................................................................................................</div>
+                                            <div class="field-line">الرقم القومي: (..................................................) &nbsp;&nbsp;|&nbsp;&nbsp; صلة القرابة/الصفة: .......................................</div>
+                                            <div class="field-line">وذلك لاستلام شهادة القيادة والإشراف الخاصة بي لبرنامج: <b>{prog_val}</b> ({cert_type_val}).</div>
+                                        </div>
+
+                                        <div class="docs-title">📋 المستندات والأوراق المطلوبة المرفقة مع هذا التفويض:</div>
+                                        <ul style="font-size: 13px; font-weight: 600; padding-right: 20px;">
+                                            <li><b>1. الشهادة الجديدة (أول مرة):</b> صورة بطاقة الرقم القومي سارية للمُفوِّض والمُفوَّض إليه + اعتماد التفويض بخاتم الشعار.</li>
+                                            <li><b>2. تجديد الشهادة / بدل الفاقد:</b> صحيفة أحوال إلكترونية حديثة معتمدة + صورة بطاقة الرقم القومي سارية للطرفين + الاعتماد بخاتم الشعار.</li>
+                                        </ul>
+
+                                        <div class="signature-grid">
+                                            <div>توقيع المعلم (المُفوِّض)<br><br>.........................................</div>
+                                            <div>توقيع المُفوَّض إليه<br><br>.........................................</div>
+                                            <div>
+                                                اعتماد جهة العمل (المدرسة / التوجيه)<br>
+                                                <br>
+                                                <div class="stamp-box">خاتم الشعار الرسمى</div>
+                                            </div>
+                                        </div>
+
+                                        <script>window.onload = function() {{ window.print(); setTimeout(function() {{ window.close(); }}, 500); }};<\/script>
                                     </body>
                                     </html>
                                 `);
@@ -1018,7 +966,7 @@ if df is not None:
                             }}
                             </script>
                             """,
-                            height=55,
+                            height=60,
                         )
 
                     # خط فاصل بين الشهادات في حالة وجود أكثر من نتيجة
