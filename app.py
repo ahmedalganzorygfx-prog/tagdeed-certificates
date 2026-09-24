@@ -255,7 +255,7 @@ st.markdown(
         font-weight: bold !important;
     }
 
-    /* ضبط شريط Expander: النص متصل بعلامة الاستفهام العربية في النواة والسهم يسار */
+    /* ضبط شريط Expander: النص متصل بعلامة الاستفهام العربية والسهم يسار */
     [data-testid="stExpander"] {
         background-color: #161b22 !important;
         border: 1px solid #30363d !important;
@@ -292,7 +292,6 @@ st.markdown(
         text-align: right !important;
         unicode-bidi: isolate;
     }
-    /* جعل سهم الفتح والطي يستقر في الجهة اليسرى بالكامل */
     [data-testid="stExpander"] summary svg {
         fill: #58a6ff !important;
         margin-right: auto !important;
@@ -580,6 +579,48 @@ def load_data(file_path):
 
 excel_file = "certificates.xlsx"
 df = load_data(excel_file)
+
+# ==========================================
+# لوحة الإدارة الداخليّة لتعديل وإضافة الشهادات بدون رفع الملفات يدوياً
+# ==========================================
+if st.session_state.get("is_admin", False):
+    st.markdown("### ⚙️ لوحة إدارة البيانات وتعديل ملف الأكسيل مباشر")
+    
+    if df is not None:
+        tab_view, tab_add = st.tabs(["📝 تعديل وحفظ الجدول المباشر", "➕ إضافة معلم/شهادة جديدة"])
+        
+        with tab_view:
+            st.info("💡 يمكنك تعديل أي خلية مباشرة في الجدول أدناه (مثل تغيير الحالة إلى 'الشهادة موجودة بالفرع') ثم اضغط 'حفظ التعديلات'.")
+            edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True)
+            if st.button("💾 حفظ التعديلات المباشرة في ملف الأكسيل"):
+                try:
+                    edited_df.to_excel(excel_file, index=False)
+                    st.cache_data.clear()
+                    st.success("✅ تم حفظ التعديلات بنجاح في قاعدة البيانات!")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"❌ حدث خطأ أثناء الحفظ: {e}")
+                    
+        with tab_add:
+            st.markdown("#### إضافة شهادة جديدة إلى الكشف:")
+            with st.form("add_teacher_form"):
+                cols = list(df.columns)
+                new_data = {}
+                for c in cols:
+                    new_data[c] = st.text_input(f"أدخل {c}:")
+                submit_new = st.form_submit_button("➕ إضافة وتحديث الملف")
+                
+                if submit_new:
+                    new_row_df = pd.DataFrame([new_data])
+                    updated_df = pd.concat([df, new_row_df], ignore_index=False)
+                    try:
+                        updated_df.to_excel(excel_file, index=False)
+                        st.cache_data.clear()
+                        st.success("🎉 تم إضافة الشهادة الجديدة بنجاح!")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ حدث خطأ أثناء الحفظ: {e}")
+    st.markdown("---")
 
 if df is not None:
     # تحديد عمود الرقم القومي
