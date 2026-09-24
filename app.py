@@ -35,7 +35,7 @@ def get_and_update_visitor_count():
 
     # 2. حالة الدخول كآدمن (?admin=true)
     if query_params.get("admin") == "true":
-        st.session_state["is_admin"] = True
+        st.session_state["is_admin_mode"] = True
 
     # إنشاء الملف إن لم يكن موجوداً
     if not os.path.exists(count_file):
@@ -51,7 +51,7 @@ def get_and_update_visitor_count():
         count = 0
 
     # زيادة العداد فقط إذا لم تكن هذه الجلسة جلسة آدمن ولم تُحتسب من قبل
-    is_admin = st.session_state.get("is_admin", False)
+    is_admin = st.session_state.get("authenticated_admin", False)
     if not is_admin and not st.session_state.get("counted_this_session", False):
         count += 1
         st.session_state["counted_this_session"] = True
@@ -581,46 +581,61 @@ excel_file = "certificates.xlsx"
 df = load_data(excel_file)
 
 # ==========================================
-# لوحة الإدارة الداخليّة لتعديل وإضافة الشهادات بدون رفع الملفات يدوياً
+# لوحة الإدارة المحمية بكلمة مرور لتعديل وإضافة الشهادات
 # ==========================================
-if st.session_state.get("is_admin", False):
-    st.markdown("### ⚙️ لوحة إدارة البيانات وتعديل ملف الأكسيل مباشر")
+ADMIN_PASSWORD = "Giza2026Admin"  # يمكنك تغيير كلمة المرور السرية من هنا
+
+if st.session_state.get("is_admin_mode", False):
+    st.markdown("### 🔒 تسجيل دخول لوحة إدارة البيانات")
     
-    if df is not None:
-        tab_view, tab_add = st.tabs(["📝 تعديل وحفظ الجدول المباشر", "➕ إضافة معلم/شهادة جديدة"])
-        
-        with tab_view:
-            st.info("💡 يمكنك تعديل أي خلية مباشرة في الجدول أدناه (مثل تغيير الحالة إلى 'الشهادة موجودة بالفرع') ثم اضغط 'حفظ التعديلات'.")
-            edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True)
-            if st.button("💾 حفظ التعديلات المباشرة في ملف الأكسيل"):
-                try:
-                    edited_df.to_excel(excel_file, index=False)
-                    st.cache_data.clear()
-                    st.success("✅ تم حفظ التعديلات بنجاح في قاعدة البيانات!")
+    if not st.session_state.get("authenticated_admin", False):
+        with st.form("admin_login_form"):
+            input_pass = st.text_input("🔑 أدخل كلمة المرور السرية للوصول للبيانات:", type="password")
+            login_submit = st.form_submit_button("🔓 تسجيل الدخول")
+            if login_submit:
+                if input_pass == ADMIN_PASSWORD:
+                    st.session_state["authenticated_admin"] = True
+                    st.success("✅ تم التحقق بنجاح! جاري فتح لوحة التحكم...")
                     st.rerun()
-                except Exception as e:
-                    st.error(f"❌ حدث خطأ أثناء الحفظ: {e}")
-                    
-        with tab_add:
-            st.markdown("#### إضافة شهادة جديدة إلى الكشف:")
-            with st.form("add_teacher_form"):
-                cols = list(df.columns)
-                new_data = {}
-                for c in cols:
-                    new_data[c] = st.text_input(f"أدخل {c}:")
-                submit_new = st.form_submit_button("➕ إضافة وتحديث الملف")
-                
-                if submit_new:
-                    new_row_df = pd.DataFrame([new_data])
-                    updated_df = pd.concat([df, new_row_df], ignore_index=False)
+                else:
+                    st.error("❌ كلمة المرور غير صحيحة!")
+    else:
+        st.markdown("### ⚙️ لوحة إدارة البيانات وتعديل ملف الأكسيل مباشر")
+        if df is not None:
+            tab_view, tab_add = st.tabs(["📝 تعديل وحفظ الجدول المباشر", "➕ إضافة معلم/شهادة جديدة"])
+            
+            with tab_view:
+                st.info("💡 يمكنك تعديل أي خلية مباشرة في الجدول أدناه ثم اضغط 'حفظ التعديلات'.")
+                edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True)
+                if st.button("💾 حفظ التعديلات المباشرة في ملف الأكسيل"):
                     try:
-                        updated_df.to_excel(excel_file, index=False)
+                        edited_df.to_excel(excel_file, index=False)
                         st.cache_data.clear()
-                        st.success("🎉 تم إضافة الشهادة الجديدة بنجاح!")
+                        st.success("✅ تم حفظ التعديلات بنجاح في قاعدة البيانات!")
                         st.rerun()
                     except Exception as e:
                         st.error(f"❌ حدث خطأ أثناء الحفظ: {e}")
-    st.markdown("---")
+                        
+            with tab_add:
+                st.markdown("#### إضافة شهادة جديدة إلى الكشف:")
+                with st.form("add_teacher_form"):
+                    cols = list(df.columns)
+                    new_data = {}
+                    for c in cols:
+                        new_data[c] = st.text_input(f"أدخل {c}:")
+                    submit_new = st.form_submit_button("➕ إضافة وتحديث الملف")
+                    
+                    if submit_new:
+                        new_row_df = pd.DataFrame([new_data])
+                        updated_df = pd.concat([df, new_row_df], ignore_index=False)
+                        try:
+                            updated_df.to_excel(excel_file, index=False)
+                            st.cache_data.clear()
+                            st.success("🎉 تم إضافة الشهادة الجديدة بنجاح!")
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ حدث خطأ أثناء الحفظ: {e}")
+        st.markdown("---")
 
 if df is not None:
     # تحديد عمود الرقم القومي
