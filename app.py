@@ -64,7 +64,7 @@ ga_script = f"""
 """
 components.html(ga_script, height=0, width=0)
 
-# تطبيق التنسيق عبر CSS لشاشة العرض
+# تطبيق التنسيق عبر CSS لشاشة العرض (نص عادي بدون f-string لمنع أخطاء بناء الجملة)
 st.markdown(
     """
     
