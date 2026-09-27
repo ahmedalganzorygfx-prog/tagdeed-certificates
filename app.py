@@ -1,6 +1,7 @@
 import base64
 import os
 import re
+from io import BytesIO
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
@@ -569,6 +570,15 @@ def load_data(file_path):
     return df
 
 
+# إنشاء نسخة Excel في الذاكرة لتوفير زر تنزيل XLSX
+def dataframe_to_excel_bytes(dataframe):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        dataframe.to_excel(writer, index=False, sheet_name="الشهادات")
+    output.seek(0)
+    return output.getvalue()
+
+
 excel_file = "certificates.xlsx"
 df = load_data(excel_file)
 
@@ -594,6 +604,18 @@ if st.session_state.get("is_admin_mode", False):
     else:
         st.markdown("### ⚙️ لوحة إدارة البيانات وتعديل ملف الأكسيل مباشر")
         if df is not None:
+
+            # زر تنزيل قاعدة البيانات كاملة بصيغة Excel XLSX
+            excel_download = dataframe_to_excel_bytes(df)
+            st.download_button(
+                label="⬇️ تنزيل قاعدة البيانات بصيغة Excel (XLSX)",
+                data=excel_download,
+                file_name="certificates.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+                help="تنزيل نسخة Excel كاملة من قاعدة بيانات الشهادات."
+            )
+
             tab_view, tab_add = st.tabs(["📝 تعديل وحفظ الجدول المباشر", "➕ إضافة معلم/شهادة جديدة"])
             
             with tab_view:
