@@ -13,13 +13,6 @@ st.set_page_config(
 )
 
 
-# دالة إجبارية لتصفير العداد
-def reset_visitor_count():
-    count_file = "visitors.txt"
-    with open(count_file, "w") as f:
-        f.write("0")
-    return 0
-
 
 # دالة حساب وعرض عدد الزوار مع الاستثناء التام للآدمن
 def get_and_update_visitor_count():
