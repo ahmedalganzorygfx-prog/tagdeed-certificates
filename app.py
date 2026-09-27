@@ -31,10 +31,10 @@ def get_and_update_visitor_count():
     if is_admin_param:
         st.session_state["is_admin_mode"] = True
 
-    # تحديد ما إذا كانت هذه الجلسة جلسة آدمن (سواء بالمعامل أو بتسجيل الدخول الفعلي)
+    # تحديد ما إذا كانت هذه الجلسة جلسة آدمن
     is_admin = st.session_state.get("is_admin_mode", False) or st.session_state.get("authenticated_admin", False)
 
-    # 1. حالة التصفير عبر الرابط (?reset=true) - للآدمن فقط إن لزم الأمر
+    # حالة التصفير عبر الرابط (?reset=true) - للآدمن فقط
     if query_params.get("reset") == "true" and is_admin:
         st.toast("🧹 تم تصفير عداد الزيارات بنجاح!")
         return reset_visitor_count()
@@ -68,12 +68,12 @@ def get_and_update_visitor_count():
 # تسجيل وتنفيذ الزيارة
 visitor_count = get_and_update_visitor_count()
 
-# تفعيل تتبع Google Analytics
+# تفعيل تتبع Google Analytics دون استخدام f-string لتفادي الأخطاء
 ga_id = "G-2V7DFZWVXJ"
-ga_script = f"""
-    
-    
-"""
+ga_script = (
+    ''
+    ''
+)
 components.html(ga_script, height=0, width=0)
 
 # تطبيق التنسيق عبر CSS لشاشة العرض
@@ -89,7 +89,7 @@ def get_image_base64(file_path):
     if os.path.exists(file_path):
         with open(file_path, "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode()
-            return f"data:image/png;base64,{encoded_string}"
+            return "data:image/png;base64," + encoded_string
     for file in os.listdir("."):
         if file.lower().startswith("logo") and file.lower().endswith(
             (".png", ".jpg", ".jpeg")
@@ -97,7 +97,7 @@ def get_image_base64(file_path):
             with open(file, "rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read()).decode()
                 ext = file.split(".")[-1].lower()
-                return f"data:image/{ext};base64,{encoded_string}"
+                return "data:image/" + ext + ";base64," + encoded_string
     return "https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
 
 
@@ -107,7 +107,7 @@ def get_hand_image_base64():
             with open(filename, "rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read()).decode()
                 ext = filename.split(".")[-1].lower()
-                return f"data:image/{ext};base64,{encoded_string}"
+                return "data:image/" + ext + ";base64," + encoded_string
     return "https://cdn-icons-png.flaticon.com/512/2912/2912761.png"
 
 
@@ -115,4 +115,4 @@ logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
 st.markdown(
-    f"""
+    '
