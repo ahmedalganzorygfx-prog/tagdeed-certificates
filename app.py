@@ -551,6 +551,37 @@ def get_hand_image_base64():
     return "https://cdn-icons-png.flaticon.com/512/2912/2912761.png"
 
 
+# إعدادات واجهة الموقع تُحمّل قبل استخدامها في رأس الصفحة
+import json, shutil, zipfile, datetime
+from pathlib import Path
+
+CONFIG_FILE = Path("site_config.json")
+UPLOADS_DIR = Path("site_assets")
+BACKUP_DIR = Path("backups")
+UPLOADS_DIR.mkdir(exist_ok=True)
+BACKUP_DIR.mkdir(exist_ok=True)
+DEFAULT_CONFIG = {
+ "branch_title":"الأكاديمية المهنية للمعلمين - فرع الجيزة",
+ "main_title":"الاستعلام عن شهادة القيادة والإشراف (جديد - تجديد - بدل فاقد)",
+ "programs":"مدير ووكيل إدارة تعليمية | مدير ووكيل إدارة مدرسية | أساسيات التوجيه الفني",
+ "faq_title":"الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل)",
+ "faq_html":"شهادة جديدة (أول مرة): إحضار صورة بطاقة الرقم القومي سارية + الأصل للاطلاع.\nتجديد الشهادة: إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي سارية.\nبدل فاقد: إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي + نموذج طلب بدل الفاقد من الفرع.",
+ "hours":"من الأحد إلى الخميس: من الساعة 10:00 صباحاً حتى 2:00 ظهراً.\nالإجازات الرسمية: الجمعة والسبت والعطلات الرسمية بالدولة.",
+ "phone1":"01069996245", "phone2":"01120807631", "phone3":"01201109892",
+ "address":"الأكاديمية المهنية للمعلمين - فرع الجيزة\nش المحطة - إمبابة (بجوار مدرسة باحثة البادية التجارية بنات)",
+ "maps_url":"https://maps.app.goo.gl/akdNyovrEbWLJmBu9"
+}
+def read_site_config():
+    try:
+        if CONFIG_FILE.exists():
+            data=json.loads(CONFIG_FILE.read_text(encoding="utf-8")); return {**DEFAULT_CONFIG, **data}
+    except Exception:
+        pass
+    return DEFAULT_CONFIG.copy()
+def save_site_config(data):
+    CONFIG_FILE.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding="utf-8")
+site_config=read_site_config()
+
 logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
@@ -612,30 +643,6 @@ import json, shutil, zipfile, datetime
 from pathlib import Path
 
 ADMIN_PASSWORD = str(st.secrets.get("ADMIN_PASSWORD", os.environ.get("ADMIN_PASSWORD", "")))
-CONFIG_FILE = Path("site_config.json")
-UPLOADS_DIR = Path("site_assets")
-BACKUP_DIR = Path("backups")
-UPLOADS_DIR.mkdir(exist_ok=True)
-BACKUP_DIR.mkdir(exist_ok=True)
-DEFAULT_CONFIG = {
- "branch_title":"الأكاديمية المهنية للمعلمين - فرع الجيزة",
- "main_title":"الاستعلام عن شهادة القيادة والإشراف (جديد - تجديد - بدل فاقد)",
- "programs":"مدير ووكيل إدارة تعليمية | مدير ووكيل إدارة مدرسية | أساسيات التوجيه الفني",
- "faq_title":"الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل)",
- "faq_html":"شهادة جديدة (أول مرة): إحضار صورة بطاقة الرقم القومي سارية + الأصل للاطلاع.\nتجديد الشهادة: إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي سارية.\nبدل فاقد: إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي + نموذج طلب بدل الفاقد من الفرع.",
- "hours":"من الأحد إلى الخميس: من الساعة 10:00 صباحاً حتى 2:00 ظهراً.\nالإجازات الرسمية: الجمعة والسبت والعطلات الرسمية بالدولة.",
- "phone1":"01069996245", "phone2":"01120807631", "phone3":"01201109892",
- "address":"الأكاديمية المهنية للمعلمين - فرع الجيزة\nش المحطة - إمبابة (بجوار مدرسة باحثة البادية التجارية بنات)",
- "maps_url":"https://maps.app.goo.gl/akdNyovrEbWLJmBu9"
-}
-def read_site_config():
-    try:
-        if CONFIG_FILE.exists():
-            data=json.loads(CONFIG_FILE.read_text(encoding="utf-8")); return {**DEFAULT_CONFIG, **data}
-    except Exception: pass
-    return DEFAULT_CONFIG.copy()
-def save_site_config(data): CONFIG_FILE.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding="utf-8")
-site_config=read_site_config()
 
 # دخول لوحة الإدارة من الشريط الجانبي، دون الاعتماد على معامل URL غير آمن
 with st.sidebar:
