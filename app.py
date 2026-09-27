@@ -68,12 +68,12 @@ def get_and_update_visitor_count():
 # تسجيل وتنفيذ الزيارة
 visitor_count = get_and_update_visitor_count()
 
-# تفعيل تتبع Google Analytics دون استخدام f-string لتفادي الأخطاء
+# تفعيل تتبع Google Analytics
 ga_id = "G-2V7DFZWVXJ"
-ga_script = (
-    ''
-    ''
-)
+ga_script = """
+    
+    
+"""
 components.html(ga_script, height=0, width=0)
 
 # تطبيق التنسيق عبر CSS لشاشة العرض
@@ -115,4 +115,4 @@ logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
 st.markdown(
-)
+    """
