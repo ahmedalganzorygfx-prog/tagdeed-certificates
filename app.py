@@ -115,4 +115,4 @@ logo_src = get_image_base64("logo.png")
 hand_src = get_hand_image_base64()
 
 st.markdown(
-    '
+)
