@@ -21,14 +21,7 @@ def get_and_update_visitor_count():
     # التحقق من وجود المعاملات في الرابط (Query Params)
     query_params = st.query_params
 
-    # 1. حالة التصفير عبر الرابط (?reset=true)
-    if query_params.get("reset") == "true":
-        st.toast("🧹 تم تصفير عداد الزيارات بنجاح!")
-        return reset_visitor_count()
-
-    # 2. حالة الدخول كآدمن (?admin=true)
-    if query_params.get("admin") == "true":
-        st.session_state["is_admin_mode"] = True
+    # إدارة الموقع لا تُفعّل عبر معامل URL؛ الدخول محمي بكلمة مرور في الشريط الجانبي.
 
     # إنشاء الملف إن لم يكن موجوداً
     if not os.path.exists(count_file):
@@ -566,7 +559,7 @@ st.markdown(
     f"""
     <div class="logo-container">
         <img src="{logo_src}" alt="Logo">
-        <div class="branch-name-top">🏛️ الأكاديمية المهنية للمعلمين - فرع الجيزة</div>
+        <div class="branch-name-top">🏛️ {site_config["branch_title"]}</div>
     </div>
     <div class="hand-container">
         <img src="{hand_src}" alt="استلام الشهادة">
@@ -577,10 +570,10 @@ st.markdown(
 
 # صندوق العنوان الرئيسي
 st.markdown(
-    """
+    f"""
     <div class="header-box">
-        <div class="main-title">الاستعلام عن شهادة القيادة والإشراف <span class="highlight-red">(جديد - تجديد - بدل فاقد)</span></div>
-        <p><b>البرامج التدريبية :</b> <span class="programs-text">مدير ووكيل إدارة تعليمية &nbsp;|&nbsp; مدير ووكيل إدارة مدرسية &nbsp;|&nbsp; أساسيات التوجيه الفني</span></p>
+        <div class="main-title">{site_config["main_title"]}</div>
+        <p><b>البرامج التدريبية :</b> <span class="programs-text">{site_config["programs"]}</span></p>
     </div>
     """,
     unsafe_allow_html=True,
@@ -612,73 +605,111 @@ excel_file = "certificates.xlsx"
 df = load_data(excel_file)
 
 # ==========================================
-# لوحة الإدارة المحمية بكلمة مرور لتعديل وإضافة الشهادات
+# لوحة الإدارة المتكاملة
+# كلمة المرور تُضبط عبر st.secrets["ADMIN_PASSWORD"] أو متغير البيئة ADMIN_PASSWORD
 # ==========================================
-ADMIN_PASSWORD = "Giza2026Admin"  # كلمة المرور السرية
+import json, shutil, zipfile, datetime
+from pathlib import Path
 
-if st.session_state.get("is_admin_mode", False):
-    st.markdown("### 🔒 تسجيل دخول لوحة إدارة البيانات")
-    
+ADMIN_PASSWORD = str(st.secrets.get("ADMIN_PASSWORD", os.environ.get("ADMIN_PASSWORD", "")))
+CONFIG_FILE = Path("site_config.json")
+UPLOADS_DIR = Path("site_assets")
+BACKUP_DIR = Path("backups")
+UPLOADS_DIR.mkdir(exist_ok=True)
+BACKUP_DIR.mkdir(exist_ok=True)
+DEFAULT_CONFIG = {
+ "branch_title":"الأكاديمية المهنية للمعلمين - فرع الجيزة",
+ "main_title":"الاستعلام عن شهادة القيادة والإشراف (جديد - تجديد - بدل فاقد)",
+ "programs":"مدير ووكيل إدارة تعليمية | مدير ووكيل إدارة مدرسية | أساسيات التوجيه الفني",
+ "faq_title":"الأسئلة الشائعة ودليل خدمات الاستلام (اضغط للتفاصيل)",
+ "faq_html":"شهادة جديدة (أول مرة): إحضار صورة بطاقة الرقم القومي سارية + الأصل للاطلاع.\nتجديد الشهادة: إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي سارية.\nبدل فاقد: إحضار صحيفة أحوال إلكترونية حديثة + صورة بطاقة الرقم القومي + نموذج طلب بدل الفاقد من الفرع.",
+ "hours":"من الأحد إلى الخميس: من الساعة 10:00 صباحاً حتى 2:00 ظهراً.\nالإجازات الرسمية: الجمعة والسبت والعطلات الرسمية بالدولة.",
+ "phone1":"01069996245", "phone2":"01120807631", "phone3":"01201109892",
+ "address":"الأكاديمية المهنية للمعلمين - فرع الجيزة\nش المحطة - إمبابة (بجوار مدرسة باحثة البادية التجارية بنات)",
+ "maps_url":"https://maps.app.goo.gl/akdNyovrEbWLJmBu9"
+}
+def read_site_config():
+    try:
+        if CONFIG_FILE.exists():
+            data=json.loads(CONFIG_FILE.read_text(encoding="utf-8")); return {**DEFAULT_CONFIG, **data}
+    except Exception: pass
+    return DEFAULT_CONFIG.copy()
+def save_site_config(data): CONFIG_FILE.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding="utf-8")
+site_config=read_site_config()
+
+# دخول لوحة الإدارة من الشريط الجانبي، دون الاعتماد على معامل URL غير آمن
+with st.sidebar:
+    st.markdown("## 🔐 إدارة الموقع")
     if not st.session_state.get("authenticated_admin", False):
         with st.form("admin_login_form"):
-            input_pass = st.text_input("🔑 أدخل كلمة المرور السرية للوصول للبيانات:", type="password")
-            login_submit = st.form_submit_button("🔓 تسجيل الدخول")
+            input_pass=st.text_input("كلمة مرور الإدارة",type="password")
+            login_submit=st.form_submit_button("تسجيل الدخول",use_container_width=True)
             if login_submit:
-                if input_pass == ADMIN_PASSWORD:
-                    st.session_state["authenticated_admin"] = True
-                    st.success("✅ تم التحقق بنجاح! جاري فتح لوحة التحكم...")
-                    st.rerun()
-                else:
-                    st.error("❌ كلمة المرور غير صحيحة!")
+                if not ADMIN_PASSWORD:
+                    st.error("لم يتم ضبط ADMIN_PASSWORD في Secrets أو متغيرات البيئة. اضبطها قبل تفعيل الإدارة.")
+                elif input_pass == ADMIN_PASSWORD:
+                    st.session_state["authenticated_admin"]=True; st.success("تم تسجيل الدخول"); st.rerun()
+                else: st.error("كلمة المرور غير صحيحة")
     else:
-        st.markdown("### ⚙️ لوحة إدارة البيانات وتعديل ملف الأكسيل مباشر")
-        if df is not None:
+        st.success("تم تسجيل الدخول كمسؤول")
+        if st.button("تسجيل الخروج",use_container_width=True):
+            st.session_state["authenticated_admin"]=False; st.rerun()
 
-            # زر تنزيل قاعدة البيانات كاملة بصيغة Excel XLSX
-            excel_download = dataframe_to_excel_bytes(df)
-            st.download_button(
-                label="⬇️ تنزيل قاعدة البيانات — Excel (XLSX)",
-                data=excel_download,
-                file_name="certificates.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                use_container_width=True,
-                help="تنزيل نسخة Excel كاملة من قاعدة بيانات الشهادات."
-            )
+if st.session_state.get("authenticated_admin",False):
+    st.title("⚙️ لوحة تحكم Admin - فرع الجيزة")
+    tab_db,tab_content,tab_media,tab_contact,tab_backup=st.tabs(["قاعدة الشهادات","محتوى الموقع والأسئلة","الصور والشعار","التواصل والمواعيد","Excel والنسخ الاحتياطي"])
+    with tab_db:
+        st.subheader("إدارة قاعدة بيانات الشهادات")
+        if df is None: df=pd.DataFrame()
+        edited=st.data_editor(df,num_rows="dynamic",use_container_width=True,key="admin_cert_editor")
+        c1,c2=st.columns(2)
+        with c1:
+            if st.button("💾 حفظ قاعدة البيانات",key="save_db",use_container_width=True):
+                try: edited.to_excel(excel_file,index=False); st.cache_data.clear(); st.success("تم حفظ قاعدة البيانات"); st.rerun()
+                except Exception as e: st.error(f"تعذر الحفظ: {e}")
+        with c2:
+            if st.button("➕ إضافة سجل فارغ",key="add_blank",use_container_width=True):
+                st.session_state["blank_added"]=True; st.info("استخدم صفاً جديداً داخل الجدول ثم اضغط حفظ قاعدة البيانات.")
+    with tab_content:
+        st.subheader("تعديل النصوص والعناوين")
+        with st.form("site_content_form"):
+            site_config["branch_title"]=st.text_input("اسم الفرع أعلى الصفحة",site_config["branch_title"])
+            site_config["main_title"]=st.text_input("العنوان الرئيسي",site_config["main_title"])
+            site_config["programs"]=st.text_area("البرامج التدريبية",site_config["programs"])
+            site_config["faq_title"]=st.text_input("عنوان الأسئلة الشائعة",site_config["faq_title"])
+            site_config["faq_html"]=st.text_area("نص الأسئلة/الإجابات (كل بند في سطر)",site_config["faq_html"],height=180)
+            if st.form_submit_button("حفظ محتوى الموقع"):
+                save_site_config(site_config); st.success("حُفظت الإعدادات في site_config.json")
+    with tab_media:
+        st.subheader("رفع أو تغيير الشعار وصورة الاستلام")
+        for label,filename in [("الشعار","logo.png"),("صورة الاستلام","certificate_hand.png")]:
+            up=st.file_uploader(label,type=["png","jpg","jpeg"],key="upload_"+filename)
+            if up and st.button("حفظ "+label,key="save_"+filename):
+                target=UPLOADS_DIR/filename; target.write_bytes(up.getvalue()); shutil.copy2(target,Path(filename)); st.success(f"تم تحديث {filename}"); st.rerun()
+        st.caption("يتم حفظ الصور داخل site_assets وكذلك بجوار التطبيق. على الاستضافة السحابية قد لا تكون الملفات المحلية دائمة؛ استخدم تخزيناً خارجياً عند الحاجة.")
+    with tab_contact:
+        with st.form("contact_form"):
+            for key,label in [("hours","مواعيد العمل والاستلام"),("phone1","رقم واتساب 1"),("phone2","رقم واتساب 2"),("phone3","رقم واتساب 3"),("address","عنوان الفرع"),("maps_url","رابط خرائط Google")]: site_config[key]=st.text_area(label,site_config[key]) if key in ("hours","address") else st.text_input(label,site_config[key])
+            if st.form_submit_button("حفظ بيانات التواصل"):
+                save_site_config(site_config); st.success("تم حفظ بيانات التواصل")
+    with tab_backup:
+        st.subheader("استيراد وتصدير Excel والنسخ الاحتياطي")
+        if not df is None and len(df.columns):
+            st.download_button("تصدير قاعدة الشهادات Excel",data=dataframe_to_excel_bytes(df),file_name="certificates_export.xlsx",mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        imp=st.file_uploader("استيراد ملف Excel بديل لقاعدة الشهادات",type=["xlsx"],key="import_excel")
+        if imp and st.button("استبدال قاعدة البيانات بالملف المستورد"):
+            try:
+                incoming=pd.read_excel(imp,dtype=str); incoming.to_excel(excel_file,index=False); st.cache_data.clear(); st.success("تم الاستيراد"); st.rerun()
+            except Exception as e: st.error(f"فشل الاستيراد: {e}")
+        if st.button("إنشاء نسخة احتياطية الآن"):
+            stamp=datetime.datetime.now().strftime("%Y%m%d_%H%M%S"); backup=BACKUP_DIR/f"backup_{stamp}.zip"
+            with zipfile.ZipFile(backup,"w",zipfile.ZIP_DEFLATED) as z:
+                for f in [Path(excel_file),CONFIG_FILE]:
+                    if f.exists(): z.write(f,arcname=f.name)
+                for f in UPLOADS_DIR.glob("*"): z.write(f,arcname=f"site_assets/{f.name}")
+            st.success(f"تم إنشاء النسخة: {backup.name}"); st.download_button("تنزيل النسخة الاحتياطية ZIP",backup.read_bytes(),file_name=backup.name,mime="application/zip")
+    st.divider()
 
-            tab_view, tab_add = st.tabs(["📝 تعديل وحفظ الجدول المباشر", "➕ إضافة معلم/شهادة جديدة"])
-            
-            with tab_view:
-                st.info("💡 يمكنك تعديل أي خلية مباشرة في الجدول أدناه ثم اضغط 'حفظ التعديلات'.")
-                edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True)
-                if st.button("💾 حفظ التعديلات المباشرة في ملف الأكسيل"):
-                    try:
-                        edited_df.to_excel(excel_file, index=False)
-                        st.cache_data.clear()
-                        st.success("✅ تم حفظ التعديلات بنجاح في قاعدة البيانات!")
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"❌ حدث خطأ أثناء الحفظ: {e}")
-                        
-            with tab_add:
-                st.markdown("#### إضافة شهادة جديدة إلى الكشف:")
-                with st.form("add_teacher_form"):
-                    cols = list(df.columns)
-                    new_data = {}
-                    for c in cols:
-                        new_data[c] = st.text_input(f"أدخل {c}:")
-                    submit_new = st.form_submit_button("➕ إضافة وتحديث الملف")
-                    
-                    if submit_new:
-                        new_row_df = pd.DataFrame([new_data])
-                        updated_df = pd.concat([df, new_row_df], ignore_index=False)
-                        try:
-                            updated_df.to_excel(excel_file, index=False)
-                            st.cache_data.clear()
-                            st.success("🎉 تم إضافة الشهادة الجديدة بنجاح!")
-                            st.rerun()
-                        except Exception as e:
-                            st.error(f"❌ حدث خطأ أثناء الحفظ: {e}")
-        st.markdown("---")
 
 if df is not None:
     # تحديد عمود الرقم القومي
@@ -1033,11 +1064,10 @@ whatsapp_share_text = "https://wa.me/?text=" + pd.Series([
 
 # صندوق مواعيد استلام الشهادات في البوابة
 st.markdown(
-    """
+    f"""
     <div class="working-hours-box">
         <div class="working-hours-title">⏰ مواعيد استلام الشهادات:</div>
-        • من الأحد إلى الخميس: من الساعة <span class="working-hours-highlight">10:00 صباحاً</span> حتى الساعة <span class="working-hours-highlight">2:00 ظهراً</span>.<br>
-        • الإجازات الرسمية: <span class="working-hours-highlight">الجمعة والسبت</span> والعطلات الرسمية بالدولة.
+        {site_config["hours"].replace(chr(10), "<br>")}
     </div>
     """,
     unsafe_allow_html=True,
@@ -1055,14 +1085,13 @@ st.markdown(
         <br>
         💬 <b>أرقام الدعم الفني للتواصل عبر واتس آب:</b>
         <div class="whatsapp-container">
-            <a href="https://wa.me/201069996245" target="_blank" class="whatsapp-btn">🟢 01069996245</a>
-            <a href="https://wa.me/201120807631" target="_blank" class="whatsapp-btn">🟢 01120807631</a>
-            <a href="https://wa.me/201201109892" target="_blank" class="whatsapp-btn">🟢 01201109892</a>
+            <a href="https://wa.me/2{site_config["phone1"]}" target="_blank" class="whatsapp-btn">🟢 {site_config["phone1"]}</a>
+            <a href="https://wa.me/2{site_config["phone2"]}" target="_blank" class="whatsapp-btn">🟢 {site_config["phone2"]}</a>
+            <a href="https://wa.me/2{site_config["phone3"]}" target="_blank" class="whatsapp-btn">🟢 {site_config["phone3"]}</a>
         </div>
         <br>
-        📍 <b>عنوان الفرع:</b> الأكاديمية المهنية للمعلمين - فرع الجيزة<br>
-        🏢 ش المحطة - إمبابة (بجوار مدرسة باحثة البادية التجارية بنات)<br>
-        <a href="https://maps.app.goo.gl/akdNyovrEbWLJmBu9" target="_blank" class="map-btn">
+        📍 <b>عنوان الفرع:</b> {site_config["address"].replace(chr(10), "<br>")}<br>
+        <a href="{site_config["maps_url"]}" target="_blank" class="map-btn">
             🗺️ فتح الموقع والتوجيه المباشر في تطبيق Google Maps
         </a>
         <div class="map-container">
