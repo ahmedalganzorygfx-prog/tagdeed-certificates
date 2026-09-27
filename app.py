@@ -211,6 +211,35 @@ st.markdown(
         background-color: #30363d;
         border-color: #8b949e;
     }
+
+
+    /* زر تنزيل ملف Excel XLSX */
+    [data-testid="stDownloadButton"] > button {
+        background-color: #238636 !important;
+        color: #ffffff !important;
+        border: 1px solid #2ea043 !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        font-size: 16px !important;
+        width: 100% !important;
+        min-height: 45px !important;
+        opacity: 1 !important;
+        text-align: center !important;
+    }
+
+    [data-testid="stDownloadButton"] > button:hover {
+        background-color: #2ea043 !important;
+        color: #ffffff !important;
+        border-color: #3fb950 !important;
+    }
+
+    [data-testid="stDownloadButton"] > button p,
+    [data-testid="stDownloadButton"] > button span,
+    [data-testid="stDownloadButton"] > button div {
+        color: #ffffff !important;
+        font-weight: bold !important;
+        opacity: 1 !important;
+    }
     .stTextInput label {
         color: #ffffff !important;
         font-weight: bold !important;
@@ -608,7 +637,7 @@ if st.session_state.get("is_admin_mode", False):
             # زر تنزيل قاعدة البيانات كاملة بصيغة Excel XLSX
             excel_download = dataframe_to_excel_bytes(df)
             st.download_button(
-                label="⬇️ تنزيل قاعدة البيانات بصيغة Excel (XLSX)",
+                label="⬇️ تنزيل قاعدة البيانات — Excel (XLSX)",
                 data=excel_download,
                 file_name="certificates.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
