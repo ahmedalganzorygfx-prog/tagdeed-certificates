@@ -643,9 +643,15 @@ if st.session_state.get("is_admin_mode", False):
                 help="تنزيل نسخة Excel كاملة من قاعدة بيانات الشهادات."
             )
 
-            # التعديل المباشر والتلقائي داخل الجدول بدون أزرار أو رسائل حفظ
+            # التعديل المباشر مع تثبيت ارتفاع الجدول لمنع الانكماش/التقليص
             st.info("💡 يمكنك التعديل المباشر أو إضافة صف جديد أسفل الجدول وسيحفظ أوتوماتيكياً.")
-            edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True, key="admin_live_editor")
+            edited_df = st.data_editor(
+                df, 
+                num_rows="dynamic", 
+                use_container_width=True, 
+                height=450, 
+                key="admin_live_editor"
+            )
             
             # الحفظ التلقائي عند وجود أي تغييرات في الجدول بصمت
             if not edited_df.equals(df):
