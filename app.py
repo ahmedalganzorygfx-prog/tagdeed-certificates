@@ -78,7 +78,7 @@ st.markdown(
     <style>
     /* تقليص وتوسيط حاوية المحتوى الرئيسية */
     .block-container {
-        max-width: 800px !important;
+        max-width: 850px !important;
         padding-top: 2rem !important;
         padding-bottom: 3rem !important;
         margin: 0 auto !important;
@@ -102,18 +102,6 @@ st.markdown(
         text-align: right;
         font-family: 'Cairo', sans-serif, Arial;
         color: #e0e0e0;
-    }
-    
-    /* تثبيت حاوية الجدول الإداري ومنع التقليص والانكماش أثناء الكتابة */
-    .table-fixed-container {
-        min-height: 500px !important;
-        max-height: 650px !important;
-        overflow-y: auto !important;
-        border: 1px solid #30363d;
-        border-radius: 8px;
-        padding: 5px;
-        background-color: #161b22;
-        margin-bottom: 20px;
     }
 
     /* حاوية مخصصة لتوسيط الشعار واسم الفرع في المنتصف */
@@ -657,18 +645,15 @@ if st.session_state.get("is_admin_mode", False):
             admin_tab1, admin_tab2 = st.tabs(["📊 عرض وتعديل الجدول المباشر", "➕ إضافة سجل جديد دفعة واحدة"])
 
             with admin_tab1:
-                st.info("💡 يمكن التعديل المباشر في الخلية أو إضافة صفوف من أسفل الجدول وتظل ثابتة الشاشة.")
+                st.info("💡 يمكن التعديل المباشر في الخلية أو إضافة صفوف من أسفل الجدول مباشرة.")
                 
-                # استخدام container مخصص لمنع انكماش وتغير شكل الجدول أثناء التعديل
-                st.markdown('<div class="table-fixed-container">', unsafe_allow_html=True)
+                # عرض الجدول بشكل ممتاز بدون إحاطة بـ divs تسبب الـ margin الفارغ
                 edited_df = st.data_editor(
                     df, 
                     num_rows="dynamic", 
                     use_container_width=True, 
-                    height=500, 
                     key="admin_live_editor"
                 )
-                st.markdown('</div>', unsafe_allow_html=True)
                 
                 # حفظ التعديلات أوتوماتيكياً
                 if not edited_df.equals(df):
