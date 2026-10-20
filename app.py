@@ -23,7 +23,6 @@ def get_and_update_visitor_count():
 
     # 1. حالة التصفير عبر الرابط (?reset=true)
     if query_params.get("reset") == "true":
-        st.toast("🧹 تم تصفير عداد الزيارات بنجاح!")
         return 0
 
     # 2. حالة الدخول كآدمن (?admin=true)
@@ -277,7 +276,7 @@ st.markdown(
         font-weight: bold !important;
     }
 
-    /* ضبط شريط Expander: النص متصل بعلامة الاستفهام العربية والسهم يسار */
+    /* ضبط شريط Expander */
     [data-testid="stExpander"] {
         background-color: #161b22 !important;
         border: 1px solid #30363d !important;
@@ -626,12 +625,11 @@ if st.session_state.get("is_admin_mode", False):
             if login_submit:
                 if input_pass == ADMIN_PASSWORD:
                     st.session_state["authenticated_admin"] = True
-                    st.success("✅ تم التحقق بنجاح! جاري فتح لوحة التحكم...")
                     st.rerun()
                 else:
                     st.error("❌ كلمة المرور غير صحيحة!")
     else:
-        st.markdown("### ⚙️ لوحة إدارة البيانات وتعديل ملف الأكسيل مباشر")
+        st.markdown("### ⚙️ لوحة إدارة البيانات والتعديل المباشر")
         if df is not None:
 
             # زر تنزيل قاعدة البيانات كاملة بصيغة Excel XLSX
@@ -645,40 +643,19 @@ if st.session_state.get("is_admin_mode", False):
                 help="تنزيل نسخة Excel كاملة من قاعدة بيانات الشهادات."
             )
 
-            tab_view, tab_add = st.tabs(["📝 تعديل وحفظ الجدول المباشر", "➕ إضافة معلم/شهادة جديدة"])
+            # التعديل المباشر والتلقائي داخل الجدول بدون أزرار أو رسائل حفظ
+            st.info("💡 يمكنك التعديل المباشر أو إضافة صف جديد أسفل الجدول وسيحفظ أوتوماتيكياً.")
+            edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True, key="admin_live_editor")
             
-            with tab_view:
-                st.info("💡 يمكنك تعديل أي خلية مباشرة في الجدول أدناه وسيتم حفظ التعديلات تلقائياً في قاعدة البيانات.")
-                edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True, key="main_data_editor")
-                if not edited_df.equals(df):
-                    try:
-                        edited_df.to_excel(excel_file, index=False)
-                        st.cache_data.clear()
-                        st.toast("⚡ تم حفظ التعديلات المباشرة تلقائياً!")
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"❌ حدث خطأ أثناء الحفظ التلقائي: {e}")
-                        
-            with tab_add:
-                st.markdown("#### إضافة شهادة جديدة إلى الكشف:")
-                cols = list(df.columns)
-                new_data = {}
-                
-                # إدخل البيانات مباشرة مع التحديث والتخزين التلقائي فور الكتابة
-                for c in cols:
-                    new_data[c] = st.text_input(f"أدخل {c}:", key=f"add_input_{c}")
-                
-                if any(str(val).strip() for val in new_data.values()):
-                    if st.button("➕ إضافة وحفظ في ملف الأكسيل فوراً"):
-                        new_row_df = pd.DataFrame([new_data])
-                        updated_df = pd.concat([df, new_row_df], ignore_index=True)
-                        try:
-                            updated_df.to_excel(excel_file, index=False)
-                            st.cache_data.clear()
-                            st.success("🎉 تم حفظ البيانات الجديدة تلقائياً في الملف!")
-                            st.rerun()
-                        except Exception as e:
-                            st.error(f"❌ حدث خطأ أثناء الحفظ التلقائي: {e}")
+            # الحفظ التلقائي عند وجود أي تغييرات في الجدول بصمت
+            if not edited_df.equals(df):
+                try:
+                    edited_df.to_excel(excel_file, index=False)
+                    st.cache_data.clear()
+                    st.rerun()
+                except Exception:
+                    pass
+
         st.markdown("---")
 
 if df is not None:
